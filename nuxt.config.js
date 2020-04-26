@@ -50,7 +50,8 @@ export default {
     '@nuxtjs/dotenv',
     ['nuxt-stylus-resources-loader', [
       resolve(__dirname, 'src/styles/scroll-shadow.styl'),
-      resolve(__dirname, 'src/styles/common-mixins.styl')
+      resolve(__dirname, 'src/styles/common-mixins.styl'),
+      resolve(__dirname, 'src/styles/variables.styl')
     ]]
   ],
   axios: {

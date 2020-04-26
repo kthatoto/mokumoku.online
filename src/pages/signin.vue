@@ -4,22 +4,33 @@
     .signin__header(slot="header")
       h2 Signin
     .signin__row
-      el-button.signin__buttonTop(@click="twitterAuth")
-        span Signin with Twitter
+      el-button.signin__button.-twitter(@click="twitterAuth")
+        img(src="~/assets/twitter-icon-white.png")
+        span Twitterでログイン
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent, ref } from '@vue/composition-api'
+import { Message } from 'element-ui'
 
 export default defineComponent({
   layout: 'beforeSignin',
   meta: { shouldGuest: true },
   setup (_, context: any) {
+    const pushedTwitterAuth = ref<boolean>(false)
     const twitterAuth = async () => {
-      await context.root.$firebase.auth().signOut()
-      const TwitterAuthProvider = context.root.$firebase.auth.TwitterAuthProvider
-      const provider = new TwitterAuthProvider()
-      context.root.$firebase.auth().signInWithRedirect(provider)
+      if (pushedTwitterAuth.value) return
+      pushedTwitterAuth.value = true
+      try {
+        await context.root.$firebase.auth().signOut()
+        const TwitterAuthProvider = context.root.$firebase.auth.TwitterAuthProvider
+        const provider = new TwitterAuthProvider()
+        context.root.$firebase.auth().signInWithRedirect(provider)
+      } catch (e) {
+        console.log(e)
+        pushedTwitterAuth.value = false
+        Message({ message: 'ログインに失敗しました。時間をおいてやり直してください。', type: 'error', duration: 5000 })
+      }
     }
 
     return { twitterAuth }
@@ -39,6 +50,21 @@ export default defineComponent({
   &__row
     &:not(.-last)
       margin-bottom: 15px
-  &__buttonTop
+  &__button
     width: 240px
+    height: 50px
+    &.-twitter
+      background-color: twitterColor
+      color: white
+      >>> > span
+        width: 100%
+        height: 100%
+        vertical-align: middle
+        display: flex
+        margin: auto
+        align-items: center
+        justify-content: center
+      img
+        width: 30px
+        margin-right: 10px
 </style>
