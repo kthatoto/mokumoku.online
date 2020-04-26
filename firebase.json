@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "mokumokuonline",
     "public": "dist",
     "ignore": [
       "firebase.json",
