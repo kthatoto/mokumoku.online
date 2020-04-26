@@ -16,6 +16,7 @@
     "@nuxtjs/dotenv": "^1.4.0",
     "@vue/composition-api": "^0.5.0",
     "element-ui": "^2.4.11",
+    "firebase": "^7.14.2",
     "nuxt": "^2.0.0",
     "nuxt-stylus-resources-loader": "^2.0.0",
     "pug": "^2.0.4",
