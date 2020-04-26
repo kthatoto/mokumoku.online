@@ -30,8 +30,7 @@ export default {
     '@/plugins/element-ui',
     '@/plugins/vue-composition-api',
     '@/plugins/vue-awesome',
-    '@/plugins/vue-markdown',
-    '@/plugins/vue-long-click'
+    '@/plugins/vue-markdown'
   ],
   buildModules: [
     '@nuxt/typescript-build',
@@ -42,7 +41,6 @@ export default {
     '@nuxtjs/dotenv',
     ['nuxt-stylus-resources-loader', [
       resolve(__dirname, 'src/styles/scroll-shadow.styl'),
-      resolve(__dirname, 'src/styles/markdown.styl'),
       resolve(__dirname, 'src/styles/common-mixins.styl')
     ]]
   ],
