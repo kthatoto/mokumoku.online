@@ -1,6 +1,8 @@
 import firebase from 'firebase/app'
 import 'firebase/auth'
 
+import { Message } from 'element-ui'
+
 if (!firebase.apps.length) {
   firebase.initializeApp(
     {
@@ -14,28 +16,17 @@ if (!firebase.apps.length) {
   )
 }
 
-export default ({ app, store, redirect }, inject) => {
+export default ({ app, redirect }, inject) => {
   firebase.auth().onAuthStateChanged((user) => {
+    console.log('onAuthStateChanged', user)
     if (!user) {
-      store.dispatch('signout')
       if (app.context.from.meta[0].auth) {
-        app.$message({ message: 'Please signin', type: 'warning', duration: 5000 })
+        Message({ message: 'ログインしてください', type: 'warning', duration: 5000 })
         return redirect('/signin')
       }
       return
     }
-    store.dispatch('signin', user)
-    if (!user.emailVerified) {
-      app.$message({
-        message: 'Please confirm your email address',
-        type: 'warning',
-        duration: 5000
-      })
-      return redirect('/signin')
-    }
-    if (app.context.from.meta[0].shouldGuest) {
-      return redirect('/')
-    }
+    if (app.context.from.meta[0].shouldGuest) return redirect('/')
   })
   inject('firebase', firebase)
 }

@@ -1,7 +1,7 @@
 <template lang="pug">
 el-container.default
   el-header.default__header
-    el-dropdown.dropdown(trigger="click" @command="handle")
+    el-dropdown.dropdown(trigger="click" @command="handleCommand")
       el-button.dropdown__button
         icon.icon(name="user")
       el-dropdown-menu(slot="dropdown")
@@ -32,7 +32,8 @@ export default defineComponent({
 .default
   &__header
     text-align: right
-    border-bottom: 1px solid borderColor
+    border-bottom: 1px solid #d7dae2
+    background-color: white
     .dropdown
       height: 100%
       &__button

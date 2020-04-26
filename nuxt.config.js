@@ -38,7 +38,8 @@ export default {
     '@/plugins/element-ui',
     '@/plugins/vue-composition-api',
     '@/plugins/vue-awesome',
-    '@/plugins/vue-markdown'
+    '@/plugins/vue-markdown',
+    '@/plugins/globalComponents'
   ],
   buildModules: [
     '@nuxt/typescript-build',
