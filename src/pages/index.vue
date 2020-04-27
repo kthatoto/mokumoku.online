@@ -1,10 +1,12 @@
 <template lang="pug">
 .index
-  h1 mokumoku.online
+  h2
+    icon.icon.-r(name="terminal")
+    span 開催中のもくもく会
   .events
     .event(v-for="event in events")
-      h2 {{ event.title }}
-      h3 {{ event.description }}
+      h3 {{ event.title }}
+      h4 {{ event.description }}
 </template>
 
 <script lang="ts">
@@ -32,8 +34,15 @@ export default defineComponent({
 .index
   width: 400px
   margin: 50px auto 0
-  monospaced-font()
-  h1
+  h2
     font-size: 28px
     margin-bottom: 20px
+    color: color5
+    .icon
+      background-color: color5
+      color: color1
+      padding: 7px
+      border-radius: 50%
+      width: 30px
+      height: 30px
 </style>
