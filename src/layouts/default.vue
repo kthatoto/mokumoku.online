@@ -46,6 +46,7 @@ export default defineComponent({
     margin: auto
     .logo
       display: inline-block
+      height: 100%
       width: 300px
       h1
         color: color1
