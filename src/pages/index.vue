@@ -31,7 +31,7 @@ export default defineComponent({
 <style lang="stylus" scoped>
 .index
   width: 400px
-  margin: 20vh auto 0
+  margin: 50px auto 0
   monospaced-font()
   h1
     font-size: 28px
