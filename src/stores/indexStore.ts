@@ -1,12 +1,9 @@
 import { InjectionKey, ref } from '@vue/composition-api'
 
-import { axios } from 'axios'
-
 interface Event {
 }
 
-export const buildIndexStore = (context) => {
-  console.log(context)
+export const buildIndexStore = (context: any) => {
   const getResources = async () => {
     const res = await context.root.$axios.get('https://us-central1-mokumokuonline.cloudfunctions.net/hello_world')
     console.log(res)
