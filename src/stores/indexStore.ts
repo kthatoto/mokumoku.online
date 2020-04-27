@@ -5,7 +5,7 @@ interface Event {
 
 export const buildIndexStore = (context: any) => {
   const getResources = async () => {
-    const res = await context.root.$axios.get('https://us-central1-mokumokuonline.cloudfunctions.net/hello_world')
+    const res = await context.root.$axios.get('/api/messages')
     console.log(res)
   }
   const message = ref<string>('')
