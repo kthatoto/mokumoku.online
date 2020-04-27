@@ -10,4 +10,4 @@ api.get('/messages', (req, res) => {
   res.send(['foo', 'bar'])
 })
 
-export default functions.https.onRequest(api)
+exports.api = functions.https.onRequest(api)
