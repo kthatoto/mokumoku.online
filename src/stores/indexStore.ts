@@ -5,7 +5,7 @@ interface Event {
 
 export const buildIndexStore = (context: any) => {
   const getResources = async () => {
-    const res = await context.root.$axios.get('/api/messages')
+    const res = await context.root.$axios.get(`${process.env.FIREBASE_FUNCTIONS_ORIGIN}/api/messages`)
     console.log(res)
   }
   const message = ref<string>('')

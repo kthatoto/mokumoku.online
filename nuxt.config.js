@@ -11,7 +11,8 @@ export default {
     FIREBASE_PROJECTID: process.env.FIREBASE_PROJECTID,
     FIREBASE_STORAGEBUCKET: process.env.FIREBASE_STORAGEBUCKET,
     FIREBASE_MESSAGINGSENDERID: process.env.FIREBASE_MESSAGINGSENDERID,
-    FIREBASE_APPID: process.env.FIREBASE_APPID
+    FIREBASE_APPID: process.env.FIREBASE_APPID,
+    FIREBASE_FUNCTIONS_ORIGIN: process.env.FIREBASE_FUNCTIONS_ORIGIN
   },
   head: {
     title: process.env.npm_package_name || '',

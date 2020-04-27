@@ -4,7 +4,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent, onMounted } from '@vue/composition-api'
 
 import { buildIndexStore } from '@/stores/indexStore'
 
@@ -12,8 +12,10 @@ export default defineComponent({
   meta: { auth: true },
   setup (_, context) {
     const store = buildIndexStore(context)
-    store.getResources()
 
+    onMounted(async () => {
+      await store.getResources()
+    })
     return {
       message: store.message
     }
