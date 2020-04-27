@@ -2,9 +2,9 @@
 .signin
   el-card.signin__card
     .signin__header(slot="header")
-      h2 Signin
+      h2 ログイン
     .signin__row
-      el-button.signin__button.-twitter(@click="twitterAuth")
+      el-button.signin__button.-twitter(@click="twitterAuth" :disabled="pushedTwitterAuth")
         img(src="~/assets/twitter-icon-white.png")
         span Twitterでログイン
 </template>
@@ -33,7 +33,7 @@ export default defineComponent({
       }
     }
 
-    return { twitterAuth }
+    return { twitterAuth, pushedTwitterAuth }
   }
 })
 </script>
