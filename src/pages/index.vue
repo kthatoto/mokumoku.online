@@ -1,6 +1,10 @@
 <template lang="pug">
 .index
   h1 mokumoku.online
+  .events
+    .event(v-for="event in events")
+      h2 {{ event.title }}
+      h3 {{ event.description }}
 </template>
 
 <script lang="ts">
@@ -16,8 +20,9 @@ export default defineComponent({
     onMounted(async () => {
       await store.getResources()
     })
+
     return {
-      message: store.message
+      events: store.events
     }
   }
 })
