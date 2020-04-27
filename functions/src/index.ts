@@ -1,8 +1,3 @@
-
-export const hello_world = functions.https.onRequest((req, res) => {
-  res.send("Hello from Firebase!")
-})
-
 import * as functions from 'firebase-functions'
 import express from 'express'
 import cors from 'cors'
