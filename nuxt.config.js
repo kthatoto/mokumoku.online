@@ -40,7 +40,8 @@ export default {
     '@/plugins/vue-composition-api',
     '@/plugins/vue-awesome',
     '@/plugins/vue-markdown',
-    '@/plugins/globalComponents'
+    '@/plugins/globalComponents',
+    '@/plugins/apiClient'
   ],
   buildModules: [
     '@nuxt/typescript-build',
