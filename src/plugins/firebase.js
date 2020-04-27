@@ -18,7 +18,6 @@ if (!firebase.apps.length) {
 
 export default ({ app, redirect }, inject) => {
   firebase.auth().onAuthStateChanged((user) => {
-    console.log('onAuthStateChanged', user)
     if (!user) {
       if (app.context.from.meta[0].auth) {
         Message({ message: 'ログインしてください', type: 'warning', duration: 5000 })

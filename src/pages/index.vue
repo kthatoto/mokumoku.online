@@ -6,8 +6,18 @@
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api'
 
+import { buildIndexStore } from '@/stores/indexStore'
+
 export default defineComponent({
-  meta: { auth: true }
+  meta: { auth: true },
+  setup (_, context) {
+    const store = buildIndexStore(context)
+    store.getResources()
+
+    return {
+      message: store.message
+    }
+  }
 })
 </script>
 
