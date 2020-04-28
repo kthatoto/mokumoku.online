@@ -29,8 +29,7 @@ export const buildIndexStore = (context: any) => {
     collection.docs.forEach((doc: any) => {
       const id: string = doc.id
       const data = doc.data()
-      console.log(data)
-      newEvents.push({ ...data, id })
+      newEvents.push({ ...data, id, date: data.date.toDate() })
     })
     events.value = newEvents
   }

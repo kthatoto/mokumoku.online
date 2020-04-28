@@ -41,6 +41,7 @@ export default {
     '@/plugins/vue-composition-api',
     '@/plugins/vue-awesome',
     '@/plugins/vue-markdown',
+    '@/plugins/dayjs',
     '@/plugins/globalComponents',
     '@/plugins/apiClient'
   ],

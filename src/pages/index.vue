@@ -9,8 +9,15 @@
       span ホストする
   .events
     el-card.event(v-for="event in events" :key="event.id")
-      h3 {{ event.title }}
-      p {{ event.description }}
+      h3.title {{ event.title }}
+      p.description(v-if="event.description") {{ event.description }}
+      h4 時間
+      p.datetime
+        span.date {{ formatDate(event.date) }}
+        span {{ event.startDatetime }}
+        span 〜
+        span {{ event.endDatetime }}
+      h4 参加しているユーザー
   new-event-modal(:showing="showingForm" @closeModal="closeForm")
 </template>
 
@@ -23,13 +30,17 @@ import NewEventModal from '@/components/NewEventModal.vue'
 export default defineComponent({
   meta: { auth: true },
   components: { NewEventModal },
-  setup (_, context) {
+  setup (_, context: any) {
     const store = buildIndexStore(context)
     provide(indexStoreInjectionKey, store)
 
     const showingForm = ref<boolean>(false)
     const openForm = () => { showingForm.value = true }
     const closeForm = () => { showingForm.value = false }
+
+    const formatDate = (date: Date): string => {
+      return context.root.$dayjs(date).format('YYYY-MM-DD')
+    }
 
     onMounted(async () => {
       await store.getResources()
@@ -39,7 +50,8 @@ export default defineComponent({
       events: store.events,
       showingForm,
       openForm,
-      closeForm
+      closeForm,
+      formatDate
     }
   }
 })
@@ -50,7 +62,7 @@ export default defineComponent({
   width: 400px
   margin: 50px auto 0
   h2
-    font-size: 28px
+    font-size: 24px
     margin-bottom: 20px
     color: color5
     .icon
@@ -60,8 +72,23 @@ export default defineComponent({
     margin-bottom: 20px
   .events
     .event
-      h3
+      margin-bottom: 20px
+      .title
         font-size: 20px
-      p
-        font-size: 18px
+        margin-bottom: 5px
+      .description
+        word-break: break-word
+        font-size: 16px
+        overflow: hidden
+        margin-bottom: 5px
+        text-truncate()
+      h4
+        font-size: 16px
+        margin-bottom: 5px
+      .datetime
+        font-size: 16px
+        color: gray
+        margin-bottom: 5px
+        .date
+          margin-right: 10px
 </style>
