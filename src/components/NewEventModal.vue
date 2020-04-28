@@ -73,8 +73,11 @@ export default defineComponent({
       const date: Date = new Date(form.date.toString())
       const res: boolean = await store.createEvent({ ...form, date })
       if (res) {
+        context.root.$message({ message: 'もくもく会を作成しました', type: 'success', duration: 5000 })
       } else {
+        context.root.$message({ message: 'もくもく会の作成に失敗しました', type: 'error', duration: 5000 })
       }
+      close()
     }
 
     const datePickerOptions = {

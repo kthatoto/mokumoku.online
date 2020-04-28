@@ -12,23 +12,35 @@ export interface Event {
 export const buildIndexStore = (context: any) => {
   const events = ref<Event[]>([])
   const db = context.root.$firebase.firestore()
+
   const getResources = async () => {
     const newEvents: Event[] = []
-    const collection: any = await db.collection('events').get()
+    let result: boolean = true
+    const collection: any = await db.collection('events').get().catch((_: any) => {
+      result = false
+    })
+    if (!result) {
+      return context.root.$message({
+        message: '情報の読み込みに失敗しました。ネットワークの良い環境でご利用ください',
+        type: 'error',
+        duration: 5000
+      })
+    }
     collection.docs.forEach((doc: any) => {
+      const id: string = doc.id
       const data = doc.data()
-      newEvents.push({ ...data })
+      console.log(data)
+      newEvents.push({ ...data, id })
     })
     events.value = newEvents
   }
 
   const createEvent = async (newEvent: Event) => {
-    try {
-      await db.collection('events').add({ ...newEvent })
-      return true
-    } catch (_e) {
-      return false
-    }
+    let result: boolean = true
+    await db.collection('events').add({ ...newEvent }).catch((_: any) => {
+      result = false
+    })
+    return result
   }
 
   return { getResources, events, createEvent }
