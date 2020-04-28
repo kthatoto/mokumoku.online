@@ -1,12 +1,16 @@
 import { InjectionKey, ref } from '@vue/composition-api'
 
-interface Event {
-  id: string
+export interface Event {
+  id?: string
   title: string
   description: string
+  date: Date
+  startDatetime: string
+  endDatetime: string
 }
 
 export const buildIndexStore = (context: any) => {
+  const events = ref<Event[]>([])
   const getResources = async () => {
     return
     const db = context.root.$firebase.firestore()
@@ -19,8 +23,12 @@ export const buildIndexStore = (context: any) => {
     })
     events.value = newEvents
   }
-  const events = ref<Event[]>([])
-  return { getResources, events }
+
+  const createEvent = (newEvent: Event) => {
+    console.log(newEvent)
+  }
+
+  return { getResources, events, createEvent }
 }
 
 export type IndexStore = ReturnType<typeof buildIndexStore>

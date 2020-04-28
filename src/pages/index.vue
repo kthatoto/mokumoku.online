@@ -15,9 +15,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive, ref } from '@vue/composition-api'
+import { defineComponent, onMounted, reactive, ref, provide } from '@vue/composition-api'
 
-import { buildIndexStore } from '@/stores/indexStore'
+import { buildIndexStore, indexStoreInjectionKey } from '@/stores/indexStore'
 import NewEventModal from '@/components/NewEventModal.vue'
 
 export default defineComponent({
@@ -25,6 +25,7 @@ export default defineComponent({
   components: { NewEventModal },
   setup (_, context) {
     const store = buildIndexStore(context)
+    provide(indexStoreInjectionKey, store)
 
     const showingForm = ref<boolean>(false)
     const openForm = () => { showingForm.value = true }
