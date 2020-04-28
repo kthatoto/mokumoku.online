@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, computed } from '@vue/composition-api'
+import { defineComponent, reactive, computed, ref } from '@vue/composition-api'
 
 import injectBy from '@/utils/injectBy'
 import { Event, indexStoreInjectionKey } from '@/stores/indexStore'
@@ -52,7 +52,15 @@ export default defineComponent({
       startDatetime: '20:00',
       endDatetime: '22:00'
     })
+    const resetForm = () => {
+      form.title = ''
+      form.description = ''
+      form.date = new Date()
+      form.startDatetime = '20:00'
+      form.endDatetime = '22:00'
+    }
     const close = () => { context.emit('closeModal') }
+    const submitting = ref<boolean>(false)
 
     const errors = reactive<Errors>({ title: null })
     const clearErrors = () => {
@@ -70,14 +78,19 @@ export default defineComponent({
       clearErrors()
       validate()
       if (!existsErrors.value) return
+      if (submitting.value) return
+      submitting.value = true
       const date: Date = new Date(form.date.toString())
       const res: boolean = await store.createEvent({ ...form, date })
       if (res) {
         context.root.$message({ message: 'もくもく会を作成しました', type: 'success', duration: 5000 })
+        resetForm()
       } else {
         context.root.$message({ message: 'もくもく会の作成に失敗しました', type: 'error', duration: 5000 })
       }
+      submitting.value = false
       close()
+      await store.getResources()
     }
 
     const datePickerOptions = {
