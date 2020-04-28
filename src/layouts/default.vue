@@ -67,11 +67,6 @@ export default defineComponent({
         margin-top: 5%
         height: 100%
         width: 100px
-        border-radius: 0
-        border: none
-        background-color: color1
-        color: color4
-        border-radius: 5%
 
 @media (max-width: 450px)
   .default

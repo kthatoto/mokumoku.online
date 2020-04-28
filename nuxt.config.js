@@ -31,7 +31,8 @@ export default {
   loading: { color: '#fff' },
   css: [
     'element-ui/lib/theme-chalk/index.css',
-    '~/styles/common.styl'
+    '~/styles/common.styl',
+    '~/styles/element-ui-override.styl'
   ],
   plugins: [
     '@/plugins/ga',
