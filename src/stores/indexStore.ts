@@ -22,7 +22,7 @@ export const buildIndexStore = (context: any) => {
     events.value = newEvents
   }
 
-  const createEvent = async (newEvent: Event): boolean => {
+  const createEvent = async (newEvent: Event) => {
     try {
       await db.collection('events').add({ ...newEvent })
       return true

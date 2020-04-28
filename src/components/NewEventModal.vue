@@ -71,7 +71,7 @@ export default defineComponent({
       validate()
       if (!existsErrors.value) return
       const date: Date = new Date(form.date.toString())
-      const res: boolean = store.createEvent({ ...form, date })
+      const res: boolean = await store.createEvent({ ...form, date })
       if (res) {
       } else {
       }
