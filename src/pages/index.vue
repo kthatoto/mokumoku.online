@@ -18,6 +18,9 @@
         span 〜
         span {{ event.endDatetime }}
       h4 参加しているユーザー
+      .users
+        .user(v-for="u in event.users" :key="u.uid")
+          img(:src="u.photoURL")
   new-event-modal(:showing="showingForm" @closeModal="closeForm")
 </template>
 
@@ -70,25 +73,35 @@ export default defineComponent({
   .console
     text-align: right
     margin-bottom: 20px
-  .events
-    .event
-      margin-bottom: 20px
-      .title
-        font-size: 20px
-        margin-bottom: 5px
-      .description
-        word-break: break-word
-        font-size: 16px
-        overflow: hidden
-        margin-bottom: 5px
-        text-truncate()
-      h4
-        font-size: 16px
-        margin-bottom: 5px
-      .datetime
-        font-size: 16px
-        color: gray
-        margin-bottom: 5px
-        .date
-          margin-right: 10px
+  .event
+    margin-bottom: 20px
+    .title
+      font-size: 20px
+      margin-bottom: 5px
+    .description
+      word-break: break-word
+      font-size: 16px
+      overflow: hidden
+      margin-bottom: 5px
+      text-truncate()
+    h4
+      font-size: 16px
+      margin-bottom: 5px
+    .datetime
+      font-size: 16px
+      color: gray
+      margin-bottom: 5px
+      .date
+        margin-right: 10px
+    .users
+      display: flex
+    .user
+      margin-right: 5px
+      width: 30px
+      height: 30px
+      img
+        width: 100%
+        height: 100%
+        border-radius: 50%
+        border: 1px solid color1
 </style>

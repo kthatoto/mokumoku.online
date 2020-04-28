@@ -7,6 +7,13 @@ export interface Event {
   date: Date
   startDatetime: string
   endDatetime: string
+  users: User[]
+}
+
+export interface User {
+  uid: string
+  displayName: string
+  photoURL: string
 }
 
 export const buildIndexStore = (context: any) => {
@@ -36,7 +43,9 @@ export const buildIndexStore = (context: any) => {
 
   const createEvent = async (newEvent: Event) => {
     let result: boolean = true
-    await db.collection('events').add({ ...newEvent }).catch((_: any) => {
+    const currentUser: any = context.root.$firebase.auth().currentUser
+    const user: User = { uid: currentUser.uid, displayName: currentUser.displayName, photoURL: currentUser.photoURL }
+    await db.collection('events').add({ ...newEvent, users: [user] }).catch((_: any) => {
       result = false
     })
     return result
