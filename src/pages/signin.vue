@@ -26,7 +26,6 @@ export default defineComponent({
         const provider = new TwitterAuthProvider()
         context.root.$firebase.auth().signInWithRedirect(provider)
       } catch (e) {
-        console.log(e)
         pushedTwitterAuth.value = false
         context.root.$message({ message: 'ログインに失敗しました。時間をおいてやり直してください。', type: 'error', duration: 5000 })
       }

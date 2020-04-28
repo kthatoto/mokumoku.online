@@ -6,7 +6,7 @@ const api = express()
 
 api.use(cors({ origin: true }))
 
-api.get('/messages', (req, res) => {
+api.get('/messages', (_req, res) => {
   res.send(['foo', 'bar'])
 })
 

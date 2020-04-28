@@ -25,7 +25,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive, ref, provide } from '@vue/composition-api'
+import { defineComponent, onMounted, ref, provide } from '@vue/composition-api'
 
 import { buildIndexStore, indexStoreInjectionKey } from '@/stores/indexStore'
 import NewEventModal from '@/components/NewEventModal.vue'

@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive, ref, computed } from '@vue/composition-api'
+import { defineComponent, reactive, computed } from '@vue/composition-api'
 
 import injectBy from '@/utils/injectBy'
 import { Event, indexStoreInjectionKey } from '@/stores/indexStore'
