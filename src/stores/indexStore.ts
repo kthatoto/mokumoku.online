@@ -11,10 +11,8 @@ export interface Event {
 
 export const buildIndexStore = (context: any) => {
   const events = ref<Event[]>([])
+  const db = context.root.$firebase.firestore()
   const getResources = async () => {
-    return
-    const db = context.root.$firebase.firestore()
-
     const newEvents: Event[] = []
     const collection: any = await db.collection('events').get()
     collection.docs.forEach((doc: any) => {
@@ -24,8 +22,13 @@ export const buildIndexStore = (context: any) => {
     events.value = newEvents
   }
 
-  const createEvent = (newEvent: Event) => {
-    console.log(newEvent)
+  const createEvent = async (newEvent: Event): boolean => {
+    try {
+      await db.collection('events').add({ ...newEvent })
+      return true
+    } catch (_e) {
+      return false
+    }
   }
 
   return { getResources, events, createEvent }

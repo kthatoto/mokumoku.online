@@ -11,7 +11,6 @@
 
 <script lang="ts">
 import { defineComponent, ref } from '@vue/composition-api'
-import { Message } from 'element-ui'
 
 export default defineComponent({
   layout: 'beforeSignin',
@@ -29,7 +28,7 @@ export default defineComponent({
       } catch (e) {
         console.log(e)
         pushedTwitterAuth.value = false
-        Message({ message: 'ログインに失敗しました。時間をおいてやり直してください。', type: 'error', duration: 5000 })
+        context.root.$message({ message: 'ログインに失敗しました。時間をおいてやり直してください。', type: 'error', duration: 5000 })
       }
     }
 
