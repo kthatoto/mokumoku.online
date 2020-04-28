@@ -7,7 +7,7 @@ export interface Event {
   date: Date
   startDatetime: string
   endDatetime: string
-  users: User[]
+  users?: User[]
 }
 
 export interface User {
