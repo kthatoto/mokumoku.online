@@ -12,7 +12,7 @@
       el-form-item(label="日付" required)
         el-date-picker(type="date" v-model="form.date" :clearable="false" :editable="false"
           :pickerOptions="datePickerOptions")
-      el-form-item(label="時間" required)
+      el-form-item(label="時間" required :error="errors.startDatetime")
         .flex
           el-time-select(v-model="form.startDatetime" :picker-options="timeSelectOptions"
             :clearable="false" :editable="false" style="width: 100%")
@@ -21,6 +21,7 @@
             :clearable="false" :editable="false" style="width: 100%")
       el-form-item(label="URL")
         el-input(type="url" placeholder="https://us04web.zoom.us/j/0123456789a")
+        span.-note あとで編集できます
       .buttons
         el-button(type="primary" @click="submit")
           icon.icon.-r(name="plus")
@@ -35,6 +36,7 @@ import { Event, indexStoreInjectionKey } from '@/stores/indexStore'
 
 interface Errors {
   title: string | null
+  startDatetime: string | null
   [key: string]: any
 }
 
@@ -70,6 +72,9 @@ export default defineComponent({
     }
     const validate = () => {
       if (form.title.length === 0) errors.title = 'タイトルを入力してください'
+      if (parseInt(form.startDatetime.split(':').join()) >= parseInt(form.endDatetime.split(':').join())) {
+        errors.startDatetime = '終了時間が終了時間を超えています'
+      }
     }
     const existsErrors = computed<boolean>(() => {
       return Object.values(errors).every(v => v === null)
@@ -130,6 +135,9 @@ export default defineComponent({
     display: flex
     > span
       margin: 0 5px
+  .-note
+    color: color3
+    font-size: 12px
   >>> .el-dialog
     max-width: 500px
   >>> .el-date-editor--time-select
