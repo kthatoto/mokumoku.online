@@ -9,7 +9,7 @@
       span ホストする
   .events
     el-card.event(v-for="event in events" :key="event.id")
-      nuxt-link.title(:to="'/events/' + event.id")
+      nuxt-link.title(:to="'/mokumoku/' + event.id")
         h3 {{ event.title }}
       p.description(v-if="event.description") {{ event.description }}
       h4 時間
