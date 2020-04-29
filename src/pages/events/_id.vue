@@ -1,7 +1,11 @@
 <template lang="pug">
 .event
   .event__wrapper(v-if="event")
-    h1.title {{ event.title }}
+    h1.title
+      span {{ event.title }}
+      el-button(type="primary" icon="el-icon-edit" circle @click="openForm")
+    .edit-form(v-if="showingForm")
+      edit-event-modal(:showing="showingForm" @closeModal="closeForm" :event="event")
     el-card.card
       p.description {{ event.description }}
       h4 時間
@@ -17,22 +21,31 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted } from '@vue/composition-api'
+import { defineComponent, onMounted, ref } from '@vue/composition-api'
 
 import injectBy from '@/utils/injectBy'
 import { indexStoreInjectionKey, Event } from '@/stores/indexStore'
+import EditEventModal from '@/components/EditEventModal.vue'
 
 export default defineComponent({
+  components: { EditEventModal },
   setup (_, context: any) {
     const store = injectBy(indexStoreInjectionKey)
     const eventId: string = context.root.$route.params.id
+
+    const showingForm = ref<boolean>(false)
+    const openForm = () => { showingForm.value = true }
+    const closeForm = () => { showingForm.value = false }
 
     onMounted(async () => {
       await store.getEvent(eventId)
     })
 
     return {
-      event: store.event
+      event: store.event,
+      showingForm,
+      openForm,
+      closeForm
     }
   }
 })
@@ -42,10 +55,12 @@ export default defineComponent({
 .event
   width: 400px
   margin: 50px auto 0
-  h1
+  .title
     font-size: 24px
     margin-bottom: 20px
     color: color5
+    display: flex
+    justify-content: space-between
   .description
     word-break: break-word
     font-size: 16px
