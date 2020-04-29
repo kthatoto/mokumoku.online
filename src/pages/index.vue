@@ -14,7 +14,7 @@
       p.description(v-if="event.description") {{ event.description }}
       h4 時間
       p.datetime
-        span.date {{ formatDate(event.date) }}
+        span.date {{ event.dateString }}
         span {{ event.startDatetime }}
         span 〜
         span {{ event.endDatetime }}
@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from '@vue/composition-api'
+import { defineComponent, ref } from '@vue/composition-api'
 
 import injectBy from '@/utils/injectBy'
 import { indexStoreInjectionKey } from '@/stores/indexStore'
@@ -42,20 +42,11 @@ export default defineComponent({
     const openForm = () => { showingForm.value = true }
     const closeForm = () => { showingForm.value = false }
 
-    const formatDate = (date: Date): string => {
-      return context.root.$dayjs(date).format('YYYY-MM-DD')
-    }
-
-    onMounted(async () => {
-      await store.getResources()
-    })
-
     return {
       events: store.events,
       showingForm,
       openForm,
-      closeForm,
-      formatDate
+      closeForm
     }
   }
 })

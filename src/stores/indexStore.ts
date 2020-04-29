@@ -5,6 +5,7 @@ export interface Event {
   title: string
   description: string
   date: Date
+  dateString?: string
   startDatetime: string
   endDatetime: string
   users?: User[]
@@ -17,10 +18,19 @@ export interface User {
 }
 
 export const buildIndexStore = (context: any) => {
-  const events = ref<Event[]>([])
   const db = context.root.$firebase.firestore()
 
-  const getResources = async () => {
+  const serialize = (data: any, id: string): Event => {
+    const date: Date = data.date.toDate()
+    return {
+      ...data,
+      id,
+      date,
+      dateString: context.root.$dayjs(date).format('YYYY-MM-DD')
+    }
+  }
+  const events = ref<Event[]>([])
+  const getEvents = async () => {
     const newEvents: Event[] = []
     let result: boolean = true
     const collection: any = await db.collection('events').get().catch((_: any) => {
@@ -36,13 +46,23 @@ export const buildIndexStore = (context: any) => {
     collection.docs.forEach((doc: any) => {
       const id: string = doc.id
       const data = doc.data()
-      newEvents.push({ ...data, id, date: data.date.toDate() })
+      newEvents.push(serialize(data, id))
     })
     events.value = newEvents
   }
 
   const event = ref<Event | null>(null)
-  const getResource = async () => {
+  const getEvent = async (eventId: string) => {
+    try {
+      const doc: any = await db.collection('events').doc(eventId).get()
+      if (!doc.exists) throw 'not_found'
+      const data = doc.data()
+      event.value = serialize(data, eventId)
+    } catch (e) {
+      context.root.$message({ message: 'イベントが見つかりませんでした', type: 'error', duration: 5000 })
+      // TODO: redirect 404
+      context.root.$router.push('/')
+    }
   }
 
   const createEvent = async (newEvent: Event) => {
@@ -57,9 +77,9 @@ export const buildIndexStore = (context: any) => {
 
   return {
     events,
-    getResources,
+    getEvents,
     event,
-    getResource,
+    getEvent,
     createEvent
   }
 }

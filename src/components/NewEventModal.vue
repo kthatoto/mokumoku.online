@@ -95,7 +95,7 @@ export default defineComponent({
       }
       submitting.value = false
       close()
-      await store.getResources()
+      store.getEvents()
     }
 
     const datePickerOptions = {
