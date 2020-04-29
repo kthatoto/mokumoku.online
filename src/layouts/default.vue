@@ -14,10 +14,15 @@ el-container.default
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent, provide } from '@vue/composition-api'
+import { buildIndexStore, indexStoreInjectionKey } from '@/stores/indexStore'
 
 export default defineComponent({
   setup (_, context: any) {
+    const store = buildIndexStore(context)
+    provide(indexStoreInjectionKey, store)
+    store.getResources()
+
     const signout = async () => {
       await context.root.$firebase.auth().signOut()
       context.root.$message({ message: 'ログアウトしました', type: 'success', duration: 5000 })

@@ -64,7 +64,7 @@ export default defineComponent({
     const close = () => { context.emit('closeModal') }
     const submitting = ref<boolean>(false)
 
-    const errors = reactive<Errors>({ title: null })
+    const errors = reactive<Errors>({ title: null, startDatetime: null })
     const clearErrors = () => {
       Object.keys(errors).forEach((key: string) => {
         errors[key] = null

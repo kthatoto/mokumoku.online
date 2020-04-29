@@ -41,6 +41,10 @@ export const buildIndexStore = (context: any) => {
     events.value = newEvents
   }
 
+  const event = ref<Event | null>(null)
+  const getResource = async () => {
+  }
+
   const createEvent = async (newEvent: Event) => {
     let result: boolean = true
     const currentUser: any = context.root.$firebase.auth().currentUser
@@ -51,7 +55,13 @@ export const buildIndexStore = (context: any) => {
     return result
   }
 
-  return { getResources, events, createEvent }
+  return {
+    events,
+    getResources,
+    event,
+    getResource,
+    createEvent
+  }
 }
 
 export type IndexStore = ReturnType<typeof buildIndexStore>

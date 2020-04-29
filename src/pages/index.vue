@@ -9,7 +9,8 @@
       span ホストする
   .events
     el-card.event(v-for="event in events" :key="event.id")
-      h3.title {{ event.title }}
+      nuxt-link.title(:to="'/events/' + event.id")
+        h3 {{ event.title }}
       p.description(v-if="event.description") {{ event.description }}
       h4 時間
       p.datetime
@@ -25,17 +26,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref, provide } from '@vue/composition-api'
+import { defineComponent, onMounted, ref } from '@vue/composition-api'
 
-import { buildIndexStore, indexStoreInjectionKey } from '@/stores/indexStore'
+import injectBy from '@/utils/injectBy'
+import { indexStoreInjectionKey } from '@/stores/indexStore'
 import NewEventModal from '@/components/NewEventModal.vue'
 
 export default defineComponent({
   meta: { auth: true },
   components: { NewEventModal },
   setup (_, context: any) {
-    const store = buildIndexStore(context)
-    provide(indexStoreInjectionKey, store)
+    const store = injectBy(indexStoreInjectionKey)
 
     const showingForm = ref<boolean>(false)
     const openForm = () => { showingForm.value = true }
@@ -76,8 +77,12 @@ export default defineComponent({
   .event
     margin-bottom: 20px
     .title
-      font-size: 20px
+      display: inline-block
       margin-bottom: 5px
+      &:hover
+        text-decoration: underline
+      h3
+        font-size: 20px
     .description
       word-break: break-word
       font-size: 16px
