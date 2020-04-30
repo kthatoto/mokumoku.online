@@ -66,12 +66,11 @@ export const buildIndexStore = (context: any) => {
     }
   }
 
-
   const createEvent = async (newEvent: Event) => {
     let result: boolean = true
     const currentUser: any = context.root.$firebase.auth().currentUser
     const user: User = { uid: currentUser.uid, displayName: currentUser.displayName, photoURL: currentUser.photoURL }
-    await db.collection('events').add({ ...newEvent, users: [user] }).catch((_: any) => {
+    await db.collection('events').add({ ...newEvent, users: [user], hostId: user.uid }).catch((_: any) => {
       result = false
     })
     return result
@@ -85,13 +84,22 @@ export const buildIndexStore = (context: any) => {
     return result
   }
 
+  const deleteEvent = async (eventId: string) => {
+    let result: boolean = true
+    await db.collection('events').doc(eventId).delete().catch((_: any) => {
+      result = false
+    })
+    return result
+  }
+
   return {
     events,
     getEvents,
     event,
     getEvent,
     createEvent,
-    updateEvent
+    updateEvent,
+    deleteEvent
   }
 }
 

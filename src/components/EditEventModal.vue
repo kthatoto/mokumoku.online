@@ -22,9 +22,10 @@
       el-form-item(label="URL")
         el-input(type="url" placeholder="https://us04web.zoom.us/j/0123456789a")
       .buttons
-        el-button(type="primary" @click="submit")
+        el-button.submit(type="primary" @click="submit")
           icon.icon.-r(name="plus")
           span 更新
+        el-button.right(type="danger" icon="el-icon-delete" circle @click="deleteConfirm")
 </template>
 
 <script lang="ts">
@@ -51,6 +52,7 @@ export default defineComponent({
   },
   setup (props: Props, context: any) {
     const store = injectBy(indexStoreInjectionKey)
+    const eventId = computed<string>(() => props.event.id || '')
 
     const form = reactive<Event>(JSON.parse(JSON.stringify(props.event)))
     const close = () => { context.emit('closeModal') }
@@ -86,8 +88,20 @@ export default defineComponent({
       }
       submitting.value = false
       close()
-      if (props.event.id === undefined) return
-      store.getEvent(props.event.id)
+      store.getEvent(eventId.value)
+    }
+
+    const deleteConfirm = async () => {
+      context.root.$confirm('本当に削除してよろしいですか？<br>(コメントなども全て削除されます)', {
+        title: 'もくもく会を削除',
+        confirmButtonText: '削除',
+        cancelButtonText: 'キャンセル',
+        dangerouslyUseHTMLString: true,
+        callback: (res: string) => {
+          if (res !== "confirm") return
+          store.deleteEvent(eventId.value)
+        }
+      })
     }
 
     const datePickerOptions = {
@@ -103,6 +117,7 @@ export default defineComponent({
       close,
       errors,
       submit,
+      deleteConfirm,
       datePickerOptions,
       timeSelectOptions
     }
@@ -121,8 +136,14 @@ export default defineComponent({
       circle-icon(24px)
   .buttons
     text-align: center
-    .el-button
+    position: relative
+    .submit
       width: 100px
+    .right
+      position: absolute
+      top: 0
+      right: 0
+      bottom: 0
   .flex
     display: flex
     > span
