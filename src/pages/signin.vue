@@ -54,15 +54,10 @@ export default defineComponent({
     &.-twitter
       background-color: twitterColor
       color: white
-      vertical-align: middle
-      >>> > span
-        width: 100%
-        height: 100%
-        display: flex
-        margin: auto
-        align-items: center
-        justify-content: center
+      span
+        vertical-align: middle
       img
         width: 30px
         margin-right: 10px
+        vertical-align: middle
 </style>

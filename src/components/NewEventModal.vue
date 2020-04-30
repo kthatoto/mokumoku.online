@@ -20,7 +20,7 @@
           el-time-select(v-model="form.endDatetime" :picker-options="timeSelectOptions"
             :clearable="false" :editable="false" style="width: 100%")
       el-form-item(label="URL")
-        el-input(type="url" placeholder="https://us04web.zoom.us/j/0123456789a")
+        el-input(type="url" v-model="form.url" placeholder="https://us04web.zoom.us/j/0123456789a")
         span.-note あとで編集できます
       .buttons
         el-button(type="primary" @click="submit")
@@ -52,7 +52,8 @@ export default defineComponent({
       description: '',
       date: new Date(),
       startDatetime: '20:00',
-      endDatetime: '22:00'
+      endDatetime: '22:00',
+      url: ''
     })
     const resetForm = () => {
       form.title = ''
@@ -60,6 +61,7 @@ export default defineComponent({
       form.date = new Date()
       form.startDatetime = '20:00'
       form.endDatetime = '22:00'
+      form.url = ''
     }
     const close = () => { context.emit('closeModal') }
     const submitting = ref<boolean>(false)

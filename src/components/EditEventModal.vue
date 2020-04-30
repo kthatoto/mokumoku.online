@@ -24,7 +24,7 @@
       .buttons
         el-button(type="primary" @click="submit")
           icon.icon.-r(name="plus")
-          span 作成
+          span 更新
 </template>
 
 <script lang="ts">
@@ -78,7 +78,7 @@ export default defineComponent({
       if (submitting.value) return
       submitting.value = true
       const date: Date = new Date(form.date.toString())
-      const res: boolean = await store.updateEvent({ ...form, date, })
+      const res: boolean = await store.updateEvent({ ...form, date })
       if (res) {
         context.root.$message({ message: 'もくもく会を編集しました', type: 'success', duration: 5000 })
       } else {
@@ -86,7 +86,7 @@ export default defineComponent({
       }
       submitting.value = false
       close()
-      store.getEvents()
+      store.getEvent(props.event.id)
     }
 
     const datePickerOptions = {
