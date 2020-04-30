@@ -86,6 +86,7 @@ export default defineComponent({
       }
       submitting.value = false
       close()
+      if (props.event.id === undefined) return
       store.getEvent(props.event.id)
     }
 
