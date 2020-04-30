@@ -100,6 +100,9 @@ export default defineComponent({
         callback: (res: string) => {
           if (res !== "confirm") return
           store.deleteEvent(eventId.value)
+          store.getEvents()
+          context.root.$message({ message: 'もくもく会を削除しました', type: 'success', duration: 5000 })
+          context.root.$router.push('/')
         }
       })
     }
