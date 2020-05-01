@@ -17,8 +17,19 @@ if (!firebase.apps.length) {
   )
 }
 
+const upsertUser = async (user) => {
+  const db = firebase.firestore()
+  const doc = await db.collection('users').doc(user.uid).get()
+  if (doc.exists) return
+  db.collection('users').doc(user.uid).set({
+    uid: user.uid,
+    displayName: user.displayName,
+    photoURL: user.photoURL
+  })
+}
+
 export default ({ app, redirect }, inject) => {
-  firebase.auth().onAuthStateChanged((user) => {
+  firebase.auth().onAuthStateChanged(async (user) => {
     if (!user) {
       if (app.context.route.meta[0].auth) {
         Message({ message: 'ログインしてください', type: 'warning', duration: 5000 })
@@ -27,15 +38,7 @@ export default ({ app, redirect }, inject) => {
       return
     }
     if (app.context.route.meta[0].shouldGuest) return redirect('/')
-    const db = firebase.firestore()
-    db.collection('users').doc(user.uid).get().then((doc) => {
-      if (doc.exists) return
-      db.collection('users').doc(user.uid).set({
-        uid: user.uid,
-        displayName: user.displayName,
-        photoURL: user.photoURL
-      })
-    })
+    await upsertUser(user)
   })
   inject('firebase', firebase)
 }
