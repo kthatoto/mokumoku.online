@@ -30,7 +30,7 @@ export default ({ app, redirect }, inject) => {
     const db = firebase.firestore()
     db.collection('users').doc(user.uid).get().then((doc) => {
       if (doc.exists) return
-      db.collection('users').add({
+      db.collection('users').doc(user.uid).set({
         uid: user.uid,
         displayName: user.displayName,
         photoURL: user.photoURL
