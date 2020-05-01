@@ -20,13 +20,22 @@ if (!firebase.apps.length) {
 export default ({ app, redirect }, inject) => {
   firebase.auth().onAuthStateChanged((user) => {
     if (!user) {
-      if (app.context.from.meta[0].auth) {
+      if (app.context.route.meta[0].auth) {
         Message({ message: 'ログインしてください', type: 'warning', duration: 5000 })
         return redirect('/signin')
       }
       return
     }
-    if (app.context.from.meta[0].shouldGuest) return redirect('/')
+    if (app.context.route.meta[0].shouldGuest) return redirect('/')
+    const db = firebase.firestore()
+    db.collection('users').doc(user.uid).get().then((doc) => {
+      if (doc.exists) return
+      db.collection('users').add({
+        uid: user.uid,
+        displayName: user.displayName,
+        photoURL: user.photoURL
+      })
+    })
   })
   inject('firebase', firebase)
 }

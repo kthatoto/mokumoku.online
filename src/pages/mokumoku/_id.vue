@@ -28,8 +28,8 @@ import { indexStoreInjectionKey, Event } from '@/stores/indexStore'
 import EditEventModal from '@/components/EditEventModal.vue'
 
 export default defineComponent({
-  components: { EditEventModal },
   meta: { auth: true },
+  components: { EditEventModal },
   setup (_, context: any) {
     const store = injectBy(indexStoreInjectionKey)
     const eventId: string = context.root.$route.params.id
