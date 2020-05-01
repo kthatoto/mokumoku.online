@@ -27,12 +27,14 @@ export const buildIndexStore = (context: any) => {
     await data.users.forEach(async (userDocRef: any) => {
       users.push((await userDocRef.get()).data())
     })
+    const host = (await data.host.get()).data()
     return {
       ...data,
       id,
       date,
       dateString: context.root.$dayjs(date).format('YYYY-MM-DD'),
-      users
+      users,
+      host
     }
   }
   const events = ref<Event[]>([])
