@@ -21,13 +21,18 @@ export interface User {
 export const buildIndexStore = (context: any) => {
   const db = context.root.$firebase.firestore()
 
-  const serialize = (data: any, id: string): Event => {
+  const serialize = async (data: any, id: string) => {
     const date: Date = data.date.toDate()
+    const users: User[] = []
+    await data.users.forEach(async (userDocRef: any) => {
+      users.push((await userDocRef.get()).data())
+    })
     return {
       ...data,
       id,
       date,
-      dateString: context.root.$dayjs(date).format('YYYY-MM-DD')
+      dateString: context.root.$dayjs(date).format('YYYY-MM-DD'),
+      users
     }
   }
   const events = ref<Event[]>([])
@@ -44,10 +49,10 @@ export const buildIndexStore = (context: any) => {
         duration: 5000
       })
     }
-    collection.docs.forEach((doc: any) => {
+    collection.docs.forEach(async (doc: any) => {
       const id: string = doc.id
       const data = doc.data()
-      newEvents.push(serialize(data, id))
+      newEvents.push(await serialize(data, id))
     })
     events.value = newEvents
   }
@@ -58,7 +63,7 @@ export const buildIndexStore = (context: any) => {
       const doc: any = await db.collection('events').doc(eventId).get()
       if (!doc.exists) throw 'not_found'
       const data = doc.data()
-      event.value = serialize(data, eventId)
+      event.value = await serialize(data, eventId)
     } catch (e) {
       context.root.$message({ message: 'イベントが見つかりませんでした', type: 'error', duration: 5000 })
       // TODO: redirect 404
@@ -69,8 +74,8 @@ export const buildIndexStore = (context: any) => {
   const createEvent = async (newEvent: Event) => {
     let result: boolean = true
     const currentUser: any = context.root.$firebase.auth().currentUser
-    const user: User = { uid: currentUser.uid, displayName: currentUser.displayName, photoURL: currentUser.photoURL }
-    await db.collection('events').add({ ...newEvent, users: [user], hostId: user.uid }).catch((_: any) => {
+    const userDocRef = db.collection('users').doc(currentUser.uid)
+    await db.collection('events').add({ ...newEvent, users: [userDocRef], host: userDocRef }).catch((_: any) => {
       result = false
     })
     return result
