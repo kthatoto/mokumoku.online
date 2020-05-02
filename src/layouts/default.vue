@@ -37,6 +37,7 @@ export default defineComponent({
       if (context.root.$firebase.auth().currentUser) {
         loading.value = false
         clearInterval(timerId)
+        store.getCurrentUser()
       }
     }, 500)
 

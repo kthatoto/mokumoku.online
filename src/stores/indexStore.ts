@@ -21,22 +21,16 @@ export interface User {
 export const buildIndexStore = (context: any) => {
   const db = context.root.$firebase.firestore()
 
-  const serialize = async (data: any, id: string) => {
-    const date: Date = data.date.toDate()
-    const users: User[] = []
-    await data.users.forEach(async (userDocRef: any) => {
-      users.push((await userDocRef.get()).data())
-    })
-    const host = (await data.host.get()).data()
-    return {
-      ...data,
-      id,
-      date,
-      dateString: context.root.$dayjs(date).format('YYYY-MM-DD'),
-      users,
-      host
+  const currentUser = ref<User | null>(null)
+  const getCurrentUser = () => {
+    const user = context.root.$firebase.auth().currentUser
+    currentUser.value = {
+      uid: user.uid,
+      displayName: user.displayName,
+      photoURL: user.photoURL
     }
   }
+
   const events = ref<Event[]>([])
   const getEvents = async () => {
     const newEvents: Event[] = []
@@ -99,7 +93,26 @@ export const buildIndexStore = (context: any) => {
     return result
   }
 
+  const serialize = async (data: any, id: string) => {
+    const date: Date = data.date.toDate()
+    const users: User[] = []
+    await data.users.forEach(async (userDocRef: any) => {
+      users.push((await userDocRef.get()).data())
+    })
+    const host = (await data.host.get()).data()
+    return {
+      ...data,
+      id,
+      date,
+      dateString: context.root.$dayjs(date).format('YYYY-MM-DD'),
+      users,
+      host
+    }
+  }
+
   return {
+    currentUser,
+    getCurrentUser,
     events,
     getEvents,
     event,
