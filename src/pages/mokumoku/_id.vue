@@ -38,21 +38,19 @@ export default defineComponent({
     const eventId: string = context.root.$route.params.id
     const eventStore = buildEventStore(context, store, eventId)
     provide(eventStoreInjectionKey, eventStore)
+    eventStore.getEvent()
 
     const showingForm = ref<boolean>(false)
     const openForm = () => { showingForm.value = true }
     const closeForm = () => { showingForm.value = false }
-
-    const joinEvent = () => {
-    }
 
     return {
       event: eventStore.event,
       showingForm,
       openForm,
       closeForm,
-      hosting: eventStore.hosting,
-      joinEvent,
+      joinEvent: eventStore.joinEvent,
+      hosting: eventStore.hosting
     }
   }
 })

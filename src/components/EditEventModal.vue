@@ -33,6 +33,7 @@ import { defineComponent, reactive, computed, ref } from '@vue/composition-api'
 
 import injectBy from '@/utils/injectBy'
 import { Event, indexStoreInjectionKey } from '@/stores/indexStore'
+import { eventStoreInjectionKey } from '@/stores/eventStore'
 
 interface Errors {
   title: string | null
@@ -52,6 +53,7 @@ export default defineComponent({
   },
   setup (props: Props, context: any) {
     const store = injectBy(indexStoreInjectionKey)
+    const eventStore = injectBy(eventStoreInjectionKey)
     const eventId = computed<string>(() => props.event.id || '')
 
     const form = reactive<Event>(JSON.parse(JSON.stringify(props.event)))
@@ -80,7 +82,7 @@ export default defineComponent({
       if (submitting.value) return
       submitting.value = true
       const date: Date = new Date(form.date.toString())
-      const res: boolean = await store.updateEvent({ ...form, date })
+      const res: boolean = await eventStore.updateEvent({ ...form, date })
       if (res) {
         context.root.$message({ message: 'もくもく会を編集しました', type: 'success', duration: 5000 })
       } else {
@@ -88,7 +90,7 @@ export default defineComponent({
       }
       submitting.value = false
       close()
-      store.getEvent(eventId.value)
+      eventStore.getEvent()
     }
 
     const deleteConfirm = async () => {
@@ -99,7 +101,7 @@ export default defineComponent({
         dangerouslyUseHTMLString: true,
         callback: (res: string) => {
           if (res !== "confirm") return
-          store.deleteEvent(eventId.value)
+          eventStore.deleteEvent()
           store.getEvents()
           context.root.$message({ message: 'もくもく会を削除しました', type: 'success', duration: 5000 })
           context.root.$router.push('/')

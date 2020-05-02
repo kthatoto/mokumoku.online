@@ -23,7 +23,6 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
       context.root.$router.push('/')
     }
   }
-  getEvent()
 
   const updateEvent = async (event: Event) => {
     let result: boolean = true
@@ -41,6 +40,9 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
     return result
   }
 
+  const joinEvent = () => {
+  }
+
   const hosting = computed<boolean>(() => {
     if (event.value === null) return false
     if (indexStore.currentUser.value === null) return false
@@ -49,8 +51,10 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
 
   return {
     event,
+    getEvent,
     updateEvent,
     deleteEvent,
+    joinEvent,
     hosting
   }
 }
