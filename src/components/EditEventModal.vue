@@ -20,7 +20,7 @@
           el-time-select(v-model="form.endDatetime" :picker-options="timeSelectOptions"
             :clearable="false" :editable="false" style="width: 100%")
       el-form-item(label="URL")
-        el-input(type="url" placeholder="https://us04web.zoom.us/j/0123456789a")
+        el-input(type="url" v-model="form.url" placeholder="https://us04web.zoom.us/j/0123456789a")
       .buttons
         el-button.submit(type="primary" @click="submit")
           icon.icon.-r(name="plus")

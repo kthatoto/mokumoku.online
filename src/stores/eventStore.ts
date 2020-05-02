@@ -26,7 +26,15 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
 
   const updateEvent = async (event: Event) => {
     let result: boolean = true
-    await db.collection('events').doc(eventId).update(event).catch((_: any) => {
+    const updatingEvent = {
+      title: event.title,
+      description: event.description,
+      date: event.date,
+      startDatetime: event.startDatetime,
+      endDatetime: event.endDatetime,
+      url: event.url
+    }
+    await db.collection('events').doc(eventId).update(updatingEvent).catch((_: any) => {
       result = false
     })
     return result
