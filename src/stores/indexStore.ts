@@ -23,7 +23,7 @@ export interface User {
 export const buildIndexStore = (context: any) => {
   const db = context.root.$firebase.firestore()
 
-  const currentUser = ref<User | null>(null)
+  const currentUser = ref<User>({} as User)
   const getCurrentUser = () => {
     const user = context.root.$firebase.auth().currentUser
     currentUser.value = {

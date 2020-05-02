@@ -6,7 +6,7 @@ import eventSerialize from '@/utils/serializers/eventSerialize'
 export const buildEventStore = (context: any, indexStore: IndexStore, eventId: string) => {
   const db = context.root.$firebase.firestore()
 
-  const event = ref<Event | null>(null)
+  const event = ref<Event>({} as Event)
   const getEvent = async () => {
     try {
       const doc: any = await db.collection('events').doc(eventId).get()
@@ -50,8 +50,9 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
 
   const joinEvent = async () => {
     if (joining.value) return false
+    if (!event.value.users) return false
     const userDocRefs = event.value.users.map((user: User) => db.collection('users').doc(user.uid))
-    userDocRefs.push(db.collection('users').doc(indexStore.currentUser.uid))
+    userDocRefs.push(db.collection('users').doc(indexStore.currentUser.value.uid))
     let result: boolean = true
     await db.collections('events').doc(eventId).update({users: userDocRefs}).catch((_: any) => {
       result = false
@@ -60,16 +61,15 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
   }
 
   const hosting = computed<boolean>(() => {
-    if (event.value === null) return false
-    if (!indexStore.currentUser.value) return false
     if (!event.value.host) return false
     return event.value.host.uid === indexStore.currentUser.value.uid
   })
 
   const joining = computed<boolean>(() => {
-    if (!indexStore.currentUser.value) return false
     if (!event.value.users) return false
-    return event.value.users.some((user: User) => user.uid === indexStore.currentUser.value.uid)
+    return event.value.users.some((user: User) => {
+      return user.uid === indexStore.currentUser.value.uid
+    })
   })
 
   return {
