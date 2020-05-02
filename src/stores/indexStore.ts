@@ -1,4 +1,4 @@
-import { InjectionKey, ref } from '@vue/composition-api'
+import { InjectionKey, ref, computed } from '@vue/composition-api'
 
 export interface Event {
   id?: string
@@ -9,7 +9,8 @@ export interface Event {
   startDatetime: string
   endDatetime: string
   url: string
-  users?: User[]
+  users: User[]
+  host: User
 }
 
 export interface User {
@@ -110,6 +111,12 @@ export const buildIndexStore = (context: any) => {
     }
   }
 
+  const hosting = computed<boolean>(() => {
+    if (event.value === null) return false
+    if (currentUser.value === null) return false
+    return event.value.host.uid === currentUser.value.uid
+  })
+
   return {
     currentUser,
     getCurrentUser,
@@ -119,7 +126,8 @@ export const buildIndexStore = (context: any) => {
     getEvent,
     createEvent,
     updateEvent,
-    deleteEvent
+    deleteEvent,
+    hosting
   }
 }
 
