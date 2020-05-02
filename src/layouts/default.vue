@@ -1,20 +1,21 @@
 <template lang="pug">
-el-container.default
-  el-header.default__header
-    .header__container
-      nuxt-link.logo.-hover(to="/")
-        img(src="~/assets/mokumoku-face.png")
-        h1 mokumoku.online
-      el-dropdown.dropdown(trigger="click" @command="handleCommand")
-        el-button.dropdown__button.-hover
-          icon.icon(name="user")
-        el-dropdown-menu(slot="dropdown")
-          el-dropdown-item(command="signout") ログアウト
-  nuxt.root
+.default(v-loading="loading")
+  el-container(v-if="!loading")
+    el-header.default__header
+      .header__container
+        nuxt-link.logo.-hover(to="/")
+          img(src="~/assets/mokumoku-face.png")
+          h1 mokumoku.online
+        el-dropdown.dropdown(trigger="click" @command="handleCommand")
+          el-button.dropdown__button.-hover
+            icon.icon(name="user")
+          el-dropdown-menu(slot="dropdown")
+            el-dropdown-item(command="signout") ログアウト
+    nuxt.root
 </template>
 
 <script lang="ts">
-import { defineComponent, provide } from '@vue/composition-api'
+import { defineComponent, provide, ref } from '@vue/composition-api'
 import { buildIndexStore, indexStoreInjectionKey } from '@/stores/indexStore'
 
 export default defineComponent({
@@ -31,13 +32,19 @@ export default defineComponent({
       if (command === 'signout') signout()
     }
 
-    return { handleCommand }
+    const loading = ref<boolean>(true)
+    setTimeout(() => {
+      loading.value = false
+    }, 5000)
+
+    return { handleCommand, loading }
   }
 })
 </script>
 
 <style lang="stylus" scoped>
 .default
+  height: 100vh
   &__header
     border-bottom: 1px solid #d7dae2
     background-color: color4
