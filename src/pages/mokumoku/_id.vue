@@ -73,34 +73,7 @@ export default defineComponent({
     display: flex
     justify-content: space-between
   .card
-    margin-bottom: 15px
-    .description
-      word-break: break-word
-      font-size: 16px
-      overflow: hidden
-      margin-bottom: 5px
-      white-space: pre-wrap
-    h4
-      font-size: 16px
-      margin-bottom: 5px
-    .datetime
-      font-size: 16px
-      color: gray
-      margin-bottom: 5px
-      .date
-        margin-right: 10px
-    .users
-      display: flex
-      margin-bottom: 5px
-    .user
-      margin-right: 5px
-      width: 30px
-      height: 30px
-      img
-        width: 100%
-        height: 100%
-        border-radius: 50%
-        border: 1px solid color1
+    event-card()
     .url
       &:hover
         text-decoration: underline

@@ -8,10 +8,11 @@
       icon.icon.-r(name="plus")
       span ホストする
   .events
-    el-card.event(v-for="event in events" :key="event.id")
+    el-card.card(v-for="event in events" :key="event.id")
       nuxt-link.title(:to="'/mokumoku/' + event.id")
         h3 {{ event.title }}
-      p.description(v-if="event.description") {{ event.description }}
+      h4 詳細
+      p.description {{ event.description }}
       h4 時間
       p.datetime
         span.date {{ event.dateString }}
@@ -66,39 +67,6 @@ export default defineComponent({
   .console
     text-align: right
     margin-bottom: 20px
-  .event
-    margin-bottom: 20px
-    .title
-      display: inline-block
-      margin-bottom: 5px
-      &:hover
-        text-decoration: underline
-      h3
-        font-size: 20px
-    .description
-      word-break: break-word
-      font-size: 16px
-      overflow: hidden
-      margin-bottom: 5px
-      text-truncate()
-    h4
-      font-size: 16px
-      margin-bottom: 5px
-    .datetime
-      font-size: 16px
-      color: gray
-      margin-bottom: 5px
-      .date
-        margin-right: 10px
-    .users
-      display: flex
-    .user
-      margin-right: 5px
-      width: 30px
-      height: 30px
-      img
-        width: 100%
-        height: 100%
-        border-radius: 50%
-        border: 1px solid color1
+  .card
+    event-card()
 </style>
