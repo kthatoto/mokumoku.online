@@ -28,16 +28,16 @@ const upsertUser = async (user) => {
   })
 }
 
-export default ({ app, redirect }, inject) => {
+export default ({ route, redirect }, inject) => {
   firebase.auth().onAuthStateChanged(async (user) => {
     if (!user) {
-      if (app.context.route.meta[0].auth) {
+      if (route.meta[0].auth) {
         Message({ message: 'ログインしてください', type: 'warning', duration: 5000 })
         return redirect('/signin')
       }
       return
     }
-    if (app.context.route.meta[0].shouldGuest) return redirect('/')
+    if (route.meta[0].shouldGuest) return redirect('/')
     await upsertUser(user)
   })
   inject('firebase', firebase)

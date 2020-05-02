@@ -3,7 +3,7 @@
   .event__wrapper(v-if="event")
     h1.title
       span {{ event.title }}
-      el-button(type="primary" icon="el-icon-edit" circle @click="openForm")
+      el-button(v-if="" type="primary" icon="el-icon-edit" circle @click="openForm")
     .edit-form(v-if="showingForm")
       edit-event-modal(:showing="showingForm" @closeModal="closeForm" :event="event")
     el-card.card
@@ -37,6 +37,8 @@ export default defineComponent({
     const showingForm = ref<boolean>(false)
     const openForm = () => { showingForm.value = true }
     const closeForm = () => { showingForm.value = false }
+
+    // const isHost = store.event.value.host.uid
 
     onMounted(async () => {
       await store.getEvent(eventId)
