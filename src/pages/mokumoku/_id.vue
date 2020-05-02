@@ -7,6 +7,7 @@
     .edit-form(v-if="showingForm")
       edit-event-modal(:showing="showingForm" @closeModal="closeForm" :event="event")
     el-card.card
+      h4 詳細
       p.description {{ event.description }}
       h4 時間
       p.datetime
