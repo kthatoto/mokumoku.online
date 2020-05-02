@@ -1,3 +1,4 @@
+import { User } from '@/stores/indexStore'
 export default async (context: any, data: any, id: string) => {
   const date: Date = data.date.toDate()
   const users: User[] = []

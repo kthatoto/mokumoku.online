@@ -10,8 +10,8 @@ export interface Event {
   startDatetime: string
   endDatetime: string
   url: string
-  users: User[]
-  host: User
+  users?: User[]
+  host?: User
 }
 
 export interface User {

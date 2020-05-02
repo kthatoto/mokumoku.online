@@ -46,6 +46,7 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
   const hosting = computed<boolean>(() => {
     if (event.value === null) return false
     if (indexStore.currentUser.value === null) return false
+    if (!event.value.host) return false
     return event.value.host.uid === indexStore.currentUser.value.uid
   })
 
