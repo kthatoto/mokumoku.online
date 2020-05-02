@@ -18,13 +18,16 @@
       .users
         .user(v-for="u in event.users" :key="u.uid")
           img(:src="u.photoURL")
+    .console
+      el-button.button(type="primary" @click="joinEvent")
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from '@vue/composition-api'
+import { defineComponent, provide, ref } from '@vue/composition-api'
 
 import injectBy from '@/utils/injectBy'
 import { indexStoreInjectionKey, Event } from '@/stores/indexStore'
+import { buildEventStore, eventStoreInjectionKey } from '@/stores/eventStore'
 import EditEventModal from '@/components/EditEventModal.vue'
 
 export default defineComponent({
@@ -33,21 +36,23 @@ export default defineComponent({
   setup (_, context: any) {
     const store = injectBy(indexStoreInjectionKey)
     const eventId: string = context.root.$route.params.id
+    const eventStore = buildEventStore(context, store, eventId)
+    provide(eventStoreInjectionKey, eventStore)
 
     const showingForm = ref<boolean>(false)
     const openForm = () => { showingForm.value = true }
     const closeForm = () => { showingForm.value = false }
 
-    onMounted(async () => {
-      await store.getEvent(eventId)
-    })
+    const joinEvent = () => {
+    }
 
     return {
-      event: store.event,
+      event: eventStore.event,
       showingForm,
       openForm,
       closeForm,
-      hosting: store.hosting
+      hosting: eventStore.hosting,
+      joinEvent,
     }
   }
 })

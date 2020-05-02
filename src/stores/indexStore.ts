@@ -1,4 +1,5 @@
 import { InjectionKey, ref, computed } from '@vue/composition-api'
+import eventSerialize from '@/utils/serializers/eventSerialize'
 
 export interface Event {
   id?: string
@@ -49,23 +50,9 @@ export const buildIndexStore = (context: any) => {
     collection.docs.forEach(async (doc: any) => {
       const id: string = doc.id
       const data = doc.data()
-      newEvents.push(await serialize(data, id))
+      newEvents.push(await eventSerialize(context, data, id))
     })
     events.value = newEvents
-  }
-
-  const event = ref<Event | null>(null)
-  const getEvent = async (eventId: string) => {
-    try {
-      const doc: any = await db.collection('events').doc(eventId).get()
-      if (!doc.exists) throw 'not_found'
-      const data = doc.data()
-      event.value = await serialize(data, eventId)
-    } catch (e) {
-      context.root.$message({ message: 'イベントが見つかりませんでした', type: 'error', duration: 5000 })
-      // TODO: redirect 404
-      context.root.$router.push('/')
-    }
   }
 
   const createEvent = async (newEvent: Event) => {
@@ -78,56 +65,12 @@ export const buildIndexStore = (context: any) => {
     return result
   }
 
-  const updateEvent = async (event: Event) => {
-    let result: boolean = true
-    await db.collection('events').doc(event.id).update(event).catch((_: any) => {
-      result = false
-    })
-    return result
-  }
-
-  const deleteEvent = async (eventId: string) => {
-    let result: boolean = true
-    await db.collection('events').doc(eventId).delete().catch((_: any) => {
-      result = false
-    })
-    return result
-  }
-
-  const serialize = async (data: any, id: string) => {
-    const date: Date = data.date.toDate()
-    const users: User[] = []
-    await data.users.forEach(async (userDocRef: any) => {
-      users.push((await userDocRef.get()).data())
-    })
-    const host = (await data.host.get()).data()
-    return {
-      ...data,
-      id,
-      date,
-      dateString: context.root.$dayjs(date).format('YYYY-MM-DD'),
-      users,
-      host
-    }
-  }
-
-  const hosting = computed<boolean>(() => {
-    if (event.value === null) return false
-    if (currentUser.value === null) return false
-    return event.value.host.uid === currentUser.value.uid
-  })
-
   return {
     currentUser,
     getCurrentUser,
     events,
     getEvents,
-    event,
-    getEvent,
-    createEvent,
-    updateEvent,
-    deleteEvent,
-    hosting
+    createEvent
   }
 }
 
