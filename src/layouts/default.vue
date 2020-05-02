@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, provide, ref } from '@vue/composition-api'
+import { defineComponent, provide, ref, onBeforeUnmount } from '@vue/composition-api'
 import { buildIndexStore, indexStoreInjectionKey } from '@/stores/indexStore'
 
 export default defineComponent({
@@ -33,9 +33,14 @@ export default defineComponent({
     }
 
     const loading = ref<boolean>(true)
-    setTimeout(() => {
-      loading.value = false
-    }, 5000)
+    const timerId: number = window.setInterval(() => {
+      if (context.root.$firebase.auth().currentUser) {
+        loading.value = false
+        clearInterval(timerId)
+      }
+    }, 500)
+
+    onBeforeUnmount(() => { clearInterval(timerId) })
 
     return { handleCommand, loading }
   }
