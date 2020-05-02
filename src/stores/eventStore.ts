@@ -1,6 +1,6 @@
 import { InjectionKey, ref, computed } from '@vue/composition-api'
 
-import { Event, IndexStore } from './indexStore'
+import { Event, User, IndexStore } from './indexStore'
 import eventSerialize from '@/utils/serializers/eventSerialize'
 
 export const buildEventStore = (context: any, indexStore: IndexStore, eventId: string) => {
@@ -58,13 +58,20 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
     return event.value.host.uid === indexStore.currentUser.value.uid
   })
 
+  const joining = computed<boolean>(() => {
+    if (indexStore.currentUser.value === null) return false
+    if (!event.value.users) return false
+    return event.value.users.some((user: User) => user.uid === indexStore.currentUser.value.uid)
+  })
+
   return {
     event,
     getEvent,
     updateEvent,
     deleteEvent,
     joinEvent,
-    hosting
+    hosting,
+    joining
   }
 }
 

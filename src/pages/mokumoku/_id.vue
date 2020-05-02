@@ -18,8 +18,12 @@
       .users
         .user(v-for="u in event.users" :key="u.uid")
           img(:src="u.photoURL")
+      template(v-if="joining")
+        h4 参加リンク
+        a.url(v-if="event.url" :href="event.url" target="_blank") {{ event.url }}
     .console
-      el-button.button(type="primary" @click="joinEvent")
+      el-button(v-if="!joining" type="primary" @click="joinEvent") 参加する
+      el-button(v-else) 参加中
 </template>
 
 <script lang="ts">
@@ -50,7 +54,8 @@ export default defineComponent({
       openForm,
       closeForm,
       joinEvent: eventStore.joinEvent,
-      hosting: eventStore.hosting
+      hosting: eventStore.hosting,
+      joining: eventStore.joining
     }
   }
 })
@@ -66,30 +71,44 @@ export default defineComponent({
     color: color5
     display: flex
     justify-content: space-between
-  .description
-    word-break: break-word
-    font-size: 16px
-    overflow: hidden
-    margin-bottom: 5px
-    text-truncate()
-  h4
-    font-size: 16px
-    margin-bottom: 5px
-  .datetime
-    font-size: 16px
-    color: gray
-    margin-bottom: 5px
-    .date
-      margin-right: 10px
-  .users
-    display: flex
-  .user
-    margin-right: 5px
-    width: 30px
-    height: 30px
-    img
-      width: 100%
-      height: 100%
-      border-radius: 50%
-      border: 1px solid color1
+  .card
+    margin-bottom: 15px
+    .description
+      word-break: break-word
+      font-size: 16px
+      overflow: hidden
+      margin-bottom: 5px
+      white-space: pre-wrap
+    h4
+      font-size: 16px
+      margin-bottom: 5px
+    .datetime
+      font-size: 16px
+      color: gray
+      margin-bottom: 5px
+      .date
+        margin-right: 10px
+    .users
+      display: flex
+      margin-bottom: 5px
+    .user
+      margin-right: 5px
+      width: 30px
+      height: 30px
+      img
+        width: 100%
+        height: 100%
+        border-radius: 50%
+        border: 1px solid color1
+    .url
+      &:hover
+        text-decoration: underline
+  .console
+    text-align: right
+    margin-bottom: 10px
+    .joining
+      display: flex
+      justify-content: space-between
+      &__url
+        width: 200px
 </style>
