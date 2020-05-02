@@ -37,8 +37,8 @@ export default ({ route, redirect }, inject) => {
       }
       return
     }
-    if (route.meta[0].shouldGuest) return redirect('/')
     await upsertUser(user)
+    if (route.meta[0].shouldGuest) return redirect('/')
   })
   inject('firebase', firebase)
 }

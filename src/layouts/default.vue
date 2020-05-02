@@ -21,7 +21,6 @@ export default defineComponent({
   setup (_, context: any) {
     const store = buildIndexStore(context)
     provide(indexStoreInjectionKey, store)
-    store.getEvents()
 
     const signout = async () => {
       await context.root.$firebase.auth().signOut()

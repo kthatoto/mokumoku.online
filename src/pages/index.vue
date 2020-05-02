@@ -41,6 +41,7 @@ export default defineComponent({
     const showingForm = ref<boolean>(false)
     const openForm = () => { showingForm.value = true }
     const closeForm = () => { showingForm.value = false }
+    store.getEvents()
 
     return {
       events: store.events,
