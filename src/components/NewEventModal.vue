@@ -75,7 +75,7 @@ export default defineComponent({
     const validate = () => {
       if (form.title.length === 0) errors.title = 'タイトルを入力してください'
       if (parseInt(form.startDatetime.split(':').join()) >= parseInt(form.endDatetime.split(':').join())) {
-        errors.startDatetime = '終了時間が終了時間を超えています'
+        errors.startDatetime = '開始時間が終了時間を超えないように入力してください'
       }
     }
     const existsErrors = computed<boolean>(() => {
