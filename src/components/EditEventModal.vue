@@ -100,7 +100,7 @@ export default defineComponent({
         cancelButtonText: 'キャンセル',
         dangerouslyUseHTMLString: true,
         callback: (res: string) => {
-          if (res !== "confirm") return
+          if (res !== 'confirm') return
           eventStore.deleteEvent()
           store.getEvents()
           context.root.$message({ message: 'もくもく会を削除しました', type: 'success', duration: 5000 })

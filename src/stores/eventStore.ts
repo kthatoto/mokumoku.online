@@ -48,18 +48,26 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
     return result
   }
 
-  const joinEvent = () => {
+  const joinEvent = async () => {
+    if (joining.value) return false
+    const userDocRefs = event.value.users.map((user: User) => db.collection('users').doc(user.uid))
+    userDocRefs.push(db.collection('users').doc(indexStore.currentUser.uid))
+    let result: boolean = true
+    await db.collections('events').doc(eventId).update({users: userDocRefs}).catch((_: any) => {
+      result = false
+    })
+    return result
   }
 
   const hosting = computed<boolean>(() => {
     if (event.value === null) return false
-    if (indexStore.currentUser.value === null) return false
+    if (!indexStore.currentUser.value) return false
     if (!event.value.host) return false
     return event.value.host.uid === indexStore.currentUser.value.uid
   })
 
   const joining = computed<boolean>(() => {
-    if (indexStore.currentUser.value === null) return false
+    if (!indexStore.currentUser.value) return false
     if (!event.value.users) return false
     return event.value.users.some((user: User) => user.uid === indexStore.currentUser.value.uid)
   })

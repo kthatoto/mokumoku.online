@@ -49,12 +49,38 @@ export default defineComponent({
     const openForm = () => { showingForm.value = true }
     const closeForm = () => { showingForm.value = false }
 
+    const joinEvent = () => {
+      context.root.$confirm('参加しますか？', {
+        title: eventStore.event.value.title,
+        confirmButtonText: '参加',
+        cancelButtonText: 'キャンセル',
+        callback: async (res: string) => {
+          if (res !== 'confirm') return
+          const result: boolean = await eventStore.joinEvent()
+          if (result) {
+            eventStore.getEvent()
+            context.root.$message({
+              message: `${eventStore.event.value.title}に参加しました`,
+              type: 'success',
+              duration: 5000
+            })
+          } else {
+            context.root.$message({
+              message: '参加できませんでした',
+              type: 'error',
+              duration: 5000
+            })
+          }
+        }
+      })
+    }
+
     return {
       event: eventStore.event,
       showingForm,
       openForm,
       closeForm,
-      joinEvent: eventStore.joinEvent,
+      joinEvent,
       hosting: eventStore.hosting,
       joining: eventStore.joining
     }
