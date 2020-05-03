@@ -9,10 +9,9 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
   const event = ref<Event>({} as Event)
   const getEvent = async () => {
     try {
-      const doc: any = await db.collection('events').doc(eventId).get()
-      if (!doc.exists) throw 'not_found'
-      const data = doc.data()
-      event.value = await eventSerialize(context, data, eventId)
+      const docRef: any = await db.collection('events').doc(eventId)
+      event.value = await eventSerialize(context, docRef, { withComment: true })
+      if (event.value === null) throw 'not_found'
     } catch (e) {
       context.root.$message({
         message: 'イベントが見つかりませんでした',
@@ -61,7 +60,9 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
 
   const addTextComment = async (content: string) => {
     let result: boolean = true
+    const commenterRef = db.collection('users').doc(indexStore.currentUser.value.uid)
     await db.collection('events').doc(eventId).collection('comments').add({
+      commenter: commenterRef,
       type: 'text',
       content,
       createdAt: new Date()
@@ -70,10 +71,12 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
   }
 
   const hosting = computed<boolean>(() => {
+    if (!event.value.host) return false
     return event.value.host.uid === indexStore.currentUser.value.uid
   })
 
   const joining = computed<boolean>(() => {
+    if (!event.value.users) return false
     return event.value.users.some((user: User) => {
       return user.uid === indexStore.currentUser.value.uid
     })

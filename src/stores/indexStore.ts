@@ -25,6 +25,11 @@ export interface Event {
 }
 
 export interface Comment {
+  commenter: User
+  type: 'text' | 'image'
+  content?: string
+  imageUrl?: string
+  createdAt: Date
 }
 
 export interface User {
@@ -50,7 +55,7 @@ export const buildIndexStore = (context: any) => {
   const getEvents = async () => {
     const newEvents: Event[] = []
     let result: boolean = true
-    const collection: any = await db.collection('events').get().catch((_: any) => {
+    const snapshot: any = await db.collection('events').get().catch((_: any) => {
       result = false
     })
     if (!result) {
@@ -60,10 +65,8 @@ export const buildIndexStore = (context: any) => {
         duration: 5000
       })
     }
-    collection.docs.forEach(async (doc: any) => {
-      const id: string = doc.id
-      const data = doc.data()
-      newEvents.push(await eventSerialize(context, data, id))
+    snapshot.docs.forEach(async (docSnapshot: any) => {
+      newEvents.push(await eventSerialize(context, docSnapshot.ref))
     })
     events.value = newEvents
   }

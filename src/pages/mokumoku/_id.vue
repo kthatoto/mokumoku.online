@@ -17,8 +17,7 @@
         span {{ event.endDatetime }}
       h4 参加しているユーザー
       .users
-        //- .user(v-for="u in event.users" :key="u.uid")
-        .user(v-for="(u, i) in event.users" :key="i")
+        .user(v-for="u in event.users" :key="u.uid")
           img(:src="u.photoURL")
       template(v-if="joining")
         h4 参加リンク
