@@ -27,8 +27,8 @@ export interface Event {
 export interface Comment {
   commenter: User
   type: 'text' | 'image'
-  content?: string
-  imageUrl?: string
+  content: string | null
+  imageUrl: string | null
   createdAt: Date
 }
 

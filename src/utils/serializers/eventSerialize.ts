@@ -30,6 +30,7 @@ export default async (context: any, docRef: any, options: Options | undefined) =
     date,
     dateString: context.root.$dayjs(date).format('YYYY-MM-DD'),
     users,
-    host
+    host,
+    comments
   }
 }
