@@ -5,7 +5,7 @@ interface Options {
   withComment?: boolean
 }
 
-export default async (context: any, docRef: any, options: Options | undefined) => {
+export default async (context: any, docRef: any, options: Options | null) => {
   const id: string = docRef.id
   const docSnapshot: any = await docRef.get()
   const data: any = docSnapshot.data()
@@ -21,7 +21,8 @@ export default async (context: any, docRef: any, options: Options | undefined) =
     const commentsSnapshot: any = await docRef.collection('comments').get()
     console.log(commentsSnapshot.docs)
     commentsSnapshot.docs.forEach(async (docSnapshot: any) => {
-      comments.push(await commentSerialize(docSnapshot))
+      const comment: Comment = await commentSerialize(docSnapshot)
+      if (comment !== null) comments.push(comment)
     })
   }
   return {

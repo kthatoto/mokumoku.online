@@ -1,7 +1,7 @@
 import { InjectionKey, ref, computed } from '@vue/composition-api'
 import eventSerialize from '@/utils/serializers/eventSerialize'
 
-export interface NewEvent {
+export interface EventInfo {
   title: string
   description: string
   date: Date
@@ -10,15 +10,9 @@ export interface NewEvent {
   url: string
 }
 
-export interface Event {
+export interface Event extends EventInfo {
   id: string
-  title: string
-  description: string
-  date: Date
   dateString?: string
-  startDatetime: string
-  endDatetime: string
-  url: string
   users: User[]
   host: User
   comments: Comment[]
@@ -66,18 +60,20 @@ export const buildIndexStore = (context: any) => {
       })
     }
     snapshot.docs.forEach(async (docSnapshot: any) => {
-      newEvents.push(await eventSerialize(context, docSnapshot.ref))
+      newEvents.push(await eventSerialize(context, docSnapshot.ref, null))
     })
     events.value = newEvents
   }
 
-  const createEvent = async (newEvent: NewEvent) => {
+  const createEvent = async (eventInfo: EventInfo) => {
     let result: boolean = true
     const currentUser: any = context.root.$firebase.auth().currentUser
     const userDocRef = db.collection('users').doc(currentUser.uid)
-    await db.collection('events').add({ ...newEvent, users: [userDocRef], host: userDocRef }).catch((_: any) => {
-      result = false
-    })
+    await db.collection('events').add({
+      ...eventInfo,
+      users: [userDocRef],
+      host: userDocRef
+    }).catch((_: any) => { result = false })
     return result
   }
 

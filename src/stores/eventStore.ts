@@ -1,6 +1,6 @@
 import { InjectionKey, ref, computed } from '@vue/composition-api'
 
-import { Event, User, IndexStore } from './indexStore'
+import { Event, EventInfo, User, IndexStore } from './indexStore'
 import eventSerialize from '@/utils/serializers/eventSerialize'
 
 export const buildEventStore = (context: any, indexStore: IndexStore, eventId: string) => {
@@ -23,17 +23,9 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
     }
   }
 
-  const updateEvent = async (event: Event) => {
+  const updateEvent = async (eventInfo: EventInfo) => {
     let result: boolean = true
-    const updatingEvent = {
-      title: event.title,
-      description: event.description,
-      date: event.date,
-      startDatetime: event.startDatetime,
-      endDatetime: event.endDatetime,
-      url: event.url
-    }
-    await db.collection('events').doc(eventId).update(updatingEvent).catch((_: any) => {
+    await db.collection('events').doc(eventId).update(eventInfo).catch((_: any) => {
       result = false
     })
     return result

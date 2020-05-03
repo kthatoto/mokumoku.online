@@ -32,7 +32,7 @@
 import { defineComponent, reactive, computed, ref } from '@vue/composition-api'
 
 import injectBy from '@/utils/injectBy'
-import { NewEvent, indexStoreInjectionKey } from '@/stores/indexStore'
+import { EventInfo, indexStoreInjectionKey } from '@/stores/indexStore'
 
 interface Errors {
   title: string | null
@@ -47,7 +47,7 @@ export default defineComponent({
   setup (_, context: any) {
     const store = injectBy(indexStoreInjectionKey)
 
-    const form = reactive<NewEvent>({
+    const form = reactive<EventInfo>({
       title: '',
       description: '',
       date: new Date(),

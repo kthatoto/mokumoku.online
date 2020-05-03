@@ -32,7 +32,7 @@
 import { defineComponent, reactive, computed, ref } from '@vue/composition-api'
 
 import injectBy from '@/utils/injectBy'
-import { Event, indexStoreInjectionKey } from '@/stores/indexStore'
+import { Event, EventInfo, indexStoreInjectionKey } from '@/stores/indexStore'
 import { eventStoreInjectionKey } from '@/stores/eventStore'
 
 interface Errors {
@@ -82,11 +82,27 @@ export default defineComponent({
       if (submitting.value) return
       submitting.value = true
       const date: Date = new Date(form.date.toString())
-      const result: boolean = await eventStore.updateEvent({ ...form, date })
+      const eventInfo: EventInfo = {
+        title: form.title,
+        description: form.description,
+        date,
+        startDatetime: form.startDatetime,
+        endDatetime: form.endDatetime,
+        url: form.url
+      }
+      const result: boolean = await eventStore.updateEvent(eventInfo)
       if (result) {
-        context.root.$message({ message: 'もくもく会を編集しました', type: 'success', duration: 5000 })
+        context.root.$message({
+          message: 'もくもく会を編集しました',
+          type: 'success',
+          duration: 5000
+        })
       } else {
-        context.root.$message({ message: 'もくもく会の編集に失敗しました', type: 'error', duration: 5000 })
+        context.root.$message({
+          message: 'もくもく会の編集に失敗しました',
+          type: 'error',
+          duration: 5000
+        })
       }
       submitting.value = false
       close()

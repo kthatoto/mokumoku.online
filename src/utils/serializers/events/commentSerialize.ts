@@ -1,11 +1,11 @@
-import { User } from '@/stores/indexStore'
+import { Comment, User } from '@/stores/indexStore'
 export default async (docSnapshot: any) => {
   const data: any = docSnapshot.data()
   const commenter: User = (await data.commenter.get()).data()
   if (data.type === 'text') {
     return {
       commenter,
-      type: data.type,
+      type: 'text',
       content: data.content,
       imageUrl: null,
       createdAt: data.createdAt
@@ -14,10 +14,11 @@ export default async (docSnapshot: any) => {
   if (data.type === 'image') {
     return {
       commenter,
-      type: data.type,
+      type: 'image',
       content: null,
       imageUrl: data.imageUrl,
       createdAt: data.createdAt
     }
   }
+  return null
 }
