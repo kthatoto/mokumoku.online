@@ -1,4 +1,4 @@
-import { InjectionKey, ref, computed } from '@vue/composition-api'
+import { InjectionKey, ref } from '@vue/composition-api'
 import eventSerialize from '@/utils/serializers/eventSerialize'
 
 export interface EventInfo {

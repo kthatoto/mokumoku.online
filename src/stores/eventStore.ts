@@ -11,7 +11,7 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
     try {
       const docRef: any = await db.collection('events').doc(eventId)
       event.value = await eventSerialize(context, docRef, { withComment: true })
-      if (event.value === null) throw 'not_found'
+      if (event.value === null) throw new Error('not_found')
     } catch (e) {
       context.root.$message({
         message: 'イベントが見つかりませんでした',
@@ -44,7 +44,7 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
     const userDocRefs = event.value.users.map((user: User) => db.collection('users').doc(user.uid))
     userDocRefs.push(db.collection('users').doc(indexStore.currentUser.value.uid))
     let result: boolean = true
-    await db.collection('events').doc(eventId).update({users: userDocRefs}).catch((_: any) => {
+    await db.collection('events').doc(eventId).update({ users: userDocRefs }).catch((_: any) => {
       result = false
     })
     return result

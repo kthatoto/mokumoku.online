@@ -32,7 +32,7 @@
 import { defineComponent, provide, ref } from '@vue/composition-api'
 
 import injectBy from '@/utils/injectBy'
-import { indexStoreInjectionKey, Event } from '@/stores/indexStore'
+import { indexStoreInjectionKey } from '@/stores/indexStore'
 import { buildEventStore, eventStoreInjectionKey } from '@/stores/eventStore'
 import EditEventModal from '@/components/EditEventModal.vue'
 import CommentField from '@/components/CommentField.vue'

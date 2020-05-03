@@ -36,7 +36,7 @@ import NewEventModal from '@/components/NewEventModal.vue'
 export default defineComponent({
   meta: { auth: true },
   components: { NewEventModal },
-  setup (_, context: any) {
+  setup (_, _context: any) {
     const store = injectBy(indexStoreInjectionKey)
 
     const showingForm = ref<boolean>(false)

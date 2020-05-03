@@ -1,4 +1,4 @@
-import { Comment, User } from '@/stores/indexStore'
+import { User } from '@/stores/indexStore'
 export default async (docSnapshot: any) => {
   const data: any = docSnapshot.data()
   const commenter: User = (await data.commenter.get()).data()

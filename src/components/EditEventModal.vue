@@ -54,7 +54,6 @@ export default defineComponent({
   setup (props: Props, context: any) {
     const store = injectBy(indexStoreInjectionKey)
     const eventStore = injectBy(eventStoreInjectionKey)
-    const eventId = computed<string>(() => props.event.id || '')
 
     const form = reactive<Event>(JSON.parse(JSON.stringify(props.event)))
     const close = () => { context.emit('closeModal') }
@@ -109,7 +108,7 @@ export default defineComponent({
       eventStore.getEvent()
     }
 
-    const deleteConfirm = async () => {
+    const deleteConfirm = () => {
       context.root.$confirm('本当に削除してよろしいですか？<br>(コメントなども全て削除されます)', {
         title: 'もくもく会を削除',
         confirmButtonText: '削除',
