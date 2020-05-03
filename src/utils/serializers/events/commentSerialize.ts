@@ -1,9 +1,11 @@
 import { User } from '@/stores/indexStore'
 export default async (docSnapshot: any) => {
+  const id: string = docSnapshot.id
   const data: any = docSnapshot.data()
   const commenter: User = (await data.commenter.get()).data()
   if (data.type === 'text') {
     return {
+      id,
       commenter,
       type: 'text',
       content: data.content,
@@ -13,6 +15,7 @@ export default async (docSnapshot: any) => {
   }
   if (data.type === 'image') {
     return {
+      id,
       commenter,
       type: 'image',
       content: null,

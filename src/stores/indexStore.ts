@@ -19,6 +19,7 @@ export interface Event extends EventInfo {
 }
 
 export interface Comment {
+  id: string
   commenter: User
   type: string
   content: string | null

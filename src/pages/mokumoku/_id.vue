@@ -27,7 +27,7 @@
     comment-field.comment-field
     h4.comments__header コメント
     .comments
-      comment-item(v-for="comment in event.comments" :comment="comment")
+      comment-item(v-for="comment in event.comments" :comment="comment" :key="comment.id")
 </template>
 
 <script lang="ts">
