@@ -28,8 +28,8 @@ export default defineComponent({
   },
   setup (props: Props, context: any) {
     const timestampString = computed<string>(() => {
-      const date: Date = props.comment.createdAt.toDate()
-      return context.root.$dayjs(date).format('YYYY-MM-DD HH:mm')
+      const timestamp: any = props.comment.createdAt
+      return context.root.$dayjs(timestamp.toDate()).format('YYYY-MM-DD HH:mm')
     })
 
     return { timestampString }
