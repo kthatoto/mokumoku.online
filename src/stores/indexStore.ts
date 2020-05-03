@@ -20,7 +20,7 @@ export interface Event extends EventInfo {
 
 export interface Comment {
   commenter: User
-  type: 'text' | 'image'
+  type: string
   content: string | null
   imageUrl: string | null
   createdAt: Date
