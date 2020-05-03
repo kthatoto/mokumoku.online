@@ -8,6 +8,12 @@ import { defineComponent, computed } from '@vue/composition-api'
 
 import { User } from '@/stores/indexStore'
 
+interface Props {
+  user: User
+  hosting: boolean
+  size: number
+}
+
 export default defineComponent({
   props: {
     user: {
