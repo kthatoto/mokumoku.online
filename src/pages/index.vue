@@ -21,8 +21,7 @@
         span {{ event.endDatetime }}
       h4 参加しているユーザー
       .users
-        .user(v-for="u in event.users" :key="u.uid")
-          img(:src="u.photoURL")
+        Avatar.user(v-for="u in event.users" :key="u.uid" :user="u")
   new-event-modal(:showing="showingForm" @closeModal="closeForm")
 </template>
 
