@@ -1,7 +1,8 @@
 import { InjectionKey, ref, computed } from '@vue/composition-api'
 
-import { Event, EventInfo, User, IndexStore } from './indexStore'
+import { Event, Comment, EventInfo, User, IndexStore } from './indexStore'
 import eventSerialize from '@/utils/serializers/eventSerialize'
+import commentSerialize from '@/utils/serializers/events/commentSerialize'
 
 export const buildEventStore = (context: any, indexStore: IndexStore, eventId: string) => {
   const db = context.root.$firebase.firestore()
@@ -9,7 +10,7 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
   const event = ref<Event>({} as Event)
   const getEvent = async () => {
     try {
-      const docRef: any = await db.collection('events').doc(eventId)
+      const docRef: any = db.collection('events').doc(eventId)
       event.value = await eventSerialize(context, docRef, { withComment: true })
       if (event.value === null) throw new Error('not_found')
     } catch (e) {
@@ -62,6 +63,17 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
     return result
   }
 
+  const updateComments = async () => {
+    const commentsSnapshot: any = await db.collection('events').doc(eventId)
+      .collection('comments').orderBy('createdAt', 'desc').get()
+    const comments: Comment[] = []
+    commentsSnapshot.docs.forEach(async (docSnapshot: any) => {
+      const comment: Comment | null = await commentSerialize(docSnapshot)
+      if (comment !== null) comments.push(comment)
+    })
+    event.value = { ...event.value, comments }
+  }
+
   const hosting = computed<boolean>(() => {
     if (!event.value.host) return false
     return event.value.host.uid === indexStore.currentUser.value.uid
@@ -81,6 +93,7 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
     deleteEvent,
     joinEvent,
     addTextComment,
+    updateComments,
     hosting,
     joining
   }
