@@ -17,7 +17,8 @@
         span {{ event.endDatetime }}
       h4 参加しているユーザー
       .users
-        .user(v-for="u in event.users" :key="u.uid")
+        //- .user(v-for="u in event.users" :key="u.uid")
+        .user(v-for="(u, i) in event.users" :key="i")
           img(:src="u.photoURL")
       template(v-if="joining")
         h4 参加リンク
@@ -25,6 +26,7 @@
     .console
       el-button(v-if="!joining" type="primary" @click="joinEvent") 参加する
       el-button(v-else) 参加中
+    comment-field
 </template>
 
 <script lang="ts">
@@ -34,10 +36,11 @@ import injectBy from '@/utils/injectBy'
 import { indexStoreInjectionKey, Event } from '@/stores/indexStore'
 import { buildEventStore, eventStoreInjectionKey } from '@/stores/eventStore'
 import EditEventModal from '@/components/EditEventModal.vue'
+import CommentField from '@/components/CommentField.vue'
 
 export default defineComponent({
   meta: { auth: true },
-  components: { EditEventModal },
+  components: { EditEventModal, CommentField },
   setup (_, context: any) {
     const store = injectBy(indexStoreInjectionKey)
     const eventId: string = context.root.$route.params.id
