@@ -25,7 +25,10 @@
     .console
       el-button(v-if="!joining" type="primary" @click="joinEvent") 参加する
       el-button(v-else) 参加中
-    comment-field
+    comment-field.comment-field
+    h4.comments__header コメント
+    .comments
+      comment-item(v-for="comment in event.comments" :comment="comment")
 </template>
 
 <script lang="ts">
@@ -36,10 +39,11 @@ import { indexStoreInjectionKey } from '@/stores/indexStore'
 import { buildEventStore, eventStoreInjectionKey } from '@/stores/eventStore'
 import EditEventModal from '@/components/EditEventModal.vue'
 import CommentField from '@/components/CommentField.vue'
+import CommentItem from '@/components/CommentItem.vue'
 
 export default defineComponent({
   meta: { auth: true },
-  components: { EditEventModal, CommentField },
+  components: { EditEventModal, CommentField, CommentItem },
   setup (_, context: any) {
     const store = injectBy(indexStoreInjectionKey)
     const eventId: string = context.root.$route.params.id
@@ -113,4 +117,9 @@ export default defineComponent({
       justify-content: space-between
       &__url
         width: 200px
+  .comment-field
+    margin-bottom: 15px
+  .comments
+    &__header
+      margin-bottom: 10px
 </style>

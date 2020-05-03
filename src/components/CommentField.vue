@@ -71,7 +71,6 @@ export default defineComponent({
 .comment-field
   width: 100%
   .markdown
-    markdown()
     border-bottom: 1px solid #ccc
     padding-bottom: 10px
     margin-bottom: 10px
