@@ -82,8 +82,8 @@ export default defineComponent({
       if (submitting.value) return
       submitting.value = true
       const date: Date = new Date(form.date.toString())
-      const res: boolean = await eventStore.updateEvent({ ...form, date })
-      if (res) {
+      const result: boolean = await eventStore.updateEvent({ ...form, date })
+      if (result) {
         context.root.$message({ message: 'もくもく会を編集しました', type: 'success', duration: 5000 })
       } else {
         context.root.$message({ message: 'もくもく会の編集に失敗しました', type: 'error', duration: 5000 })

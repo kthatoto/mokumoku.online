@@ -1,8 +1,17 @@
 import { InjectionKey, ref, computed } from '@vue/composition-api'
 import eventSerialize from '@/utils/serializers/eventSerialize'
 
+export interface NewEvent {
+  title: string
+  description: string
+  date: Date
+  startDatetime: string
+  endDatetime: string
+  url: string
+}
+
 export interface Event {
-  id?: string
+  id: string
   title: string
   description: string
   date: Date
@@ -10,8 +19,12 @@ export interface Event {
   startDatetime: string
   endDatetime: string
   url: string
-  users?: User[]
-  host?: User
+  users: User[]
+  host: User
+  comments: Comment[]
+}
+
+export interface Comment {
 }
 
 export interface User {
@@ -55,7 +68,7 @@ export const buildIndexStore = (context: any) => {
     events.value = newEvents
   }
 
-  const createEvent = async (newEvent: Event) => {
+  const createEvent = async (newEvent: NewEvent) => {
     let result: boolean = true
     const currentUser: any = context.root.$firebase.auth().currentUser
     const userDocRef = db.collection('users').doc(currentUser.uid)

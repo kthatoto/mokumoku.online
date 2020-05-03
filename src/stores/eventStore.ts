@@ -50,7 +50,6 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
 
   const joinEvent = async () => {
     if (joining.value) return false
-    if (!event.value.users) return false
     const userDocRefs = event.value.users.map((user: User) => db.collection('users').doc(user.uid))
     userDocRefs.push(db.collection('users').doc(indexStore.currentUser.value.uid))
     let result: boolean = true
@@ -60,13 +59,21 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
     return result
   }
 
+  const addTextComment = async (content: string) => {
+    let result: boolean = true
+    await db.collection('events').doc(eventId).collection('comments').add({
+      type: 'text',
+      content,
+      createdAt: new Date()
+    }).catch((_: any) => { result = false })
+    return result
+  }
+
   const hosting = computed<boolean>(() => {
-    if (!event.value.host) return false
     return event.value.host.uid === indexStore.currentUser.value.uid
   })
 
   const joining = computed<boolean>(() => {
-    if (!event.value.users) return false
     return event.value.users.some((user: User) => {
       return user.uid === indexStore.currentUser.value.uid
     })
@@ -78,6 +85,7 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
     updateEvent,
     deleteEvent,
     joinEvent,
+    addTextComment,
     hosting,
     joining
   }
