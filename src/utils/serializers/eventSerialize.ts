@@ -18,7 +18,8 @@ export default async (context: any, docRef: any, options: Options | null) => {
 
   const comments: Comment[] = []
   if (options && options.withComment) {
-    const commentsSnapshot: any = await docRef.collection('comments').get()
+    const commentsSnapshot: any = await docRef.collection('comments')
+      .orderBy('createdAt', 'desc').get()
     commentsSnapshot.docs.forEach(async (docSnapshot: any) => {
       const comment: Comment | null = await commentSerialize(docSnapshot)
       if (comment !== null) comments.push(comment)
