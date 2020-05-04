@@ -19,7 +19,7 @@
         span {{ event.startDatetime }}
         span 〜
         span {{ event.endDatetime }}
-      h4 参加しているユーザー
+      h4 参加ユーザー
       .users
         Avatar.user(v-for="u in event.users" :key="u.uid" :user="u")
   new-event-modal(:showing="showingForm" @closeModal="closeForm")
