@@ -63,7 +63,7 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
     return result
   }
 
-  const updateComments = async () => {
+  const getComments = async () => {
     const commentsSnapshot: any = await db.collection('events').doc(eventId)
       .collection('comments').orderBy('createdAt', 'desc').get()
     const comments: Comment[] = []
@@ -72,6 +72,15 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
       if (comment !== null) comments.push(comment)
     })
     event.value = { ...event.value, comments }
+  }
+
+  const deleteComment = async (commentId: string) => {
+    let result: boolean = true
+    await db.collection('events').doc(eventId)
+      .collection('comments').doc(commentId).delete().catch((_: any) => {
+        result = false
+      })
+    return result
   }
 
   const hosting = computed<boolean>(() => {
@@ -93,7 +102,8 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
     deleteEvent,
     joinEvent,
     addTextComment,
-    updateComments,
+    getComments,
+    deleteComment,
     hosting,
     joining
   }

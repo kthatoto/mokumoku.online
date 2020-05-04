@@ -25,7 +25,7 @@
       el-button(v-if="!joining" type="primary" @click="joinEvent") 参加する
       el-button(v-else) 参加中
     .comments(v-if="joining")
-      comment-field.comment-field(@updateComments="updateComments")
+      comment-field.comment-field(@getComments="getComments")
       h4.comments__header コメント
       .comment-list
         comment-item(v-for="comment in event.comments" :comment="comment" :key="comment.id")
@@ -99,6 +99,7 @@ export default defineComponent({
 .event
   width: 400px
   margin: 50px auto 0
+  padding-bottom: 100px
   .title
     font-size: 24px
     margin-bottom: 20px

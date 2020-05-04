@@ -13,6 +13,7 @@
 * [ ] 画像をコメントとして投稿できるようにする
 * [x] Userにprovider(twitter or github...)フィールド追加
 * [x] EventにcreatedAt追加
+* [ ] 参加するとどうなるかを見せる
 ### Nice to have
 * [ ] イベント削除する時にコメントも削除
 * [x] 主催者にマークをつける

@@ -56,7 +56,7 @@ export default defineComponent({
       }
       submitting.value = false
       form.content = ''
-      context.emit('updateComments')
+      context.emit('getComments')
     }
 
     return {
