@@ -1,6 +1,6 @@
 <template lang="pug">
 .event
-  .event__wrapper(v-if="event")
+  .event__wrapper(v-if="event && event.id")
     h1.title
       span {{ event.title }}
       el-button(v-if="hosting" type="primary" icon="el-icon-edit" circle @click="openForm")
@@ -24,10 +24,11 @@
     .console
       el-button(v-if="!joining" type="primary" @click="joinEvent") 参加する
       el-button(v-else) 参加中
-    comment-field.comment-field(@updateComments="updateComments")
-    h4.comments__header コメント
-    .comments
-      comment-item(v-for="comment in event.comments" :comment="comment" :key="comment.id")
+    .comments(v-if="joining")
+      comment-field.comment-field(@updateComments="updateComments")
+      h4.comments__header コメント
+      .comment-list
+        comment-item(v-for="comment in event.comments" :comment="comment" :key="comment.id")
 </template>
 
 <script lang="ts">
