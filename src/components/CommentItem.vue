@@ -13,9 +13,6 @@
       span(@click="deleteComment")
         icon.icon(name="trash-alt")
         span 削除
-      span
-        icon.icon(name="edit")
-        span 編集
 </template>
 
 <script lang="ts">
