@@ -33,6 +33,7 @@ export interface User {
   displayName: string
   photoURL: string
   hosting?: boolean
+  providerId: string
 }
 
 export const buildIndexStore = (context: any) => {
@@ -41,10 +42,12 @@ export const buildIndexStore = (context: any) => {
   const currentUser = ref<User>({} as User)
   const getCurrentUser = () => {
     const user = context.root.$firebase.auth().currentUser
+    const providerId: string = user.providerData[0].providerId.split('.')[0]
     currentUser.value = {
       uid: user.uid,
       displayName: user.displayName,
-      photoURL: user.photoURL
+      photoURL: user.photoURL,
+      providerId
     }
   }
 

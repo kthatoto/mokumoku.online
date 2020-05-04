@@ -20,11 +20,12 @@ if (!firebase.apps.length) {
 const upsertUser = async (user) => {
   const db = firebase.firestore()
   const doc = await db.collection('users').doc(user.uid).get()
-  if (doc.exists) return
+  const providerId = user.providerData[0].providerId.split('.')[0]
   db.collection('users').doc(user.uid).set({
     uid: user.uid,
     displayName: user.displayName,
-    photoURL: user.photoURL
+    photoURL: user.photoURL,
+    providerId
   })
 }
 
