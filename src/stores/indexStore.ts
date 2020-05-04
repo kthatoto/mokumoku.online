@@ -16,6 +16,7 @@ export interface Event extends EventInfo {
   users: User[]
   host: User
   comments: Comment[]
+  createdAt: Date
 }
 
 export interface Comment {
@@ -51,9 +52,9 @@ export const buildIndexStore = (context: any) => {
   const getEvents = async () => {
     const newEvents: Event[] = []
     let result: boolean = true
-    const snapshot: any = await db.collection('events').get().catch((_: any) => {
-      result = false
-    })
+    const snapshot: any = await db.collection('events')
+      .orderBy('createdAt', 'desc').get()
+      .catch((_: any) => { result = false })
     if (!result) {
       return context.root.$message({
         message: '情報の読み込みに失敗しました。ネットワークの良い環境でご利用ください',
@@ -74,7 +75,8 @@ export const buildIndexStore = (context: any) => {
     await db.collection('events').add({
       ...eventInfo,
       users: [userDocRef],
-      host: userDocRef
+      host: userDocRef,
+      createdAt: new Date()
     }).catch((_: any) => { result = false })
     return result
   }

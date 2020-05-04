@@ -10,6 +10,7 @@ export default async (context: any, docRef: any, options: Options | null) => {
   const docSnapshot: any = await docRef.get()
   const data: any = docSnapshot.data()
   const date: Date = data.date.toDate()
+  const createdAt: Date = data.createdAt.toDate()
   const host = (await data.host.get()).data()
 
   const users: User[] = []
@@ -34,6 +35,7 @@ export default async (context: any, docRef: any, options: Options | null) => {
     dateString: context.root.$dayjs(date).format('YYYY-MM-DD'),
     users,
     host,
-    comments
+    comments,
+    createdAt
   }
 }

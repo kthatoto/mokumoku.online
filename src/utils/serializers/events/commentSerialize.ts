@@ -11,7 +11,7 @@ export default async (docSnapshot: any, hostUid: string) => {
       type: 'text',
       content: data.content,
       imageUrl: null,
-      createdAt: data.createdAt
+      createdAt: data.createdAt.toDate()
     }
   }
   if (data.type === 'image') {
@@ -21,7 +21,7 @@ export default async (docSnapshot: any, hostUid: string) => {
       type: 'image',
       content: null,
       imageUrl: data.imageUrl,
-      createdAt: data.createdAt
+      createdAt: data.createdAt.toDate()
     }
   }
   return null
