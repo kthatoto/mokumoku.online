@@ -15,7 +15,7 @@
 * [ ] Userにprovider(twitter or github...)とaccountIdフィールド追加
 * [ ] EventにcreatedAt追加
 ### Nice to have
-* [ ] 主催者にマークをつける
+* [x] 主催者にマークをつける
 * [ ] 参加申請機能
 * [ ] 人数制限機能
 * [ ] 時間を過ぎたらイベント操作を制限する

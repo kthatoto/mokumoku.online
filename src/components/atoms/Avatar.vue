@@ -1,5 +1,6 @@
 <template lang="pug">
 .avatar(:style="sizeStyle")
+  icon.icon(v-if="user.hosting" name="user-circle")
   img(:src="user.photoURL" :style="sizeStyle")
 </template>
 
@@ -10,7 +11,6 @@ import { User } from '@/stores/indexStore'
 
 interface Props {
   user: User
-  hosting: boolean
   size: number
 }
 
@@ -19,11 +19,6 @@ export default defineComponent({
     user: {
       type: Object,
       required: true
-    },
-    hosting: {
-      type: Boolean,
-      required: false,
-      default: false
     },
     size: {
       type: Number,
@@ -43,6 +38,16 @@ export default defineComponent({
 
 <style lang="stylus" scoped>
 .avatar
+  position: relative
+  .icon
+    position: absolute
+    bottom: -15%
+    right: -15%
+    width: 50%
+    height: 50%
+    color: color5
+    background-color: white
+    border-radius: 50%
   img
     border-radius: 50%
     border: 1px solid color2
