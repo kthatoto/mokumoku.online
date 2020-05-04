@@ -10,18 +10,20 @@ export default async (context: any, docRef: any, options: Options | null) => {
   const docSnapshot: any = await docRef.get()
   const data: any = docSnapshot.data()
   const date: Date = data.date.toDate()
+  const host = (await data.host.get()).data()
+
   const users: User[] = []
   await data.users.forEach(async (userDocRef: any) => {
-    users.push((await userDocRef.get()).data())
+    const user: User = (await userDocRef.get()).data()
+    users.push({ ...user, hosting: user.uid === host.uid })
   })
-  const host = (await data.host.get()).data()
 
   const comments: Comment[] = []
   if (options && options.withComment) {
     const commentsSnapshot: any = await docRef.collection('comments')
       .orderBy('createdAt', 'desc').get()
     commentsSnapshot.docs.forEach(async (docSnapshot: any) => {
-      const comment: Comment | null = await commentSerialize(docSnapshot)
+      const comment: Comment | null = await commentSerialize(docSnapshot, host.uid)
       if (comment !== null) comments.push(comment)
     })
   }

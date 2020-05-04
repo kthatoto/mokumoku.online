@@ -31,6 +31,7 @@ export interface User {
   uid: string
   displayName: string
   photoURL: string
+  hosting?: boolean
 }
 
 export const buildIndexStore = (context: any) => {

@@ -1,8 +1,9 @@
 import { User } from '@/stores/indexStore'
-export default async (docSnapshot: any) => {
+export default async (docSnapshot: any, hostUid: string) => {
   const id: string = docSnapshot.id
   const data: any = docSnapshot.data()
-  const commenter: User = (await data.commenter.get()).data()
+  const user: User = (await data.commenter.get()).data()
+  const commenter: User = { ...user, hosting: user.uid === hostUid }
   if (data.type === 'text') {
     return {
       id,
