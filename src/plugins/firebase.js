@@ -1,7 +1,7 @@
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
-import 'firebase/firestorage'
+import 'firebase/storage'
 
 import { Message } from 'element-ui'
 

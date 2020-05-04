@@ -14,6 +14,7 @@
 * [x] Userにprovider(twitter or github...)フィールド追加
 * [x] EventにcreatedAt追加
 * [ ] 参加するとどうなるかを見せる
+* [ ] コメントの順番
 ### Nice to have
 * [ ] いいね機能
 * [ ] アンケート機能

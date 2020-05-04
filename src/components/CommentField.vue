@@ -20,6 +20,12 @@
       span(slot="label")
         icon.icon.-r(name="image")
         span 画像
+      .uploader
+        el-upload(list-type="picture-card" :limit="3" action="" :auto-upload="false"
+          :on-change="handleFilesChange" :on-remove="handleFilesChange")
+          i.el-icon-plus
+        .buttons
+          el-button(type="primary" :disabled="!imagesSubmittable" @click="postImages")
 </template>
 
 <script lang="ts">
@@ -59,10 +65,24 @@ export default defineComponent({
       context.emit('getComments')
     }
 
+    const imagesList = ref<any[]>([])
+    const handleFilesChange = (_, fileList: any[]) => { imagesList.value = fileList }
+    const imagesSubmittable = computed<boolean>(() => imagesList.value.length > 0)
+    const postImages = () => {
+      const storageRef = context.root.$firebase.storage().ref()
+      imagesList.forEach((image) => {
+        const imageRef = storageRef.child(`test/${Math.random().toString(32).substring(2)}`)
+        imageRef.put(image)
+      })
+    }
+
     return {
       form,
       submittable,
-      addTextComment
+      addTextComment,
+      handleFilesChange,
+      imagesSubmittable,
+      postImages
     }
   }
 })
