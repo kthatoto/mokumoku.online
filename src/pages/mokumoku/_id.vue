@@ -87,7 +87,7 @@ export default defineComponent({
       openForm,
       closeForm,
       joinEvent,
-      updateComments: eventStore.updateComments,
+      getComments: eventStore.getComments,
       hosting: eventStore.hosting,
       joining: eventStore.joining
     }

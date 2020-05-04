@@ -10,7 +10,7 @@
       .comment__content(v-if="comment.type === 'text'")
         vue-markdown.markdown {{ comment.content }}
     .comment__console(v-if="isCommenter")
-      span
+      span(@click="deleteComment")
         icon.icon(name="trash-alt")
         span 削除
       span
@@ -54,7 +54,7 @@ export default defineComponent({
         cancelButtonText: 'キャンセル',
         callback: (res: string) => {
           if (res !== 'confirm') return
-          eventStore.deleteComment()
+          eventStore.deleteComment(props.comment.id)
           eventStore.getComments()
           context.root.$message({
             message: 'コメントを削除しました',
@@ -65,7 +65,11 @@ export default defineComponent({
       })
     }
 
-    return { timestampString, isCommenter }
+    return {
+      timestampString,
+      isCommenter,
+      deleteComment
+    }
   }
 })
 </script>
