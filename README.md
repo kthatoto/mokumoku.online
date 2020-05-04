@@ -12,7 +12,7 @@
 * [ ] コメントは参加ユーザーのみ見ることができる
 * [ ] イベント削除する時にコメントも削除
 * [ ] 画像をコメントとして投稿できるようにする
-* [ ] Userにprovider(twitter or github...)とaccountIdフィールド追加
+* [x] Userにprovider(twitter or github...)フィールド追加
 * [x] EventにcreatedAt追加
 ### Nice to have
 * [x] 主催者にマークをつける
@@ -26,3 +26,4 @@
 * [ ] Githubログイン
 * [ ] userページ
 * [ ] グループ機能
+* [ ] UserにaccountIdフィールド追加
