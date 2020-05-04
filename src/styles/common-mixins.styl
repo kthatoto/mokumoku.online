@@ -28,7 +28,6 @@ text-truncate($font-size = 16px, $line-height = 1.8, $line = 3, $bg = #fff)
   max-height: 'calc(%s * %s * %s)' % ($font-size $line-height $line)
   font-size: $font-size
   line-height: $line-height
-  white-space: pre-wrap
   overflow: hidden
   &::before, &::after
     position: absolute
@@ -55,7 +54,7 @@ event-card()
     word-break: break-word
     font-size: 16px
     overflow: hidden
-    text-truncate()
+    white-space: pre-wrap
   h4
     font-size: 16px
     margin: 10px 0

@@ -68,4 +68,6 @@ export default defineComponent({
     margin-bottom: 20px
   .card
     event-card()
+    .description
+      text-truncate()
 </style>
