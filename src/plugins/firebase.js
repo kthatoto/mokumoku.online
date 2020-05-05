@@ -18,7 +18,7 @@ if (!firebase.apps.length) {
   )
 }
 
-const upsertUser = async (user) => {
+const upsertUser = (user) => {
   const db = firebase.firestore()
   const providerId = user.providerData[0].providerId.split('.')[0]
   db.collection('users').doc(user.uid).set({

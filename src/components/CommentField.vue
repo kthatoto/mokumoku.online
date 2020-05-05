@@ -71,14 +71,17 @@ export default defineComponent({
     const image = ref<any>(null)
     const imageList = computed<any[]>(() => image.value === null ? [] : [image.value])
     const handleFilesChange = (file: any, fileList: any[]) => {
-      if (fileList.length === 0) return image.value = null
+      if (fileList.length === 0) {
+        image.value = null
+        return
+      }
       image.value = file
     }
     const imageSubmittable = computed<boolean>(() => image.value !== null)
     const clearImage = () => { image.value = null }
     const uploading = ref<boolean>(false)
 
-    const postImage = async () => {
+    const postImage = () => {
       const randomId: string = context.root.$firebase.firestore().collection('d').doc().id
       const imageRef = context.root.$firebase.storage()
         .ref(`${eventStore.event.value.id}/${randomId}`)
