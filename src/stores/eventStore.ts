@@ -94,7 +94,6 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
       const comment: Comment | null = await commentSerialize(docSnapshot, event.value.host.uid)
       if (comment !== null) newComments.splice(i, 1, comment)
     })
-    console.log(newComments)
     comments.value = newComments
   }
 
