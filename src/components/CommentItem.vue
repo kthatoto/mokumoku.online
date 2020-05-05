@@ -3,12 +3,14 @@
   .comment__user
     Avatar(:user="comment.commenter" :size="50")
   .comment__main
-    el-card
+    el-card(:class="{'-image': comment.type === 'image'}")
       .comment__header(slot="header")
         span {{ comment.commenter.displayName }}
         span.timestamp {{ timestampString }}
       .comment__content(v-if="comment.type === 'text'")
         vue-markdown.markdown {{ comment.content }}
+      .comment__image(v-if="comment.type === 'image'")
+        img(:src="comment.imageUrl")
     .comment__console(v-if="isCommenter")
       span(@click="deleteComment")
         icon.icon(name="trash-alt")
@@ -99,6 +101,16 @@ export default defineComponent({
         text-decoration: underline
       .icon
         vertical-align: middle
+
+  &__image
+    text-align: center
+    img
+      max-width: 100%
+      max-height: 300px
+
+  .-image
+    >>> .el-card__body
+      padding: 0
 
   >>>
     .el-card__header
