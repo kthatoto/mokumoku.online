@@ -14,17 +14,6 @@ export default async (context: any, docRef: any) => {
     users.push({ ...user, hosting: user.uid === host.uid })
   })
 
-  // const comments: Comment[] = []
-  // if (options && options.withComment) {
-  //   const commentsSnapshot: any = await docRef.collection('comments')
-  //     .orderBy('createdAt', 'desc').get()
-  //   comments.length = commentsSnapshot.docs.length
-  //   commentsSnapshot.docs.forEach(async (docSnapshot: any, i: number) => {
-  //     const comment: Comment | null = await commentSerialize(docSnapshot, host.uid)
-  //     if (comment !== null) comments.splice(i, 1, comment)
-  //     console.log(comment)
-  //   })
-  // }
   return {
     ...data,
     id,

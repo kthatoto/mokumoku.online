@@ -21,8 +21,8 @@
 import { defineComponent, computed } from '@vue/composition-api'
 
 import injectBy from '@/utils/injectBy'
-import { Comment, indexStoreInjectionKey } from '@/stores/indexStore'
-import { eventStoreInjectionKey } from '@/stores/eventStore'
+import { indexStoreInjectionKey } from '@/stores/indexStore'
+import { Comment, eventStoreInjectionKey } from '@/stores/eventStore'
 
 interface Props {
   comment: Comment

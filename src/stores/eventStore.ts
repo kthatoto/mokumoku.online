@@ -17,6 +17,8 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
   const db = context.root.$firebase.firestore()
 
   const event = ref<Event>({} as Event)
+  const comments = ref<Comment[]>([])
+
   const getEvent = async () => {
     try {
       const docRef: any = db.collection('events').doc(eventId)
@@ -86,14 +88,14 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
 
   const getComments = async () => {
     const commentsSnapshot: any = await db.collection('events').doc(eventId)
-      .collection('comments').orderBy('createdAt', 'desc').get()
-    console.log(commentsSnapshot)
-    const comments: Comment[] = []
-    commentsSnapshot.docs.forEach(async (docSnapshot: any) => {
+      .collection('comments').get()
+    const newComments: Comment[] = [...Array(commentsSnapshot.docs.length)]
+    commentsSnapshot.docs.forEach(async (docSnapshot: any, i: number) => {
       const comment: Comment | null = await commentSerialize(docSnapshot, event.value.host.uid)
-      if (comment !== null) comments.push(comment)
+      if (comment !== null) newComments.splice(i, 1, comment)
     })
-    event.value = { ...event.value, comments }
+    console.log(newComments)
+    comments.value = newComments
   }
 
   const deleteComment = async (commentId: string) => {
@@ -119,6 +121,7 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
 
   return {
     event,
+    comments,
     getEvent,
     updateEvent,
     deleteEvent,

@@ -26,9 +26,9 @@
       el-button(v-else) 参加中
     .comments(v-if="joining")
       comment-field.comment-field(@getComments="getComments")
-      h4.comments__header コメント
+      h4.comments__header(@click="getComments") コメント
       .comment-list
-        comment-item(v-for="comment in comments" :comment="comment" :key="comment.id")
+        comment-item(v-for="comment in comments" v-if="comment.id" :comment="comment" :key="comment.id")
 </template>
 
 <script lang="ts">
@@ -50,7 +50,7 @@ export default defineComponent({
     const eventStore = buildEventStore(context, store, eventId)
     provide(eventStoreInjectionKey, eventStore)
     eventStore.getEvent()
-    eventStore.getComments()
+    // eventStore.getComments()
 
     const showingForm = ref<boolean>(false)
     const openForm = () => { showingForm.value = true }
