@@ -1,7 +1,7 @@
 <template lang="pug">
 .comment-field
   el-tabs.tabs(type="border-card")
-    el-tab-pane(label="入力")
+    el-tab-pane
       span(slot="label")
         icon.icon.-r(name="pen")
         span 入力
