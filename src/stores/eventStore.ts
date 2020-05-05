@@ -1,8 +1,17 @@
 import { InjectionKey, ref, computed } from '@vue/composition-api'
 
-import { Event, Comment, EventInfo, User, IndexStore } from './indexStore'
+import { Event, EventInfo, User, IndexStore } from './indexStore'
 import eventSerialize from '@/utils/serializers/eventSerialize'
 import commentSerialize from '@/utils/serializers/events/commentSerialize'
+
+export interface Comment {
+  id: string
+  commenter: User
+  type: string
+  content: string | null
+  imageUrl: string | null
+  createdAt: Date
+}
 
 export const buildEventStore = (context: any, indexStore: IndexStore, eventId: string) => {
   const db = context.root.$firebase.firestore()
@@ -11,7 +20,7 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
   const getEvent = async () => {
     try {
       const docRef: any = db.collection('events').doc(eventId)
-      event.value = await eventSerialize(context, docRef, { withComment: true })
+      event.value = await eventSerialize(context, docRef)
       if (event.value === null) throw new Error('not_found')
     } catch (e) {
       context.root.$message({
@@ -78,6 +87,7 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
   const getComments = async () => {
     const commentsSnapshot: any = await db.collection('events').doc(eventId)
       .collection('comments').orderBy('createdAt', 'desc').get()
+    console.log(commentsSnapshot)
     const comments: Comment[] = []
     commentsSnapshot.docs.forEach(async (docSnapshot: any) => {
       const comment: Comment | null = await commentSerialize(docSnapshot, event.value.host.uid)

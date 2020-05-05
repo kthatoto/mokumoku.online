@@ -15,16 +15,7 @@ export interface Event extends EventInfo {
   dateString?: string
   users: User[]
   host: User
-  comments: Comment[]
-  createdAt: Date
-}
-
-export interface Comment {
-  id: string
-  commenter: User
-  type: string
-  content: string | null
-  imageUrl: string | null
+  // comments: Comment[]
   createdAt: Date
 }
 
@@ -66,7 +57,7 @@ export const buildIndexStore = (context: any) => {
       })
     }
     snapshot.docs.forEach(async (docSnapshot: any) => {
-      newEvents.push(await eventSerialize(context, docSnapshot.ref, null))
+      newEvents.push(await eventSerialize(context, docSnapshot.ref))
     })
     events.value = newEvents
   }

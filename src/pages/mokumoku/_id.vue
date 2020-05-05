@@ -28,7 +28,7 @@
       comment-field.comment-field(@getComments="getComments")
       h4.comments__header コメント
       .comment-list
-        comment-item(v-for="comment in event.comments" :comment="comment" :key="comment.id")
+        comment-item(v-for="comment in comments" :comment="comment" :key="comment.id")
 </template>
 
 <script lang="ts">
@@ -50,6 +50,7 @@ export default defineComponent({
     const eventStore = buildEventStore(context, store, eventId)
     provide(eventStoreInjectionKey, eventStore)
     eventStore.getEvent()
+    eventStore.getComments()
 
     const showingForm = ref<boolean>(false)
     const openForm = () => { showingForm.value = true }
@@ -83,6 +84,7 @@ export default defineComponent({
 
     return {
       event: eventStore.event,
+      comments: eventStore.comments,
       showingForm,
       openForm,
       closeForm,

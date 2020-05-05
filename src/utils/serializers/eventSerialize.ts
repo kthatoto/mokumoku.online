@@ -1,11 +1,6 @@
-import commentSerialize from './events/commentSerialize'
-import { User, Comment } from '@/stores/indexStore'
+import { User } from '@/stores/indexStore'
 
-interface Options {
-  withComment?: boolean
-}
-
-export default async (context: any, docRef: any, options: Options | null) => {
+export default async (context: any, docRef: any) => {
   const id: string = docRef.id
   const docSnapshot: any = await docRef.get()
   const data: any = docSnapshot.data()
@@ -19,15 +14,17 @@ export default async (context: any, docRef: any, options: Options | null) => {
     users.push({ ...user, hosting: user.uid === host.uid })
   })
 
-  const comments: Comment[] = []
-  if (options && options.withComment) {
-    const commentsSnapshot: any = await docRef.collection('comments')
-      .orderBy('createdAt', 'desc').get()
-    commentsSnapshot.docs.forEach(async (docSnapshot: any) => {
-      const comment: Comment | null = await commentSerialize(docSnapshot, host.uid)
-      if (comment !== null) comments.push(comment)
-    })
-  }
+  // const comments: Comment[] = []
+  // if (options && options.withComment) {
+  //   const commentsSnapshot: any = await docRef.collection('comments')
+  //     .orderBy('createdAt', 'desc').get()
+  //   comments.length = commentsSnapshot.docs.length
+  //   commentsSnapshot.docs.forEach(async (docSnapshot: any, i: number) => {
+  //     const comment: Comment | null = await commentSerialize(docSnapshot, host.uid)
+  //     if (comment !== null) comments.splice(i, 1, comment)
+  //     console.log(comment)
+  //   })
+  // }
   return {
     ...data,
     id,
@@ -35,7 +32,6 @@ export default async (context: any, docRef: any, options: Options | null) => {
     dateString: context.root.$dayjs(date).format('YYYY-MM-DD'),
     users,
     host,
-    comments,
     createdAt
   }
 }
