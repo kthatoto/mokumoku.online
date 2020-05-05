@@ -16,7 +16,7 @@
 * [ ] 参加するとどうなるかを見せる
 * [x] コメントの順番
 * [x] リンクのstyle(wrapと色)
-* [ ] リンクをtarget blank
+* [x] リンクをtarget blank
 ### Nice to have
 * [ ] いいね機能
 * [ ] アンケート機能

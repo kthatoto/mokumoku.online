@@ -8,7 +8,8 @@
         span {{ comment.commenter.displayName }}
         span.timestamp {{ timestampString }}
       .comment__content(v-if="comment.type === 'text'")
-        vue-markdown.markdown {{ comment.content }}
+        vue-markdown.markdown(:anchorAttributes="{target: '_blank'}")
+          | {{ comment.content }}
       .comment__image(v-if="comment.type === 'image'")
         img(:src="comment.imageUrl")
     .comment__console(v-if="isCommenter")
