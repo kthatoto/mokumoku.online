@@ -25,7 +25,7 @@
           :on-change="handleFilesChange" :on-remove="handleFilesChange")
           i.el-icon-plus
         .buttons
-          el-button(type="primary" :disabled="!imagesSubmittable" @click="postImages")
+          el-button(type="primary" :disabled="!imagesSubmittable" @click="postImages") 投稿
 </template>
 
 <script lang="ts">
@@ -70,9 +70,9 @@ export default defineComponent({
     const imagesSubmittable = computed<boolean>(() => imagesList.value.length > 0)
     const postImages = () => {
       const storageRef = context.root.$firebase.storage().ref()
-      imagesList.forEach((image) => {
+      imagesList.value.forEach((image) => {
         const imageRef = storageRef.child(`test/${Math.random().toString(32).substring(2)}`)
-        imageRef.put(image)
+        imageRef.put(image.raw)
       })
     }
 
