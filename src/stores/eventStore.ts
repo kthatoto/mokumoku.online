@@ -106,6 +106,21 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
     return result
   }
 
+  const updateComment = async (commentId: string, content: string) => {
+    let result: boolean = true
+    await db.collection('event').doc(eventId)
+      .collection('comments').doc(commentId).set({ content }).catch((_: any) => {
+        result = false
+      })
+    if (result) {
+      comments.value = comments.value.map((comment: Comment) => {
+        if (comment.id !== commentId) return comment
+        return { ...comment, content }
+      })
+    }
+    return result
+  }
+
   const hosting = computed<boolean>(() => {
     if (!event.value.host) return false
     return event.value.host.uid === indexStore.currentUser.value.uid
@@ -129,6 +144,7 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
     addImageComment,
     getComments,
     deleteComment,
+    updateComment,
     hosting,
     joining
   }

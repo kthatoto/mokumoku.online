@@ -13,7 +13,7 @@
       span(slot="label")
         icon.icon.-r(name="comment")
         span プレビュー
-      vue-markdown.markdown(:source="form.content")
+      vue-markdown.markdown(:anchorAttributes="{target: '_blank'}" :source="form.content")
       .buttons
         el-button(type="primary" :disabled="!submittable" @click="addTextComment") 投稿
     el-tab-pane

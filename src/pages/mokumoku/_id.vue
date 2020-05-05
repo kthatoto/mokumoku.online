@@ -28,7 +28,8 @@
       comment-field.comment-field(@getComments="getComments")
       h4.comments__header コメント
       .comment-list
-        comment-item(v-for="comment in comments" v-if="comment" :comment="comment" :key="comment.id")
+        comment-item(v-for="comment in comments" v-if="comment" :key="comment.id"
+          :comment="comment")
 </template>
 
 <script lang="ts">

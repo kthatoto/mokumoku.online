@@ -9,22 +9,26 @@
         span.timestamp {{ timestampString }}
       .comment__content(v-if="comment.type === 'text'")
         template(v-if="!editing")
-          vue-markdown.markdown(:anchorAttributes="{target: '_blank'}")
-            | {{ comment.content }}
+          vue-markdown.markdown(:anchorAttributes="{target: '_blank'}" :source="comment.content")
         .comment__edit(v-else)
           el-tabs.tabs(type="border-card")
             el-tab-pane
               span(slot="label")
                 icon.icon.-r(name="pen")
                 span 入力
+              el-input.textarea(type="textarea" v-model="editingText"
+                :autosize="{ minRows: 2, maxRows: 5 }")
               .buttons
                 el-button(@click="cancelEdit") キャンセル
+                el-button(@click="updateComment" type="primary") 更新
             el-tab-pane
               span(slot="label")
                 icon.icon.-r(name="comment")
                 span プレビュー
+              vue-markdown.markdown(:anchorAttributes="{target: '_blank'}" :source="editingText")
               .buttons
                 el-button(@click="cancelEdit") キャンセル
+                el-button(@click="updateComment" type="primary") 更新
       .comment__image(v-if="comment.type === 'image'")
         img(:src="comment.imageUrl")
     .comment__console(v-if="isCommenter")
@@ -87,17 +91,36 @@ export default defineComponent({
     const editingText = ref<string>('')
     const editComment = () => {
       editing.value = true
-      editingText.value = props.comment.content
+      editingText.value = props.comment.content || ''
     }
     const cancelEdit = () => { editing.value = false }
+    const updateComment = async () => {
+      const result: boolean = await eventStore.updateComment(props.comment.id, editingText.value)
+      if (result) {
+        context.root.$message({
+          message: 'コメントを編集しました',
+          type: 'success',
+          duration: 5000
+        })
+      } else {
+        context.root.$message({
+          message: 'コメントの編集に失敗しました',
+          type: 'error',
+          duration: 5000
+        })
+      }
+      editing.value = false
+    }
 
     return {
       timestampString,
       isCommenter,
       deleteComment,
       editing,
+      editingText,
       editComment,
-      cancelEdit
+      cancelEdit,
+      updateComment
     }
   }
 })
@@ -141,6 +164,10 @@ export default defineComponent({
   &__edit
     .buttons
       text-align: right
+    .textarea
+      margin-bottom: 10px
+      >>> .el-textarea__inner
+        padding: 5px
 
   .-image
     >>> .el-card__body
