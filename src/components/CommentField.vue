@@ -20,12 +20,15 @@
       span(slot="label")
         icon.icon.-r(name="image")
         span 画像
-      .uploader
-        el-upload(list-type="picture-card" :limit="3" action="" :auto-upload="false"
-          :on-change="handleFilesChange" :on-remove="handleFilesChange")
-          i.el-icon-plus
+      .uploader(v-loading="uploading")
+        el-upload(list-type="picture-card" :limit="1" action="" :auto-upload="false"
+          :file-list="imageList" :disabled="imageSubmittable"
+          :show-file-list="false" :on-change="handleFilesChange" :on-remove="handleFilesChange")
+          .thumbnail(v-if="image" :style="{backgroundImage: `url(${image.url})`}")
+          i.el-icon-plus(v-else)
         .buttons
-          el-button(type="primary" :disabled="!imagesSubmittable" @click="postImages") 投稿
+          el-button(@click="clearImage") 削除
+          el-button(type="primary" :disabled="!imageSubmittable" @click="postImage") 投稿
 </template>
 
 <script lang="ts">
@@ -65,14 +68,57 @@ export default defineComponent({
       context.emit('getComments')
     }
 
-    const imagesList = ref<any[]>([])
-    const handleFilesChange = (_: any, fileList: any[]) => { imagesList.value = fileList }
-    const imagesSubmittable = computed<boolean>(() => imagesList.value.length > 0)
-    const postImages = () => {
-      const storageRef = context.root.$firebase.storage().ref()
-      imagesList.value.forEach((image) => {
-        const imageRef = storageRef.child(`test/${Math.random().toString(32).substring(2)}`)
-        imageRef.put(image.raw)
+    const image = ref<any>(null)
+    const imageList = computed<any[]>(() => image.value === null ? [] : [image.value])
+    const handleFilesChange = (file: any, fileList: any[]) => {
+      if (fileList.length === 0) return image.value = null
+      image.value = file
+    }
+    const imageSubmittable = computed<boolean>(() => image.value !== null)
+    const clearImage = () => { image.value = null }
+    const uploading = ref<boolean>(false)
+
+    const postImage = async () => {
+      const randomId: string = context.root.$firebase.firestore().collection('d').doc().id
+      const imageRef = context.root.$firebase.storage()
+        .ref(`${eventStore.event.value.id}/${randomId}`)
+      const uploadTask = imageRef.put(image.value.raw)
+      uploading.value = true
+
+      const postProcess = async (completed: boolean) => {
+        uploading.value = false
+        clearImage()
+        if (!completed) return false
+        const imageUrl: string = await imageRef.getDownloadURL()
+        const result: boolean = await eventStore.addImageComment(imageUrl)
+        return result
+      }
+      const showErrorMessage = () => {
+        context.root.$message({
+          message: '画像のアップロードに失敗しました<br>リロードしてやり直してください',
+          dangerouslyUseHTMLString: true,
+          type: 'error',
+          duration: 5000
+        })
+      }
+      const showSuccessMessage = () => {
+        context.root.$message({
+          message: '画像を投稿しました',
+          type: 'success',
+          duration: 5000
+        })
+      }
+      uploadTask.on('state_changed', {
+        error: async () => {
+          await postProcess(false)
+          return showErrorMessage()
+        },
+        complete: async () => {
+          const result: boolean = await postProcess(true)
+          if (!result) return showErrorMessage()
+          eventStore.getComments()
+          showSuccessMessage()
+        }
       })
     }
 
@@ -81,8 +127,12 @@ export default defineComponent({
       submittable,
       addTextComment,
       handleFilesChange,
-      imagesSubmittable,
-      postImages
+      image,
+      imageList,
+      imageSubmittable,
+      clearImage,
+      postImage,
+      uploading
     }
   }
 })
@@ -103,4 +153,15 @@ export default defineComponent({
     padding: 0 10px !important
   .buttons
     text-align: right
+  .uploader
+    >>> .el-upload--picture-card
+      width: 100%
+      margin-bottom: 10px
+    .thumbnail
+      width: 100%
+      height: 100%
+      background-size: contain
+      background-repeat: no-repeat
+      background-position: center
+      background-color: color1
 </style>

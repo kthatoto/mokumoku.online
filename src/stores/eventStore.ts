@@ -63,6 +63,18 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
     return result
   }
 
+  const addImageComment = async (imageUrl: string) => {
+    let result: boolean = true
+    const commenterRef = db.collection('users').doc(indexStore.currentUser.value.uid)
+    await db.collection('events').doc(eventId).collection('comments').add({
+      commenter: commenterRef,
+      type: 'image',
+      imageUrl,
+      createdAt: new Date()
+    }).catch((_: any) => { result = false })
+    return result
+  }
+
   const getComments = async () => {
     const commentsSnapshot: any = await db.collection('events').doc(eventId)
       .collection('comments').orderBy('createdAt', 'desc').get()
@@ -102,6 +114,7 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
     deleteEvent,
     joinEvent,
     addTextComment,
+    addImageComment,
     getComments,
     deleteComment,
     hosting,
