@@ -14,8 +14,8 @@
 * [x] Userにprovider(twitter or github...)フィールド追加
 * [x] EventにcreatedAt追加
 * [ ] 参加するとどうなるかを見せる
-* [ ] コメントの順番
-* [ ] リンクのstyle(wrapと色)
+* [x] コメントの順番
+* [x] リンクのstyle(wrapと色)
 * [ ] リンクをtarget blank
 ### Nice to have
 * [ ] いいね機能
