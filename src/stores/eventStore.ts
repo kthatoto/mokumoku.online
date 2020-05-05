@@ -88,7 +88,7 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
 
   const getComments = async () => {
     const commentsSnapshot: any = await db.collection('events').doc(eventId)
-      .collection('comments').get()
+      .collection('comments').orderBy('createdAt', 'desc').get()
     const newComments: Comment[] = [...Array(commentsSnapshot.docs.length)]
     commentsSnapshot.docs.forEach(async (docSnapshot: any, i: number) => {
       const comment: Comment | null = await commentSerialize(docSnapshot, event.value.host.uid)
