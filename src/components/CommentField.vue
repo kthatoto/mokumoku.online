@@ -66,7 +66,7 @@ export default defineComponent({
     }
 
     const imagesList = ref<any[]>([])
-    const handleFilesChange = (_, fileList: any[]) => { imagesList.value = fileList }
+    const handleFilesChange = (_: any, fileList: any[]) => { imagesList.value = fileList }
     const imagesSubmittable = computed<boolean>(() => imagesList.value.length > 0)
     const postImages = () => {
       const storageRef = context.root.$firebase.storage().ref()
