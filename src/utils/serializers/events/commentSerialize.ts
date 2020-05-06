@@ -7,19 +7,15 @@ export default async (docSnapshot: any, hostUid: string, users: User[]) => {
   const user: User = (await data.commenter.get()).data()
   const commenter: User = { ...user, hosting: user.uid === hostUid }
 
-  const findUserById = (userId: string) => {
-    const user: User | undefined = users.find((u: User) => { u.uid === userId })
-    return user === undefined ? null : user
-  }
-  const favorites: any[] = []
+  // const findUserById = (userId: string) => {
+  //   const user: User | undefined = users.find((u: User) => { u.uid === userId })
+  //   return user === undefined ? null : user
+  // }
+  const favorites: FavoriteList[] = []
   // if (data.favorites) {
   //   data.favorites.forEach((favorite: { key: string, userUids: string[] }) => {
-  //     const users: User[] = userUids.reduce((users: User[], uid: string) => {
-  //     }, [])
-  //     favorites.push()
-  //     // const favoriteList: FavoriteList = data.favorites
-  //     //   .find((f: any) => f.key === favorite.key) || { key: favorite.key, users: [] }
-  //     // const user: User | null = findUserById()
+  //     const favoriteList: FavoriteList = data.favorites
+  //       .find((f: any) => f.key === favorite.key) || { key: favorite.key, users: [] }
   //   })
   // }
 

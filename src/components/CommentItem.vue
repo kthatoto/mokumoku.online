@@ -10,6 +10,10 @@
       .comment__content(v-if="comment.type === 'text'")
         template(v-if="!editing")
           vue-markdown.markdown(:anchorAttributes="{target: '_blank'}" :source="comment.content")
+          .reaction(v-if="!isCommenter")
+            .favorite-button
+              icon.icon.plus(name="plus")
+              icon.icon.-large(name="meh-blank")
         .comment__edit(v-else)
           el-tabs.tabs(type="border-card")
             el-tab-pane
@@ -160,6 +164,14 @@ export default defineComponent({
     img
       max-width: 100%
       max-height: 300px
+
+  &__content
+    .reaction
+      text-align: right
+      .favorite-button
+        .icon
+          &.plus
+            vertical-align: baseline
 
   &__edit
     .buttons
