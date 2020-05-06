@@ -22,8 +22,16 @@
         h4 参加リンク
         a.url(v-if="event.url" :href="event.url" target="_blank") {{ event.url }}
     .console
-      el-button(v-if="!joining" type="primary" @click="joinEvent") 参加する
-      el-button(v-else) 参加中
+      template(v-if="!joining")
+        el-tooltip(effect="dark" placement="bottom-end")
+          span(slot="content")
+            p 参加するともくもく会に参加できる
+            p リンクを取得できます
+            p コメントの閲覧と投稿が可能になります
+          icon.icon.-x-large(name="question-circle")
+        el-button(type="primary" @click="joinEvent") 参加する
+      template(v-else)
+        el-button 参加中
     .comments(v-if="joining")
       comment-field.comment-field(@getComments="getComments")
       h4.comments__header コメント
@@ -118,11 +126,9 @@ export default defineComponent({
   .console
     text-align: right
     margin-bottom: 10px
-    .joining
-      display: flex
-      justify-content: space-between
-      &__url
-        width: 200px
+    .icon
+      color: color3
+      margin-right: 15px
   .comment-field
     margin-bottom: 15px
   .comments
