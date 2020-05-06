@@ -21,7 +21,7 @@
                   :autosize="{ minRows: 2, maxRows: 5 }")
                 .buttons
                   el-button(@click="cancelEdit") キャンセル
-                  el-button(@click="updateComment" type="primary") 更新
+                  el-button(@click="updateCommentContent" type="primary") 更新
               el-tab-pane
                 span(slot="label")
                   icon.icon.-r(name="comment")
@@ -29,7 +29,7 @@
                 vue-markdown.markdown(:anchorAttributes="{target: '_blank'}" :source="editingText")
                 .buttons
                   el-button(@click="cancelEdit") キャンセル
-                  el-button(@click="updateComment" type="primary") 更新
+                  el-button(@click="updateCommentContent" type="primary") 更新
         .comment__image(v-if="comment.type === 'image'")
           img(:src="comment.imageUrl")
         .comment__console-others
@@ -114,8 +114,11 @@ export default defineComponent({
       editingText.value = props.comment.content || ''
     }
     const cancelEdit = () => { editing.value = false }
-    const updateComment = async () => {
-      const result: boolean = await eventStore.updateComment(props.comment.id, editingText.value)
+    const updateCommentContent = async () => {
+      const result: boolean = await eventStore.updateCommentContent(
+        props.comment.id,
+        editingText.value
+      )
       if (result) {
         context.root.$message({
           message: 'コメントを編集しました',
@@ -140,7 +143,7 @@ export default defineComponent({
       editingText,
       editComment,
       cancelEdit,
-      updateComment,
+      updateCommentContent,
       toggleReaction: eventStore.toggleReaction
     }
   }

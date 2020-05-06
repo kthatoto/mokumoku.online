@@ -118,7 +118,7 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
     return result
   }
 
-  const updateComment = async (commentId: string, content: string) => {
+  const updateCommentContent = async (commentId: string, content: string) => {
     let result: boolean = true
     await db.collection('events').doc(eventId)
       .collection('comments').doc(commentId).update({ content }).catch((_: any) => {
@@ -133,8 +133,8 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
     return result
   }
 
-  const toggleReaction = (key: string) => {
-    console.log(key)
+  const toggleReaction = async (key: string) => {
+    await db.collection('event').doc(eventId)
   }
 
   const hosting = computed<boolean>(() => {
@@ -160,7 +160,7 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
     addImageComment,
     getComments,
     deleteComment,
-    updateComment,
+    updateCommentContent,
     toggleReaction,
     hosting,
     joining
