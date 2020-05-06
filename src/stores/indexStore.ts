@@ -15,7 +15,6 @@ export interface Event extends EventInfo {
   dateString?: string
   users: User[]
   host: User
-  // comments: Comment[]
   createdAt: Date
 }
 

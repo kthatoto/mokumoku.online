@@ -11,6 +11,7 @@ export interface Comment {
   content: string | null
   imageUrl: string | null
   createdAt: Date
+  favoritedUsers: User[]
 }
 
 export const buildEventStore = (context: any, indexStore: IndexStore, eventId: string) => {
@@ -108,7 +109,7 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
 
   const updateComment = async (commentId: string, content: string) => {
     let result: boolean = true
-    await db.collection('event').doc(eventId)
+    await db.collection('events').doc(eventId)
       .collection('comments').doc(commentId).set({ content }).catch((_: any) => {
         result = false
       })
