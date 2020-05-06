@@ -34,13 +34,18 @@
           img(:src="comment.imageUrl")
         .comment__reactions
           .reactions__list
-            span.reactions__item(v-for="(r, i) in comment.reactions")
-              template(v-if="r.key === 'smile'") 😁
-              template(v-else-if="r.key === 'good'") 👍
-              template(v-else-if="r.key === 'eyes'") 👀
-              template(v-else-if="r.key === 'pray'") 🙏
-              template(v-else-if="r.key === 'circle'") ⭕️
-              template(v-else-if="r.key === 'cross'") ❌
+            el-tooltip.reactions__item(v-for="(r, i) in comment.reactions" :key="i"
+              popper-class="reactions__item-popper")
+              span(slot="content")
+                Avatar.avatar(:user="r.user" :size="20")
+                span.display-name {{ r.user.displayName }}
+              span
+                template(v-if="r.key === 'smile'") 😁
+                template(v-else-if="r.key === 'good'") 👍
+                template(v-else-if="r.key === 'eyes'") 👀
+                template(v-else-if="r.key === 'pray'") 🙏
+                template(v-else-if="r.key === 'circle'") ⭕️
+                template(v-else-if="r.key === 'cross'") ❌
           el-popover.reactions__popover(placement="top-end" width="170"
             popper-class="reactions__popper")
             el-button.reactions__button(slot="reference" round type="primary")
@@ -78,8 +83,8 @@
 import { defineComponent, computed, ref } from '@vue/composition-api'
 
 import injectBy from '@/utils/injectBy'
-import { indexStoreInjectionKey } from '@/stores/indexStore'
-import { Comment, eventStoreInjectionKey } from '@/stores/eventStore'
+import { indexStoreInjectionKey, User } from '@/stores/indexStore'
+import { Comment, Reaction, eventStoreInjectionKey } from '@/stores/eventStore'
 
 interface Props {
   comment: Comment
@@ -155,7 +160,7 @@ export default defineComponent({
 
     const reactionExists = (key: string) => {
       return !!(props.comment.reactions.find((reaction: Reaction) => {
-        return reaction.key === key && reaction.user.uid == store.currentUser.value.uid
+        return reaction.key === key && reaction.user.uid === store.currentUser.value.uid
       }))
     }
 
@@ -235,6 +240,9 @@ export default defineComponent({
           vertical-align: -2px
     &__list
       width: calc(100% - 60px)
+    &__item
+      margin: 2px
+      cursor: pointer
 
   &__edit
     .buttons
@@ -265,4 +273,12 @@ export default defineComponent({
 <style lang="stylus">
 .reactions__popper
   padding: 10px 10px 0
+
+.reactions__item-popper
+  > span
+    display: flex
+  .avatar
+    margin-right: 5px
+  .display-name
+    padding-top: 3px
 </style>
