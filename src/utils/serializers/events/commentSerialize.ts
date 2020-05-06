@@ -1,5 +1,5 @@
 import { User } from '@/stores/indexStore'
-import { FavoriteList } from '@/stores/eventStore'
+import { Reaction } from '@/stores/eventStore'
 
 export default async (docSnapshot: any, hostUid: string, users: User[]) => {
   const id: string = docSnapshot.id
@@ -7,17 +7,14 @@ export default async (docSnapshot: any, hostUid: string, users: User[]) => {
   const user: User = (await data.commenter.get()).data()
   const commenter: User = { ...user, hosting: user.uid === hostUid }
 
-  // const findUserById = (userId: string) => {
-  //   const user: User | undefined = users.find((u: User) => { u.uid === userId })
-  //   return user === undefined ? null : user
-  // }
-  const favorites: FavoriteList[] = []
-  // if (data.favorites) {
-  //   data.favorites.forEach((favorite: { key: string, userUids: string[] }) => {
-  //     const favoriteList: FavoriteList = data.favorites
-  //       .find((f: any) => f.key === favorite.key) || { key: favorite.key, users: [] }
-  //   })
-  // }
+  const findUserById = (userId: string) => {
+    const user: User | undefined = users.find((u: User) => { u.uid === userId })
+    return user === undefined ? null : user
+  }
+  const reactions: Reaction[] = []
+  // TODO: Add reactions field to all comment and remove below if
+  // data.reactions.forEach((reaction: { key: string, uid: string }) => {
+  // })
 
   if (data.type === 'text') {
     return {
@@ -27,7 +24,7 @@ export default async (docSnapshot: any, hostUid: string, users: User[]) => {
       content: data.content,
       imageUrl: null,
       createdAt: data.createdAt.toDate(),
-      favorites
+      reactions
     }
   }
   if (data.type === 'image') {
@@ -38,7 +35,7 @@ export default async (docSnapshot: any, hostUid: string, users: User[]) => {
       content: null,
       imageUrl: data.imageUrl,
       createdAt: data.createdAt.toDate(),
-      favorites
+      reactions
     }
   }
   return null

@@ -141,7 +141,7 @@ export default defineComponent({
       editComment,
       cancelEdit,
       updateComment,
-      toggleReaction
+      toggleReaction: eventStore.toggleReaction
     }
   }
 })
@@ -187,6 +187,8 @@ export default defineComponent({
     padding: 10px 15px
     &.-image
       padding: 0
+      .comment__console-others
+        padding: 8px 15px 10px
     &.-editing
       padding: 5px
 

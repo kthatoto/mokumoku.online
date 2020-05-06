@@ -11,12 +11,12 @@ export interface Comment {
   content: string | null
   imageUrl: string | null
   createdAt: Date
-  favorites: FavoriteList[]
+  reactions: Reaction[]
 }
 
-export interface FavoriteList {
+export interface Reaction {
   key: string
-  users: User[]
+  user: User
 }
 
 export const buildEventStore = (context: any, indexStore: IndexStore, eventId: string) => {
@@ -76,7 +76,7 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
       type: 'text',
       content,
       createdAt: new Date(),
-      favorites: []
+      reactions: []
     }).catch((_: any) => { result = false })
     return result
   }
@@ -89,7 +89,7 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
       type: 'image',
       imageUrl,
       createdAt: new Date(),
-      favorites: []
+      reactions: []
     }).catch((_: any) => { result = false })
     return result
   }
@@ -133,6 +133,10 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
     return result
   }
 
+  const toggleReaction = (key: string) => {
+    console.log(key)
+  }
+
   const hosting = computed<boolean>(() => {
     if (!event.value.host) return false
     return event.value.host.uid === indexStore.currentUser.value.uid
@@ -157,6 +161,7 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
     getComments,
     deleteComment,
     updateComment,
+    toggleReaction,
     hosting,
     joining
   }
