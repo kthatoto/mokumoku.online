@@ -25,8 +25,7 @@
       template(v-if="!joining")
         el-tooltip(effect="dark" placement="bottom-end")
           span(slot="content")
-            p 参加するともくもく会に参加できる
-            p リンクを取得できます
+            p もくもく会に参加できるリンクを取得できます
             p コメントの閲覧と投稿が可能になります
           icon.icon.-x-large(name="question-circle")
         el-button(type="primary" @click="joinEvent") 参加する
@@ -67,10 +66,15 @@ export default defineComponent({
     const closeForm = () => { showingForm.value = false }
 
     const joinEvent = () => {
-      context.root.$confirm('参加しますか？', {
+      const confirmMessage: string = `参加しますか？
+
+もくもく会に参加できるリンクを取得できます
+コメントの閲覧と投稿が可能になります`
+      context.root.$confirm(confirmMessage, {
         title: eventStore.event.value.title,
         confirmButtonText: '参加',
         cancelButtonText: 'キャンセル',
+        customClass: 'joining-confirm',
         callback: async (res: string) => {
           if (res !== 'confirm') return
           const result: boolean = await eventStore.joinEvent()
@@ -134,4 +138,11 @@ export default defineComponent({
   .comments
     &__header
       margin-bottom: 10px
+
+</style>
+
+<style lang="stylus">
+.joining-confirm
+  .el-message-box__message
+    white-space: pre-wrap
 </style>
