@@ -39,17 +39,23 @@
               icon.icon.-r.-mini(name="plus")
               icon.icon(name="meh-blank")
             .reactions
-              el-button(round @click="toggleReaction('smile')")
+              el-button(round @click="toggleReaction('smile')"
+                :type="reactionExists('smile') ? 'primary' : 'default'")
                 span 😁
-              el-button(round @click="toggleReaction('good')")
+              el-button(round @click="toggleReaction('good')"
+                :type="reactionExists('good') ? 'primary' : 'default'")
                 span 👍
-              el-button(round @click="toggleReaction('eyes')")
+              el-button(round @click="toggleReaction('eyes')"
+                :type="reactionExists('eyes') ? 'primary' : 'default'")
                 span 👀
-              el-button(round @click="toggleReaction('pray')")
+              el-button(round @click="toggleReaction('pray')"
+                :type="reactionExists('pray') ? 'primary' : 'default'")
                 span 🙏
-              el-button(round @click="toggleReaction('circle')")
+              el-button(round @click="toggleReaction('circle')"
+                :type="reactionExists('circle') ? 'primary' : 'default'")
                 span ⭕️
-              el-button(round @click="toggleReaction('cross')")
+              el-button(round @click="toggleReaction('cross')"
+                :type="reactionExists('cross') ? 'primary' : 'default'")
                 span ❌
     .comment__console-commenter(v-if="isCommenter")
       span(v-if="comment.type === 'text'" @click="editComment")
@@ -139,6 +145,13 @@ export default defineComponent({
       await eventStore.toggleReaction(props.comment, key)
     }
 
+    const reactionExists = (key: string) => {
+      console.log(JSON.parse(JSON.stringify(props.comment)))
+      return !!(props.comment.reactions.find((reaction: Reaction) => {
+        return reaction.key === key && reaction.user.uid == store.currentUser.value.uid
+      }))
+    }
+
     return {
       timestampString,
       isCommenter,
@@ -148,7 +161,8 @@ export default defineComponent({
       editComment,
       cancelEdit,
       updateCommentContent,
-      toggleReaction
+      toggleReaction,
+      reactionExists
     }
   }
 })
