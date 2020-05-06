@@ -11,7 +11,12 @@ export interface Comment {
   content: string | null
   imageUrl: string | null
   createdAt: Date
-  favorites: { key: string, users: User[] }[]
+  favorites: FavoriteList[]
+}
+
+export interface FavoriteList {
+  key: string
+  users: User[]
 }
 
 export const buildEventStore = (context: any, indexStore: IndexStore, eventId: string) => {
