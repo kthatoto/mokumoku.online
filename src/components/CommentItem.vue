@@ -146,7 +146,6 @@ export default defineComponent({
     }
 
     const reactionExists = (key: string) => {
-      console.log(JSON.parse(JSON.stringify(props.comment)))
       return !!(props.comment.reactions.find((reaction: Reaction) => {
         return reaction.key === key && reaction.user.uid == store.currentUser.value.uid
       }))

@@ -7,14 +7,13 @@ export default async (docSnapshot: any, hostUid: string, users: User[]) => {
   const user: User = (await data.commenter.get()).data()
   const commenter: User = { ...user, hosting: user.uid === hostUid }
 
-  const findUserById = (userId: string) => {
-    const user: User | undefined = users.find((u: User) => { u.uid === userId })
+  const findUserByUid = (uid: string) => {
+    const user: User | undefined = users.find((u: User) => u.uid === uid)
     return user === undefined ? null : user
   }
   const reactions: Reaction[] = []
-  // TODO: Add reactions field to all comment and remove below if
   data.reactions.forEach((reaction: { key: string, uid: string }) => {
-    const user: User | null = findUserById(reaction.uid)
+    const user: User | null = findUserByUid(reaction.uid)
     if (user) reactions.push({ key: reaction.key, user })
   })
 
