@@ -14,8 +14,8 @@ export default async (docSnapshot: any, hostUid: string, users: User[]) => {
   const reactions: Reaction[] = []
   // TODO: Add reactions field to all comment and remove below if
   data.reactions.forEach((reaction: { key: string, uid: string }) => {
-    const user: User = findUserById(reaction.uid)
-    reactions.push({ key, user })
+    const user: User | null = findUserById(reaction.uid)
+    if (user) reactions.push({ key: reaction.key, user })
   })
 
   if (data.type === 'text') {
