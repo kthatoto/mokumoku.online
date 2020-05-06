@@ -3,39 +3,55 @@
   .comment__user
     Avatar(:user="comment.commenter" :size="50")
   .comment__main
-    el-card(:class="{'-image': comment.type === 'image', '-editing': editing}")
+    el-card.comment__card
       .comment__header(slot="header")
         span {{ comment.commenter.displayName }}
         span.timestamp {{ timestampString }}
-      .comment__content(v-if="comment.type === 'text'")
-        template(v-if="!editing")
-          vue-markdown.markdown(:anchorAttributes="{target: '_blank'}" :source="comment.content")
-          .reaction(v-if="!isCommenter")
-            .favorite-button
-              icon.icon.plus(name="plus")
-              icon.icon.-large(name="meh-blank")
-        .comment__edit(v-else)
-          el-tabs.tabs(type="border-card")
-            el-tab-pane
-              span(slot="label")
-                icon.icon.-r(name="pen")
-                span 入力
-              el-input.textarea(type="textarea" v-model="editingText"
-                :autosize="{ minRows: 2, maxRows: 5 }")
-              .buttons
-                el-button(@click="cancelEdit") キャンセル
-                el-button(@click="updateComment" type="primary") 更新
-            el-tab-pane
-              span(slot="label")
-                icon.icon.-r(name="comment")
-                span プレビュー
-              vue-markdown.markdown(:anchorAttributes="{target: '_blank'}" :source="editingText")
-              .buttons
-                el-button(@click="cancelEdit") キャンセル
-                el-button(@click="updateComment" type="primary") 更新
-      .comment__image(v-if="comment.type === 'image'")
-        img(:src="comment.imageUrl")
-    .comment__console(v-if="isCommenter")
+      .comment__inner(:class="{'-image': comment.type === 'image', '-editing': editing}")
+        .comment__content(v-if="comment.type === 'text'")
+          template(v-if="!editing")
+            vue-markdown.markdown(:anchorAttributes="{target: '_blank'}" :source="comment.content")
+          .comment__edit(v-else)
+            el-tabs.tabs(type="border-card")
+              el-tab-pane
+                span(slot="label")
+                  icon.icon.-r(name="pen")
+                  span 入力
+                el-input.textarea(type="textarea" v-model="editingText"
+                  :autosize="{ minRows: 2, maxRows: 5 }")
+                .buttons
+                  el-button(@click="cancelEdit") キャンセル
+                  el-button(@click="updateComment" type="primary") 更新
+              el-tab-pane
+                span(slot="label")
+                  icon.icon.-r(name="comment")
+                  span プレビュー
+                vue-markdown.markdown(:anchorAttributes="{target: '_blank'}" :source="editingText")
+                .buttons
+                  el-button(@click="cancelEdit") キャンセル
+                  el-button(@click="updateComment" type="primary") 更新
+        .comment__image(v-if="comment.type === 'image'")
+          img(:src="comment.imageUrl")
+        .comment__console-others
+          el-popover.reactions__popover(v-if="!isCommenter" placement="top-end" width="170"
+            popper-class="reactions__popper")
+            el-button.reactions__button(slot="reference" round type="primary")
+              icon.icon.-r.-mini(name="plus")
+              icon.icon(name="meh-blank")
+            .reactions
+              el-button(round @click="toggleReaction('smile')")
+                span 😁
+              el-button(round @click="toggleReaction('good')")
+                span 👍
+              el-button(round @click="toggleReaction('eyes')")
+                span 👀
+              el-button(round @click="toggleReaction('pray')")
+                span 🙏
+              el-button(round @click="toggleReaction('circle')")
+                span ⭕️
+              el-button(round @click="toggleReaction('cross')")
+                span ❌
+    .comment__console-commenter(v-if="isCommenter")
       span(v-if="comment.type === 'text'" @click="editComment")
         icon.icon(name="edit")
         span 編集
@@ -124,7 +140,8 @@ export default defineComponent({
       editingText,
       editComment,
       cancelEdit,
-      updateComment
+      updateComment,
+      toggleReaction
     }
   }
 })
@@ -146,7 +163,7 @@ export default defineComponent({
     .timestamp
       color: color3
 
-  &__console
+  &__console-commenter
     padding: 5px
     text-align: right
     color: color3
@@ -165,13 +182,23 @@ export default defineComponent({
       max-width: 100%
       max-height: 300px
 
-  &__content
-    .reaction
-      text-align: right
-      .favorite-button
-        .icon
-          &.plus
-            vertical-align: baseline
+  &__inner
+    position: relative
+    padding: 10px 15px
+    &.-image
+      padding: 0
+    &.-editing
+      padding: 5px
+
+  &__console-others
+    text-align: right
+  .reactions
+    &__button
+      padding: 10px 15px
+      border: 1px solid color1
+      .icon
+        &:first-child
+          vertical-align: -2px
 
   &__edit
     .buttons
@@ -181,13 +208,6 @@ export default defineComponent({
       >>> .el-textarea__inner
         padding: 5px
 
-  .-image
-    >>> .el-card__body
-      padding: 0
-  .-editing
-    >>> .el-card__body
-      padding: 5px
-
   .tabs >>> .el-tabs__item
     padding: 0 10px !important
 
@@ -195,5 +215,18 @@ export default defineComponent({
     .el-card__header
       padding: 5px
     .el-card__body
-      padding: 10px 15px
+      padding: 0
+
+.reactions
+  display: flex
+  justify-content: space-between
+  flex-wrap: wrap
+  .el-button
+    padding: 10px
+    margin: 0 0 10px
+</style>
+
+<style lang="stylus">
+.reactions__popper
+  padding: 10px 10px 0
 </style>
