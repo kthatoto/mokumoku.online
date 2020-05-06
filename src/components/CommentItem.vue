@@ -32,7 +32,15 @@
                   el-button(@click="updateCommentContent" type="primary") 更新
         .comment__image(v-if="comment.type === 'image'")
           img(:src="comment.imageUrl")
-        .comment__console-others
+        .comment__reactions
+          .reactions__list
+            span.reactions__item(v-for="(r, i) in comment.reactions")
+              template(v-if="r.key === 'smile'") 😁
+              template(v-else-if="r.key === 'good'") 👍
+              template(v-else-if="r.key === 'eyes'") 👀
+              template(v-else-if="r.key === 'pray'") 🙏
+              template(v-else-if="r.key === 'circle'") ⭕️
+              template(v-else-if="r.key === 'cross'") ❌
           el-popover.reactions__popover(placement="top-end" width="170"
             popper-class="reactions__popper")
             el-button.reactions__button(slot="reference" round type="primary")
@@ -57,7 +65,7 @@
               el-button(round @click="toggleReaction('cross')"
                 :type="reactionExists('cross') ? 'primary' : 'default'")
                 span ❌
-    .comment__console-commenter(v-if="isCommenter")
+    .comment__console(v-if="isCommenter")
       span(v-if="comment.type === 'text'" @click="editComment")
         icon.icon(name="edit")
         span 編集
@@ -183,7 +191,7 @@ export default defineComponent({
     .timestamp
       color: color3
 
-  &__console-commenter
+  &__console
     padding: 5px
     text-align: right
     color: color3
@@ -207,20 +215,26 @@ export default defineComponent({
     padding: 10px 15px
     &.-image
       padding: 0
-      .comment__console-others
+      .comment__reactions
         padding: 8px 15px 10px
     &.-editing
       padding: 5px
 
-  &__console-others
-    text-align: right
+  &__reactions
+    display: flex
+    justify-content: space-between
+    border-top: 1px solid color3
+    margin-top: 10px
+    padding-top: 10px
   .reactions
     &__button
-      padding: 10px 15px
+      padding: 5px 10px
       border: 1px solid color1
       .icon
         &:first-child
           vertical-align: -2px
+    &__list
+      width: calc(100% - 60px)
 
   &__edit
     .buttons
