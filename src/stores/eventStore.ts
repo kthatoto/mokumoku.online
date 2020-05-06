@@ -70,7 +70,8 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
       commenter: commenterRef,
       type: 'text',
       content,
-      createdAt: new Date()
+      createdAt: new Date(),
+      favorites: []
     }).catch((_: any) => { result = false })
     return result
   }
@@ -82,7 +83,8 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
       commenter: commenterRef,
       type: 'image',
       imageUrl,
-      createdAt: new Date()
+      createdAt: new Date(),
+      favorites: []
     }).catch((_: any) => { result = false })
     return result
   }
