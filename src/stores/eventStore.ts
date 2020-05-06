@@ -133,8 +133,35 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
     return result
   }
 
-  const toggleReaction = async (key: string) => {
-    await db.collection('event').doc(eventId)
+  const toggleReaction = async (comment: Comment, key: string) => {
+    const reactionEqual = (reaction: Reaction) => {
+      return reaction.key === key && reaction.user.uid === indexStore.currentUser.value.uid
+    }
+    const reactionExists: boolean = comment.reactions.some((reaction: Reaction) => {
+      return reactionEqual(reaction)
+    })
+    const newReactions: Reaction[] = []
+    if (reactionExists) {
+      comment.reactions.forEach((reaction: Reaction) => {
+        if (reactionEqual(reaction)) return
+        newReactions.push(reaction)
+      })
+    } else {
+      newReactions.push(...comment.reactions, { key, user: indexStore.currentUser.value })
+    }
+    const reactionsForStore: { key: string, uid: string }[] = newReactions
+      .map((reaction: Reaction) => {
+        return { key: reaction.key, uid: reaction.user.uid }
+      })
+    let result: boolean = true
+    await db.collection('events').doc(eventId).collection('comments').doc(comment.id)
+      .update({ reactions: reactionsForStore }).catch((_: any) => { result = false })
+    if (!result) return false
+    comments.value = comments.value.map((c: Comment) => {
+      if (c.id !== comment.id) return c
+      return { ...c, reactions: newReactions }
+    })
+    return true
   }
 
   const hosting = computed<boolean>(() => {

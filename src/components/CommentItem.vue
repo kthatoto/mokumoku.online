@@ -33,7 +33,7 @@
         .comment__image(v-if="comment.type === 'image'")
           img(:src="comment.imageUrl")
         .comment__console-others
-          el-popover.reactions__popover(v-if="!isCommenter" placement="top-end" width="170"
+          el-popover.reactions__popover(placement="top-end" width="170"
             popper-class="reactions__popper")
             el-button.reactions__button(slot="reference" round type="primary")
               icon.icon.-r.-mini(name="plus")
@@ -135,6 +135,10 @@ export default defineComponent({
       editing.value = false
     }
 
+    const toggleReaction = async (key: string) => {
+      await eventStore.toggleReaction(props.comment, key)
+    }
+
     return {
       timestampString,
       isCommenter,
@@ -144,7 +148,7 @@ export default defineComponent({
       editComment,
       cancelEdit,
       updateCommentContent,
-      toggleReaction: eventStore.toggleReaction
+      toggleReaction
     }
   }
 })
