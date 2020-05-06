@@ -11,7 +11,7 @@ export interface Comment {
   content: string | null
   imageUrl: string | null
   createdAt: Date
-  favoritedUsers: User[]
+  favorites: { key: string, users: User[] }[]
 }
 
 export const buildEventStore = (context: any, indexStore: IndexStore, eventId: string) => {
@@ -92,7 +92,11 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
       .collection('comments').orderBy('createdAt', 'desc').get()
     const newComments: Comment[] = [...Array(commentsSnapshot.docs.length)]
     commentsSnapshot.docs.forEach(async (docSnapshot: any, i: number) => {
-      const comment: Comment | null = await commentSerialize(docSnapshot, event.value.host.uid)
+      const comment: Comment | null = await commentSerialize(
+        docSnapshot,
+        event.value.host.uid,
+        event.value.users
+      )
       if (comment !== null) newComments.splice(i, 1, comment)
     })
     comments.value = newComments
