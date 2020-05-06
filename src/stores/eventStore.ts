@@ -116,7 +116,7 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
   const updateComment = async (commentId: string, content: string) => {
     let result: boolean = true
     await db.collection('events').doc(eventId)
-      .collection('comments').doc(commentId).set({ content }).catch((_: any) => {
+      .collection('comments').doc(commentId).update({ content }).catch((_: any) => {
         result = false
       })
     if (result) {
