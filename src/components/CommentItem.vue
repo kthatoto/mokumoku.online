@@ -83,7 +83,7 @@
 import { defineComponent, computed, ref } from '@vue/composition-api'
 
 import injectBy from '@/utils/injectBy'
-import { indexStoreInjectionKey, User } from '@/stores/indexStore'
+import { indexStoreInjectionKey } from '@/stores/indexStore'
 import { Comment, Reaction, eventStoreInjectionKey } from '@/stores/eventStore'
 
 interface Props {
