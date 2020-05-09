@@ -26,9 +26,12 @@
           :show-file-list="false" :on-change="handleFilesChange" :on-remove="handleFilesChange")
           .thumbnail(v-if="image" :style="{backgroundImage: `url(${image.url})`}")
           i.el-icon-plus(v-else)
-        .buttons
-          el-button(@click="clearImage") 削除
-          el-button(type="primary" :disabled="!imageSubmittable" @click="postImage") 投稿
+        .console
+          .message
+            span(v-if="uploaderErrorMessage") {{ uploaderErrorMessage }}
+          .buttons
+            el-button(@click="clearImage") 削除
+            el-button(type="primary" :disabled="!imageSubmittable" @click="postImage") 投稿
 </template>
 
 <script lang="ts">
@@ -77,9 +80,18 @@ export default defineComponent({
       }
       image.value = file
     }
-    const imageSubmittable = computed<boolean>(() => image.value !== null)
+    const imageSubmittable = computed<boolean>(() => {
+      if (image.value === null) return false
+      if (image.value.size / (1024 * 1024) >= 2) return false
+      return true
+    })
     const clearImage = () => { image.value = null }
     const uploading = ref<boolean>(false)
+    const uploaderErrorMessage = computed<string | null>(() => {
+      if (image.value === null) return null
+      if (image.value.size / (1024 * 1024) >= 2) return '画像サイズが2MBを超えないようにしてください'
+      return null
+    })
 
     const postImage = () => {
       const randomId: string = context.root.$firebase.firestore().collection('d').doc().id
@@ -133,6 +145,7 @@ export default defineComponent({
       image,
       imageList,
       imageSubmittable,
+      uploaderErrorMessage,
       clearImage,
       postImage,
       uploading
@@ -167,4 +180,11 @@ export default defineComponent({
       background-repeat: no-repeat
       background-position: center
       background-color: color1
+    .console
+      display: flex
+      justify-content: space-between
+      .message
+        width: 185px
+        span
+          color: red
 </style>
