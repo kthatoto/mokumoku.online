@@ -37,6 +37,7 @@
 * eventRef: DocumentReference<event>
 * content: string
 * tags: string[]
+* reactions: { key: string, userRef: DocumentReference<user> }[]
 * public: boolean
 ## Groups
 * name: string
