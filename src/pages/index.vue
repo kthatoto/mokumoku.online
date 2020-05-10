@@ -33,7 +33,6 @@ import { indexStoreInjectionKey } from '@/stores/indexStore'
 import NewEventModal from '@/components/NewEventModal.vue'
 
 export default defineComponent({
-  meta: { auth: true },
   components: { NewEventModal },
   setup (_, _context: any) {
     const store = injectBy(indexStoreInjectionKey)

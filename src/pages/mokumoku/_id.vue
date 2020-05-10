@@ -50,7 +50,6 @@ import CommentField from '@/components/CommentField.vue'
 import CommentItem from '@/components/CommentItem.vue'
 
 export default defineComponent({
-  meta: { auth: true },
   components: { EditEventModal, CommentField, CommentItem },
   setup (_, context: any) {
     const store = injectBy(indexStoreInjectionKey)

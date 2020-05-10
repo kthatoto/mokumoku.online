@@ -33,13 +33,6 @@ export default ({ app, route, redirect }, inject) => {
   app.onAuthStateChanged = false
   firebase.auth().onAuthStateChanged(async (user) => {
     app.onAuthStateChanged = true
-    if (!user) {
-      if (route.meta[0].auth) {
-        Message({ message: 'ログインしてください', type: 'warning', duration: 5000 })
-        return redirect('/signin')
-      }
-      return
-    }
     await upsertUser(user)
     if (route.meta[0].shouldGuest) return redirect('/')
   })
