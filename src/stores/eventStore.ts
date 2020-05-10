@@ -42,6 +42,7 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
   }
 
   const updateEvent = async (eventInfo: EventInfo) => {
+    if (indexStore.currentUser.value === null) return false
     let result: boolean = true
     await db.collection('events').doc(eventId).update(eventInfo).catch((_: any) => {
       result = false
@@ -50,6 +51,7 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
   }
 
   const deleteEvent = async () => {
+    if (indexStore.currentUser.value === null) return false
     let result: boolean = true
     await db.collection('events').doc(eventId).delete().catch((_: any) => {
       result = false
@@ -58,6 +60,7 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
   }
 
   const joinEvent = async () => {
+    if (indexStore.currentUser.value === null) return false
     if (joining.value) return false
     const userDocRefs = event.value.users.map((user: User) => db.collection('users').doc(user.uid))
     userDocRefs.push(db.collection('users').doc(indexStore.currentUser.value.uid))
@@ -69,6 +72,7 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
   }
 
   const addTextComment = async (content: string) => {
+    if (indexStore.currentUser.value === null) return false
     let result: boolean = true
     const commenterRef = db.collection('users').doc(indexStore.currentUser.value.uid)
     await db.collection('events').doc(eventId).collection('comments').add({
@@ -82,6 +86,7 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
   }
 
   const addImageComment = async (imageUrl: string) => {
+    if (indexStore.currentUser.value === null) return false
     let result: boolean = true
     const commenterRef = db.collection('users').doc(indexStore.currentUser.value.uid)
     await db.collection('events').doc(eventId).collection('comments').add({
@@ -110,6 +115,7 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
   }
 
   const deleteComment = async (commentId: string) => {
+    if (indexStore.currentUser.value === null) return false
     let result: boolean = true
     await db.collection('events').doc(eventId)
       .collection('comments').doc(commentId).delete().catch((_: any) => {
@@ -119,6 +125,7 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
   }
 
   const updateCommentContent = async (commentId: string, content: string) => {
+    if (indexStore.currentUser.value === null) return false
     let result: boolean = true
     await db.collection('events').doc(eventId)
       .collection('comments').doc(commentId).update({ content }).catch((_: any) => {
@@ -134,6 +141,7 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
   }
 
   const toggleReaction = async (comment: Comment, key: string) => {
+    if (indexStore.currentUser.value === null) return false
     const reactionEqual = (reaction: Reaction) => {
       return reaction.key === key && reaction.user.uid === indexStore.currentUser.value.uid
     }
@@ -165,11 +173,13 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
   }
 
   const hosting = computed<boolean>(() => {
+    if (indexStore.currentUser.value === null) return false
     if (!event.value.host) return false
     return event.value.host.uid === indexStore.currentUser.value.uid
   })
 
   const joining = computed<boolean>(() => {
+    if (indexStore.currentUser.value === null) return false
     if (!event.value.users) return false
     return event.value.users.some((user: User) => {
       return user.uid === indexStore.currentUser.value.uid

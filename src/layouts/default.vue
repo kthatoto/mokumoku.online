@@ -24,9 +24,9 @@ export default defineComponent({
     provide(indexStoreInjectionKey, store)
 
     const signout = async () => {
+      if (store.currentUser.value === null) return
       await context.root.$firebase.auth().signOut()
       context.root.$message({ message: 'ログアウトしました', type: 'success', duration: 5000 })
-      context.root.$router.push('/signin')
     }
     const handleCommand = (command: string) => {
       if (command === 'signout') signout()
@@ -34,7 +34,8 @@ export default defineComponent({
 
     const loading = ref<boolean>(true)
     const timerId: number = window.setInterval(() => {
-      if (context.root.$firebase.auth().currentUser) {
+      const onAuthStateChanged: boolean = context.root.context.app.onAuthStateChanged
+      if (onAuthStateChanged) {
         loading.value = false
         clearInterval(timerId)
         store.getCurrentUser()

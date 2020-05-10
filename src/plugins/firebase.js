@@ -33,8 +33,10 @@ export default ({ app, route, redirect }, inject) => {
   app.onAuthStateChanged = false
   firebase.auth().onAuthStateChanged(async (user) => {
     app.onAuthStateChanged = true
-    await upsertUser(user)
-    if (route.meta[0].shouldGuest) return redirect('/')
+    if (user) {
+      await upsertUser(user)
+      if (route.meta[0].shouldGuest) return redirect('/')
+    }
   })
   inject('firebase', firebase)
 }

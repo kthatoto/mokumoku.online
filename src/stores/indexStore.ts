@@ -29,9 +29,10 @@ export interface User {
 export const buildIndexStore = (context: any) => {
   const db = context.root.$firebase.firestore()
 
-  const currentUser = ref<User>({} as User)
+  const currentUser = ref<User | null>(null)
   const getCurrentUser = () => {
     const user = context.root.$firebase.auth().currentUser
+    if (user === null) return
     const providerId: string = user.providerData[0].providerId.split('.')[0]
     currentUser.value = {
       uid: user.uid,
@@ -62,9 +63,9 @@ export const buildIndexStore = (context: any) => {
   }
 
   const createEvent = async (eventInfo: EventInfo) => {
+    if (currentUser.value === null) return
     let result: boolean = true
-    const currentUser: any = context.root.$firebase.auth().currentUser
-    const userDocRef = db.collection('users').doc(currentUser.uid)
+    const userDocRef = db.collection('users').doc(currentUser.value.uid)
     await db.collection('events').add({
       ...eventInfo,
       users: [userDocRef],
