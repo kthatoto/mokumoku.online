@@ -18,14 +18,24 @@ if (!firebase.apps.length) {
   )
 }
 
-const upsertUser = (user) => {
+const createUser = async (user) => {
   const db = firebase.firestore()
+  const userSnapshot = await db.collection('users').doc(user.uid).get()
+  if (userSnapshot.exists) return
   const providerId = user.providerData[0].providerId.split('.')[0]
   db.collection('users').doc(user.uid).set({
-    uid: user.uid,
     displayName: user.displayName,
-    photoURL: user.photoURL,
-    providerId
+    twitterScreenName: '',
+    githubScreenName: '',
+    imageURL: user.photoURL,
+    providerId,
+    uid: user.uid,
+    description: '',
+    eventRefs: [],
+    groupRefs: [],
+    achievementRefs: [],
+    tags: [],
+    createdAt: new Date()
   })
 }
 
@@ -34,7 +44,7 @@ export default ({ app, route, redirect }, inject) => {
   firebase.auth().onAuthStateChanged(async (user) => {
     app.onAuthStateChanged = true
     if (user) {
-      await upsertUser(user)
+      await createUser(user)
       if (route.meta[0].shouldGuest) return redirect('/')
     }
   })
