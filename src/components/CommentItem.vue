@@ -105,6 +105,7 @@ export default defineComponent({
       return context.root.$dayjs(props.comment.createdAt).format('YYYY-MM-DD HH:mm')
     })
     const isCommenter = computed<boolean>(() => {
+      if (store.currentUser.value === null) return false
       return props.comment.commenter.uid === store.currentUser.value.uid
     })
 
@@ -159,8 +160,10 @@ export default defineComponent({
     }
 
     const reactionExists = (key: string) => {
+      if (store.currentUser.value === null) return false
+      const currentUserUid: string = store.currentUser.value.uid
       return !!(props.comment.reactions.find((reaction: Reaction) => {
-        return reaction.key === key && reaction.user.uid === store.currentUser.value.uid
+        return reaction.key === key && reaction.user.uid === currentUserUid
       }))
     }
 

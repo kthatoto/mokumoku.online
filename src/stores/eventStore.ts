@@ -142,8 +142,9 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
 
   const toggleReaction = async (comment: Comment, key: string) => {
     if (indexStore.currentUser.value === null) return false
+    const currentUserUid: string = indexStore.currentUser.value.uid
     const reactionEqual = (reaction: Reaction) => {
-      return reaction.key === key && reaction.user.uid === indexStore.currentUser.value.uid
+      return reaction.key === key && reaction.user.uid === currentUserUid
     }
     const reactionExists: boolean = comment.reactions.some((reaction: Reaction) => {
       return reactionEqual(reaction)
@@ -181,8 +182,9 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
   const joining = computed<boolean>(() => {
     if (indexStore.currentUser.value === null) return false
     if (!event.value.users) return false
+    const currentUserUid: string = indexStore.currentUser.value.uid
     return event.value.users.some((user: User) => {
-      return user.uid === indexStore.currentUser.value.uid
+      return user.uid === currentUserUid
     })
   })
 

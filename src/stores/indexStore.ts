@@ -63,7 +63,7 @@ export const buildIndexStore = (context: any) => {
   }
 
   const createEvent = async (eventInfo: EventInfo) => {
-    if (currentUser.value === null) return
+    if (currentUser.value === null) return false
     let result: boolean = true
     const userDocRef = db.collection('users').doc(currentUser.value.uid)
     await db.collection('events').add({
