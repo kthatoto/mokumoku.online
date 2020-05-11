@@ -8,13 +8,17 @@ export interface EventInfo {
   startDatetime: string
   endDatetime: string
   url: string
+  limitUserCount: boolean
+  maxUserCount: number | null
+  joinPermission: boolean
+  tags: string[]
 }
 
 export interface Event extends EventInfo {
   id: string
   dateString?: string
   users: User[]
-  host: User
+  host: User // | Group
   createdAt: Date
 }
 

@@ -19,6 +19,7 @@
 * startDatetime: Date
 * endDatetime: Date
 * url: string
+* limitUserCount: boolean
 * maxUserCount: number
 * joinPermission: boolean
 * userRefs: DocumentReference<user>[]
