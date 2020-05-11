@@ -60,7 +60,7 @@ export default defineComponent({
     justify-content: space-between
     height: 100%
     width: 95%
-    max-width: 700px
+    max-width: 800px
     margin: auto
     .logo
       display: inline-block
