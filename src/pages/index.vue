@@ -1,13 +1,14 @@
 <template lang="pug">
 .index
   .event-list
-    .console
-      el-button.button(type="primary" @click="openForm")
-        icon.icon.-r(name="plus")
-        span ホストする
-    h2
-      icon.icon.-r(name="terminal")
-      span もくもく会を探す
+    .event-list__header
+      h2
+        icon.icon.-r(name="terminal")
+        span もくもく会を探す
+      .console
+        el-button.button(type="primary" @click="openForm")
+          icon.icon.-r(name="plus")
+          span ホストする
     .events
       el-card.card(v-for="event in events" :key="event.id")
         nuxt-link.title(:to="'/mokumoku/' + event.id")
@@ -25,6 +26,9 @@
           Avatar.user(v-for="u in event.users" :key="u.uid" :user="u")
     new-event-modal(:showing="showingForm" @closeModal="closeForm")
   .achievement-list
+    h2
+      icon.icon.-r(name="list-alt")
+      span もくもく一覧
 </template>
 
 <script lang="ts">
@@ -60,14 +64,18 @@ export default defineComponent({
   margin: 30px auto 0
   display: flex
   justify-content: space-between
+  h2
+    font-size: 24px
+    margin-bottom: 20px
+    color: color5
+    .icon
+      circle-icon()
   .event-list
-    width: 400px
-    h2
-      font-size: 24px
-      margin-bottom: 20px
-      color: color5
-      .icon
-        circle-icon()
+    width: 450px
+    background-color: lightblue
+    &__header
+      display: flex
+      justify-content: space-between
     .console
       text-align: right
       margin-bottom: 20px
@@ -76,5 +84,6 @@ export default defineComponent({
       .description
         text-truncate()
   .achievement-list
-    width: 380px
+    width: 300px
+    background-color: lightblue
 </style>

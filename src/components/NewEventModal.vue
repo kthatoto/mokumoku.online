@@ -21,7 +21,11 @@
             :clearable="false" :editable="false" style="width: 100%")
       el-form-item(label="URL")
         el-input(type="url" v-model="form.url" placeholder="https://us04web.zoom.us/j/0123456789a")
-        span.-note あとで編集できます
+      el-form-item(label="参加人数")
+        el-radio-group.radio-group(@change="toggleLimitUserCount" v-model="form.limitUserCount")
+          el-radio-button(:label="false") 制限しない
+          el-radio-button(:label="true") 制限する
+        el-input-number(v-if="form.limitUserCount" v-model="form.maxUserCount" :min="1" :max="100")
       .buttons
         el-button(type="primary" @click="submit")
           icon.icon.-r(name="plus")
@@ -53,7 +57,11 @@ export default defineComponent({
       date: new Date(),
       startDatetime: '20:00',
       endDatetime: '22:00',
-      url: ''
+      url: '',
+      limitUserCount: false,
+      maxUserCount: null,
+      joinPermission: false,
+      tags: []
     })
     const resetForm = () => {
       form.title = ''
@@ -62,7 +70,17 @@ export default defineComponent({
       form.startDatetime = '20:00'
       form.endDatetime = '22:00'
       form.url = ''
+      form.limitUserCount = false
+      form.maxUserCount = null
+      form.joinPermission = false
+      form.tags = []
     }
+
+    const toggleLimitUserCount = (flag: boolean) => {
+      if (flag) form.maxUserCount = 10
+      if (!flag) form.maxUserCount = null
+    }
+
     const close = () => { context.emit('closeModal') }
     const submitting = ref<boolean>(false)
 
@@ -110,6 +128,7 @@ export default defineComponent({
 
     return {
       form,
+      toggleLimitUserCount,
       close,
       errors,
       submit,
@@ -137,9 +156,8 @@ export default defineComponent({
     display: flex
     > span
       margin: 0 5px
-  .-note
-    color: color3
-    font-size: 12px
+  .radio-group
+    margin-bottom: 10px
   >>> .el-dialog
     max-width: 500px
   >>> .el-date-editor--time-select
