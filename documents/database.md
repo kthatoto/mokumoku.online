@@ -51,4 +51,3 @@
 * eventRefs: DocumentReference<event>[]
 * groupRefs: DocumentReference<group>[]
 * achievementRefs: DocumentReference<achievement>[]
-
