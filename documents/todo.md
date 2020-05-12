@@ -1,7 +1,7 @@
 # TODO
 ## version2
 ### もくもく会作成 `/(index)`
-* [ ] 人数制限
+* [x] 人数制限
 * [ ] 参加許可制
 * [ ] タグ入力UI
 * [ ] startDatetime, endDatetime
