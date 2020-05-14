@@ -92,7 +92,7 @@ export default defineComponent({
       if (flag) form.maxUserCount = 10
       if (!flag) form.maxUserCount = null
     }
-    const searchFromTags = (query: string, callback) => {
+    const searchFromTags = (query: string, callback: Function) => {
       const tags: { value: string }[] = [
         { value: 'vue' },
         { value: 'asdf' },
@@ -101,7 +101,7 @@ export default defineComponent({
         { value: 'javascript' },
         { value: 'jquery' }
       ]
-      const results: string[] = query ? tags.filter((tag: { value: string }) => {
+      const results: { value: string }[] = query ? tags.filter((tag: { value: string }) => {
         return tag.value.toLowerCase().indexOf(query.toLowerCase()) >= 0
       }) : tags
       callback(results)
