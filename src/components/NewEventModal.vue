@@ -32,7 +32,11 @@
           el-radio-button(:label="true") 制限する
       el-form-item(label="タグ")
         el-autocomplete(v-model="tagInput" :fetch-suggestions="searchFromTags" :trigger-on-focus="false"
-          @select="handleAutocompleteSelect")
+          @keydown.enter.native="handleAutocompleteEnter")
+        .tags
+          el-tag(v-for="tag in form.tags" closable @close="removeTag(tag)" :key="tag")
+            icon.icon.-r(name="hashtag")
+            span {{ tag }}
       .buttons
         el-button(type="primary" @click="submit")
           icon.icon.-r(name="plus")
@@ -102,8 +106,14 @@ export default defineComponent({
       }) : tags
       callback(results)
     }
-    const handleAutocompleteSelect = (item) => {
-      console.log(item)
+    const handleAutocompleteEnter = (event: any) => {
+      if (event.keyCode !== 13) return
+      const tag: string = event.target.value
+      if (form.tags.indexOf(tag) < 0) form.tags.push(tag)
+      tagInput.value = ''
+    }
+    const removeTag = (tag: string) => {
+      form.tags = form.tags.filter((_tag: string) => _tag !== tag)
     }
 
     const close = () => { context.emit('closeModal') }
@@ -156,7 +166,8 @@ export default defineComponent({
       tagInput,
       toggleLimitUserCount,
       searchFromTags,
-      handleAutocompleteSelect,
+      handleAutocompleteEnter,
+      removeTag,
       close,
       errors,
       submit,
@@ -186,6 +197,14 @@ export default defineComponent({
       margin: 0 5px
   .radio-group
     margin-bottom: 10px
+  .tags
+    .el-tag
+      font-size: 16px
+      &:not(:last-child)
+        margin-right: 10px
+      .icon
+        vertical-align: -2px
+
   >>> .el-dialog
     max-width: 500px
   >>> .el-date-editor--time-select
