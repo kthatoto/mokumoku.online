@@ -4,7 +4,7 @@
     h3
       icon.icon.-r(name="terminal")
       span もくもく会をつくる
-    el-form(:model="form" ref="form" label-width="80px")
+    el-form(:model="form" ref="form" label-width="85px")
       el-form-item(label="タイトル" required :error="errors.title")
         el-input(v-model="form.title" placeholder="オンラインもくもく会")
       el-form-item(label="説明")
@@ -26,6 +26,13 @@
           el-radio-button(:label="false") 制限しない
           el-radio-button(:label="true") 制限する
         el-input-number(v-if="form.limitUserCount" v-model="form.maxUserCount" :min="1" :max="100")
+      el-form-item(label="参加許可制")
+        el-radio-group.radio-group(v-model="form.joinPermission")
+          el-radio-button(:label="false") 誰でも
+          el-radio-button(:label="true") 制限する
+      el-form-item(label="タグ")
+        el-autocomplete(v-model="tagInput" :fetch-suggestions="searchFromTags" :trigger-on-focus="false"
+          @select="handleAutocompleteSelect")
       .buttons
         el-button(type="primary" @click="submit")
           icon.icon.-r(name="plus")
@@ -75,10 +82,28 @@ export default defineComponent({
       form.joinPermission = false
       form.tags = []
     }
+    const tagInput = ref<string>('')
 
     const toggleLimitUserCount = (flag: boolean) => {
       if (flag) form.maxUserCount = 10
       if (!flag) form.maxUserCount = null
+    }
+    const searchFromTags = (query: string, callback) => {
+      const tags: { value: string }[] = [
+        { value: 'vue' },
+        { value: 'asdf' },
+        { value: 'react' },
+        { value: 'elm' },
+        { value: 'javascript' },
+        { value: 'jquery' }
+      ]
+      const results: string[] = query ? tags.filter((tag: string) => {
+        return tag.value.toLowerCase().indexOf(query.toLowerCase()) >= 0
+      }) : tags
+      callback(results)
+    }
+    const handleAutocompleteSelect = (item) => {
+      console.log(item)
     }
 
     const close = () => { context.emit('closeModal') }
@@ -128,7 +153,10 @@ export default defineComponent({
 
     return {
       form,
+      tagInput,
       toggleLimitUserCount,
+      searchFromTags,
+      handleAutocompleteSelect,
       close,
       errors,
       submit,

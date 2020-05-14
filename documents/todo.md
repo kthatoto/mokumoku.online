@@ -2,7 +2,7 @@
 ## version2
 ### もくもく会作成 `/(index)`
 * [x] 人数制限
-* [ ] 参加許可制
+* [x] 参加許可制
 * [ ] タグ入力UI
 * [ ] startDatetime, endDatetime
 * [ ] ログインユーザーのみ
