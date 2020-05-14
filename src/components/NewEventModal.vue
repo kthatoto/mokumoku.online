@@ -97,7 +97,7 @@ export default defineComponent({
         { value: 'javascript' },
         { value: 'jquery' }
       ]
-      const results: string[] = query ? tags.filter((tag: string) => {
+      const results: string[] = query ? tags.filter((tag: { value: string }) => {
         return tag.value.toLowerCase().indexOf(query.toLowerCase()) >= 0
       }) : tags
       callback(results)
