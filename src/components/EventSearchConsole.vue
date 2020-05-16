@@ -1,14 +1,17 @@
 <template lang="pug">
 .event-search-console
-  .tags-console
-    h3 タグで絞り込む
-    el-card
-      tag-console(:tags="form.tags" @input="tags => form.tags = tags")
-  .calendar-console
-    h3 日付で絞り込む
-    el-card
-      v-date-picker(v-model="form.dateRange" mode="range" is-inline)
-        span(slot="header-title" slot-scope="{ year, month }") {{ year }}年 {{ month }}月
+  .consoles
+    .tags-console
+      h3 タグで絞り込む
+      el-card
+        tag-console(:tags="form.tags" @input="tags => form.tags = tags")
+    .calendar-console
+      h3 日付で絞り込む
+      el-card
+        v-date-picker(v-model="form.dateRange" mode="range" is-inline)
+          span(slot="header-title" slot-scope="{ year, month }") {{ year }}年 {{ month }}月
+  .search
+    el-button(type="primary") 検索
 </template>
 
 <script lang="ts">
@@ -43,14 +46,20 @@ export default defineComponent({
 
 <style lang="stylus" scoped>
 .event-search-console
-  display: flex
-  justify-content: space-between
+  margin-bottom: 30px
+  .consoles
+    display: flex
+    justify-content: space-between
+    margin-bottom: 20px
   .tags-console
     width: 280px
   .calendar-console
     width: 260px
   h3
     margin-bottom: 10px
+
+  .search
+    text-align: right
 
   >>> .vc-day
     &.weekday-1
