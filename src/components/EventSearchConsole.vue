@@ -4,8 +4,7 @@
     .tags-console
       h3(@click="toggleStatus('tags')")
         span タグで絞り込む
-        icon.icon.-l(v-if="showingStatuses.tags" name="chevron-down")
-        icon.icon.-l(v-else name="chevron-left")
+        icon.icon.-l(:class="{'-opening': showingStatuses.tags}" name="chevron-down")
       el-card
         el-collapse-transition
           div(v-if="!showingStatuses.tags")
@@ -17,8 +16,7 @@
     .calendar-console
       h3(@click="toggleStatus('calendar')")
         span 日付で絞り込む
-        icon.icon.-l(v-if="showingStatuses.calendar" name="chevron-down")
-        icon.icon.-l(v-else name="chevron-left")
+        icon.icon.-l(:class="{'-opening': showingStatuses.calendar}" name="chevron-down")
       el-card
         el-collapse-transition
           div(v-if="!showingStatuses.calendar")
@@ -101,6 +99,11 @@ export default defineComponent({
     cursor: pointer
     &:hover
       text-decoration: underline
+    .icon
+      transform: rotate(90deg)
+      transition: transform 0.2s linear
+      &.-opening
+        transform: rotate(0deg)
 
   .search
     text-align: right
