@@ -3,8 +3,6 @@ import 'firebase/auth'
 import 'firebase/firestore'
 import 'firebase/storage'
 
-import { Message } from 'element-ui'
-
 if (!firebase.apps.length) {
   firebase.initializeApp(
     {

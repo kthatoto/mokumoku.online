@@ -35,7 +35,7 @@ export default defineComponent({
         { value: 'jquery' }
       ]
       const results: { value: string }[] = query ? tags.filter((tag: { value: string }) => {
-        return tag.value.toLowerCase().indexOf(query.toLowerCase()) >= 0
+        return tag.value.toLowerCase().includes(query.toLowerCase())
       }) : tags
       callback(results)
     }
@@ -43,7 +43,7 @@ export default defineComponent({
       if (event.keyCode !== 13) return
       const tag: string = event.target.value
       if (!tag) return
-      if (props.tags.indexOf(tag) < 0) context.emit('input', [...props.tags, tag])
+      if (!props.tags.includes(tag)) context.emit('input', [...props.tags, tag])
       tagInput.value = ''
     }
     const removeTag = (tag: string) => {
@@ -55,7 +55,7 @@ export default defineComponent({
       '個人開発', 'もくもく弱め', 'もくもく強め'
     ])
     const addRecommendTag = (tag: string) => {
-      if (props.tags.indexOf(tag) < 0) context.emit('input', [...props.tags, tag])
+      if (!props.tags.includes(tag)) context.emit('input', [...props.tags, tag])
     }
 
     return {
