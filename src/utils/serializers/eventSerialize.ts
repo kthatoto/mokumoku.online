@@ -14,11 +14,17 @@ export default async (context: any, docRef: any) => {
     users.push({ ...user, hosting: user.uid === host.uid })
   })
 
+  const dayjs: any = context.root.$dayjs
+  const startDatetime: string = dayjs(data.startDatetime.toDate()).format('HH:mm')
+  const endDatetime: string = dayjs(data.endDatetime.toDate()).format('HH:mm')
+
   return {
     ...data,
     id,
     date,
     dateString: context.root.$dayjs(date).format('YYYY-MM-DD'),
+    startDatetime,
+    endDatetime,
     users,
     host,
     createdAt
