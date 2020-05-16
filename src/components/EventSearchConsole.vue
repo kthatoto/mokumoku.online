@@ -2,11 +2,13 @@
 .event-search-console
   .tags-console
     h3 タグで絞り込む
-    tag-console(:tags="form.tags" @input="tags => form.tags = tags")
+    el-card
+      tag-console(:tags="form.tags" @input="tags => form.tags = tags")
   .calendar-console
     h3 日付で絞り込む
-    v-date-picker(v-model="form.dateRange" mode="range" is-inline)
-      span(slot="header-title" slot-scope="{ year, month }") {{ year }}年 {{ month }}月
+    el-card
+      v-date-picker(v-model="form.dateRange" mode="range" is-inline)
+        span(slot="header-title" slot-scope="{ year, month }") {{ year }}年 {{ month }}月
 </template>
 
 <script lang="ts">
@@ -43,9 +45,10 @@ export default defineComponent({
 .event-search-console
   display: flex
   justify-content: space-between
-  .calendar
-    &-console
-      width: auto
+  .tags-console
+    width: 280px
+  .calendar-console
+    width: 260px
   h3
     margin-bottom: 10px
 
@@ -54,4 +57,10 @@ export default defineComponent({
       color: #fc9896
     &.weekday-7
       color: #65a7d6
+
+  .calendar-console
+    >>> .el-card__body
+      padding: 0
+      .vc-container
+        border: none
 </style>

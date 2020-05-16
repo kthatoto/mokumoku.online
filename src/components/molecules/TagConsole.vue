@@ -6,7 +6,11 @@
     el-tag(v-for="tag in tags" closable @close="removeTag(tag)" :key="tag")
       icon.icon.-r(name="hashtag")
       span {{ tag }}
-  h3 おすすめのタグ
+  h4 おすすめのタグ
+  .tags.recommend
+    el-tag(v-for="tag in recommendTags" :key="tag" @click="addRecommendTag(tag)")
+      icon.icon.-r(name="hashtag")
+      span {{ tag }}
 </template>
 
 <script lang="ts">
@@ -42,9 +46,7 @@ export default defineComponent({
     const handleAutocompleteEnter = (event: any) => {
       if (event.keyCode !== 13) return
       const tag: string = event.target.value
-      if (props.tags.indexOf(tag) < 0) {
-        context.emit('input', [...props.tags, tag])
-      }
+      if (props.tags.indexOf(tag) < 0) context.emit('input', [...props.tags, tag])
       tagInput.value = ''
     }
     const removeTag = (tag: string) => {
@@ -52,11 +54,20 @@ export default defineComponent({
       context.emit('input', newTags)
     }
 
+    const recommendTags = ref<string[]>([
+      '個人開発', 'おしゃべり少なめ', 'おしゃべり多め'
+    ])
+    const addRecommendTag = (tag: string) => {
+      if (props.tags.indexOf(tag) < 0) context.emit('input', [...props.tags, tag])
+    }
+
     return {
       tagInput,
       searchFromTags,
       handleAutocompleteEnter,
-      removeTag
+      removeTag,
+      recommendTags,
+      addRecommendTag
     }
   }
 })
@@ -66,9 +77,11 @@ export default defineComponent({
 .tag-console
   .autocomplete
     margin-bottom: 5px
-    width: 90%
+    width: 100%
   .tags
     margin-bottom: 10px
+    height: 60px
+    overflow-y: scroll
     .el-tag
       font-size: 16px
       margin-bottom: 5px
@@ -77,4 +90,7 @@ export default defineComponent({
         margin-right: 10px
       .icon
         vertical-align: -2px
+    &.recommend
+      .el-tag
+        cursor: pointer
 </style>
