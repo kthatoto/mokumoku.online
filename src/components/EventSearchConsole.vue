@@ -46,6 +46,9 @@ export default defineComponent({
   .calendar
     &-console
       width: auto
+  h3
+    margin-bottom: 10px
+
   >>> .vc-day
     &.weekday-1
       color: #fc9896

@@ -1,11 +1,12 @@
 <template lang="pug">
 .tag-console
-  el-autocomplete(v-model="tagInput" :fetch-suggestions="searchFromTags" :trigger-on-focus="false"
+  el-autocomplete.autocomplete(v-model="tagInput" :fetch-suggestions="searchFromTags" :trigger-on-focus="false"
       @keydown.enter.native="handleAutocompleteEnter")
   .tags
     el-tag(v-for="tag in tags" closable @close="removeTag(tag)" :key="tag")
       icon.icon.-r(name="hashtag")
       span {{ tag }}
+  h3 おすすめのタグ
 </template>
 
 <script lang="ts">
@@ -63,9 +64,15 @@ export default defineComponent({
 
 <style lang="stylus" scoped>
 .tag-console
+  .autocomplete
+    margin-bottom: 5px
+    width: 90%
   .tags
+    margin-bottom: 10px
     .el-tag
       font-size: 16px
+      margin-bottom: 5px
+      background-color: white
       &:not(:last-child)
         margin-right: 10px
       .icon
