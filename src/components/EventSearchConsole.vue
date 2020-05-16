@@ -9,8 +9,9 @@
       el-card
         el-collapse-transition
           div(v-if="!showingStatuses.tags")
-            .tags
+            .tags(v-if="form.tags.length > 0")
               Tag(v-for="tag in form.tags" :key="tag" :label="tag")
+            p(v-else) タグなし
         el-collapse-transition
           tag-console(v-if="showingStatuses.tags" :tags="form.tags" @input="tags => form.tags = tags")
     .calendar-console
