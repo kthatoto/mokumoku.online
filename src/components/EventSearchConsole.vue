@@ -50,7 +50,7 @@ interface Form {
 
 export default defineComponent({
   components: { TagConsole },
-  setup (_, context) {
+  setup (_, context: any) {
     const initDate: Date = new Date()
     initDate.setHours(0, 0, 0)
     const form = reactive<Form>({
