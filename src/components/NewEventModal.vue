@@ -166,13 +166,6 @@ export default defineComponent({
       margin: 0 5px
   .radio-group
     margin-bottom: 10px
-  .tags
-    .el-tag
-      font-size: 16px
-      &:not(:last-child)
-        margin-right: 10px
-      .icon
-        vertical-align: -2px
 
   >>> .el-dialog
     max-width: 500px
