@@ -42,6 +42,7 @@ export default {
     '@/plugins/vue-awesome',
     '@/plugins/vue-markdown',
     '@/plugins/dayjs',
+    '@/plugins/v-calendar',
     '@/plugins/globalComponents',
     '@/plugins/apiClient'
   ],
