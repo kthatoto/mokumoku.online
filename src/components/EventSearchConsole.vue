@@ -10,7 +10,7 @@
         el-collapse-transition
           div(v-if="!showingStatuses.tags")
             .tags
-              el-tag(v-for="tag in form.tags" :key="tag") {{ tag }}
+              Tag(v-for="tag in form.tags" :key="tag" :label="tag")
         el-collapse-transition
           tag-console(v-if="showingStatuses.tags" :tags="form.tags" @input="tags => form.tags = tags")
     .calendar-console
