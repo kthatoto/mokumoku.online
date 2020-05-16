@@ -19,9 +19,10 @@
         icon.icon.-l(:class="{'-opening': showingStatuses.calendar}" name="chevron-down")
       el-card
         el-collapse-transition
-          div(v-if="!showingStatuses.calendar")
-            p {{ form.dateRange.start }}
-            p {{ form.dateRange.end }}
+          .date-range-result(v-if="!showingStatuses.calendar")
+            p {{ displayStartDate }}
+            p.-wave 〜
+            p {{ displayEndDate }}
         el-collapse-transition
           v-date-picker(v-if="showingStatuses.calendar" v-model="form.dateRange" mode="range" is-inline)
             span(slot="header-title" slot-scope="{ year, month }") {{ year }}年 {{ month }}月
@@ -49,10 +50,12 @@ interface Form {
 
 export default defineComponent({
   components: { TagConsole },
-  setup (_, _context) {
+  setup (_, context) {
+    const initDate: Date = new Date()
+    initDate.setHours(0, 0, 0)
     const form = reactive<Form>({
       tags: [],
-      dateRange: { start: new Date(), end: new Date() }
+      dateRange: { start: initDate, end: initDate }
     })
     const showingStatuses = reactive({ tags: true, calendar: true })
     const toggleStatus = (key: string) => {
@@ -71,13 +74,21 @@ export default defineComponent({
         showingStatuses.calendar = true
       }
     }
+    const displayStartDate = computed<string>(() => {
+      return context.root.$dayjs(form.dateRange.start).format('YYYY年MM月DD日(dd)')
+    })
+    const displayEndDate = computed<string>(() => {
+      return context.root.$dayjs(form.dateRange.end).format('YYYY年MM月DD日(dd)')
+    })
 
     return {
       form,
       showingStatuses,
       toggleStatus,
       toggleAllStatuses,
-      anyShowing
+      anyShowing,
+      displayStartDate,
+      displayEndDate
     }
   }
 })
@@ -94,6 +105,13 @@ export default defineComponent({
     width: 280px
   .calendar-console
     width: 260px
+    .date-range-result
+      padding: 10px
+      font-weight: bold
+      font-size: 14px
+      text-align: center
+      .-wave
+        transform: rotate(90deg)
   h3
     margin-bottom: 10px
     cursor: pointer
