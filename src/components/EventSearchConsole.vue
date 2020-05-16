@@ -11,6 +11,7 @@
         v-date-picker(v-model="form.dateRange" mode="range" is-inline)
           span(slot="header-title" slot-scope="{ year, month }") {{ year }}年 {{ month }}月
   .search
+    el-button 閉じる
     el-button(type="primary") 検索
 </template>
 
@@ -50,7 +51,7 @@ export default defineComponent({
   .consoles
     display: flex
     justify-content: space-between
-    margin-bottom: 20px
+    margin-bottom: 10px
   .tags-console
     width: 280px
   .calendar-console
