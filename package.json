@@ -27,6 +27,7 @@
     "sass-loader": "^8.0.2",
     "stylus": "^0.54.7",
     "stylus-loader": "^3.0.2",
+    "v-calendar": "^1.0.6",
     "vue-awesome": "^4.0.2",
     "vue-markdown": "^2.2.4"
   },
