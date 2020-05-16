@@ -9,6 +9,7 @@
         el-button.button(type="primary" @click="openForm")
           icon.icon.-r(name="plus")
           span ホストする
+    event-search-console.event-search-console
     .events
       el-card.card(v-for="event in events" :key="event.id")
         nuxt-link.title(:to="'/mokumoku/' + event.id")
@@ -36,10 +37,11 @@ import { defineComponent, ref } from '@vue/composition-api'
 
 import injectBy from '@/utils/injectBy'
 import { indexStoreInjectionKey } from '@/stores/indexStore'
+import EventSearchConsole from '@/components/EventSearchConsole.vue'
 import NewEventModal from '@/components/NewEventModal.vue'
 
 export default defineComponent({
-  components: { NewEventModal },
+  components: { EventSearchConsole, NewEventModal },
   setup (_, _context: any) {
     const store = injectBy(indexStoreInjectionKey)
 
@@ -60,7 +62,7 @@ export default defineComponent({
 
 <style lang="stylus" scoped>
 .index
-  width: 800px
+  width: 900px
   margin: 30px auto 0
   display: flex
   justify-content: space-between
@@ -71,8 +73,7 @@ export default defineComponent({
     .icon
       circle-icon()
   .event-list
-    width: 450px
-    background-color: lightblue
+    width: 570px
     &__header
       display: flex
       justify-content: space-between
@@ -85,5 +86,4 @@ export default defineComponent({
         text-truncate()
   .achievement-list
     width: 300px
-    background-color: lightblue
 </style>
