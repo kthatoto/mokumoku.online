@@ -22,7 +22,7 @@ export default defineComponent({
       required: true
     }
   },
-  setup (props, context) {
+  setup (props: Props, context) {
     const tagInput = ref<string>('')
     const searchFromTags = (query: string, callback: Function) => {
       const tags: { value: string }[] = [
@@ -47,7 +47,7 @@ export default defineComponent({
       tagInput.value = ''
     }
     const removeTag = (tag: string) => {
-      const newTags: string[] = props.tags.filter((_tag: string) => tag !== _tag)
+      const newTags: string[] = props.tags.filter((t: string) => tag !== t)
       context.emit('input', newTags)
     }
 
