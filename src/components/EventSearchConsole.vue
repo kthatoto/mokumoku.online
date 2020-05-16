@@ -2,21 +2,39 @@
 .event-search-console
   .consoles
     .tags-console
-      h3 タグで絞り込む
+      h3(@click="toggleStatus('tags')")
+        span タグで絞り込む
+        icon.icon.-l(v-if="showingStatuses.tags" name="chevron-down")
+        icon.icon.-l(v-else name="chevron-left")
       el-card
-        tag-console(:tags="form.tags" @input="tags => form.tags = tags")
+        el-collapse-transition
+          div(v-if="!showingStatuses.tags")
+            .tags
+              el-tag(v-for="tag in form.tags" :key="tag") {{ tag }}
+        el-collapse-transition
+          tag-console(v-if="showingStatuses.tags" :tags="form.tags" @input="tags => form.tags = tags")
     .calendar-console
-      h3 日付で絞り込む
+      h3(@click="toggleStatus('calendar')")
+        span 日付で絞り込む
+        icon.icon.-l(v-if="showingStatuses.calendar" name="chevron-down")
+        icon.icon.-l(v-else name="chevron-left")
       el-card
-        v-date-picker(v-model="form.dateRange" mode="range" is-inline)
-          span(slot="header-title" slot-scope="{ year, month }") {{ year }}年 {{ month }}月
+        el-collapse-transition
+          div(v-if="!showingStatuses.calendar")
+            p {{ form.dateRange.start }}
+            p {{ form.dateRange.end }}
+        el-collapse-transition
+          v-date-picker(v-if="showingStatuses.calendar" v-model="form.dateRange" mode="range" is-inline)
+            span(slot="header-title" slot-scope="{ year, month }") {{ year }}年 {{ month }}月
   .search
-    el-button 閉じる
+    el-button(@click="toggleAllStatuses")
+      span(v-if="anyShowing") 閉じる
+      span(v-else) 開く
     el-button(type="primary") 検索
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive } from '@vue/composition-api'
+import { defineComponent, reactive, computed } from '@vue/composition-api'
 
 import TagConsole from '@/components/molecules/TagConsole.vue'
 
@@ -37,9 +55,30 @@ export default defineComponent({
       tags: [],
       dateRange: { start: new Date(), end: new Date() }
     })
+    const showingStatuses = reactive({ tags: true, calendar: true })
+    const toggleStatus = (key: string) => {
+      if (key === 'tags') showingStatuses.tags = !showingStatuses.tags
+      if (key === 'calendar') showingStatuses.calendar = !showingStatuses.calendar
+    }
+    const anyShowing = computed<boolean>(() => {
+      return showingStatuses.tags || showingStatuses.calendar
+    })
+    const toggleAllStatuses = () => {
+      if (anyShowing.value) {
+        showingStatuses.tags = false
+        showingStatuses.calendar = false
+      } else {
+        showingStatuses.tags = true
+        showingStatuses.calendar = true
+      }
+    }
 
     return {
-      form
+      form,
+      showingStatuses,
+      toggleStatus,
+      toggleAllStatuses,
+      anyShowing
     }
   }
 })
@@ -58,6 +97,9 @@ export default defineComponent({
     width: 260px
   h3
     margin-bottom: 10px
+    cursor: pointer
+    &:hover
+      text-decoration: underline
 
   .search
     text-align: right
@@ -70,7 +112,7 @@ export default defineComponent({
 
   .tags-console
     >>> .el-card__body
-      padding: 15px 10px 10px
+      padding: 15px 10px 5px
   .calendar-console
     >>> .el-card__body
       padding: 0
