@@ -31,12 +31,7 @@
           el-radio-button(:label="false") 誰でも
           el-radio-button(:label="true") 制限する
       el-form-item(label="タグ")
-        el-autocomplete(v-model="tagInput" :fetch-suggestions="searchFromTags" :trigger-on-focus="false"
-          @keydown.enter.native="handleAutocompleteEnter")
-        .tags
-          el-tag(v-for="tag in form.tags" closable @close="removeTag(tag)" :key="tag")
-            icon.icon.-r(name="hashtag")
-            span {{ tag }}
+        tag-console(:tags="form.tags" @input="tags => form.tags = tags")
       .buttons
         el-button(type="primary" @click="submit")
           icon.icon.-r(name="plus")
@@ -48,6 +43,7 @@ import { defineComponent, reactive, computed, ref } from '@vue/composition-api'
 
 import injectBy from '@/utils/injectBy'
 import { EventInfo, indexStoreInjectionKey } from '@/stores/indexStore'
+import TagConsole from '@/components/molecules/TagConsole.vue'
 
 interface Errors {
   title: string | null
@@ -59,6 +55,7 @@ export default defineComponent({
   props: {
     showing: { type: Boolean, required: true }
   },
+  components: { TagConsole },
   setup (_, context: any) {
     const store = injectBy(indexStoreInjectionKey)
 
@@ -86,34 +83,9 @@ export default defineComponent({
       form.joinPermission = false
       form.tags = []
     }
-    const tagInput = ref<string>('')
-
     const toggleLimitUserCount = (flag: boolean) => {
       if (flag) form.maxUserCount = 10
       if (!flag) form.maxUserCount = null
-    }
-    const searchFromTags = (query: string, callback: Function) => {
-      const tags: { value: string }[] = [
-        { value: 'vue' },
-        { value: 'asdf' },
-        { value: 'react' },
-        { value: 'elm' },
-        { value: 'javascript' },
-        { value: 'jquery' }
-      ]
-      const results: { value: string }[] = query ? tags.filter((tag: { value: string }) => {
-        return tag.value.toLowerCase().indexOf(query.toLowerCase()) >= 0
-      }) : tags
-      callback(results)
-    }
-    const handleAutocompleteEnter = (event: any) => {
-      if (event.keyCode !== 13) return
-      const tag: string = event.target.value
-      if (form.tags.indexOf(tag) < 0) form.tags.push(tag)
-      tagInput.value = ''
-    }
-    const removeTag = (tag: string) => {
-      form.tags = form.tags.filter((_tag: string) => _tag !== tag)
     }
 
     const close = () => { context.emit('closeModal') }
@@ -164,11 +136,7 @@ export default defineComponent({
 
     return {
       form,
-      tagInput,
       toggleLimitUserCount,
-      searchFromTags,
-      handleAutocompleteEnter,
-      removeTag,
       close,
       errors,
       submit,
