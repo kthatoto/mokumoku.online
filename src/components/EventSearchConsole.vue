@@ -58,6 +58,9 @@ export default defineComponent({
     &.weekday-7
       color: #65a7d6
 
+  .tags-console
+    >>> .el-card__body
+      padding: 15px 10px 10px
   .calendar-console
     >>> .el-card__body
       padding: 0
