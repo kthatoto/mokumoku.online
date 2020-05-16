@@ -4,10 +4,10 @@
 * [x] 人数制限
 * [x] 参加許可制
 * [x] タグ入力UI
-* [ ] startDatetime, endDatetime
+* [x] startDatetime, endDatetime
 * [ ] ログインユーザーのみ
 * [ ] ホスト選択UI(グループとしてなのか個人としてなのか)
-* (おすすめタグ機能)
+* [ ] (おすすめタグ機能)
 ### もくもく会検索 `/(index)`
 * [ ] タグ入力UI
 * [ ] 時間帯検索

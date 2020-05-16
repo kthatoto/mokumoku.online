@@ -141,6 +141,7 @@ export default defineComponent({
       if (submitting.value) return
       submitting.value = true
       const date: Date = new Date(form.date.toString())
+      date.setHours(0, 0, 0)
       const res: boolean = await store.createEvent({ ...form, date })
       if (res) {
         context.root.$message({ message: 'もくもく会を作成しました', type: 'success', duration: 5000 })

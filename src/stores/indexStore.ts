@@ -70,8 +70,16 @@ export const buildIndexStore = (context: any) => {
     if (currentUser.value === null) return false
     let result: boolean = true
     const userDocRef = db.collection('users').doc(currentUser.value.uid)
+
+    const date: Date = eventInfo.date
+    const startHour: number = parseInt(eventInfo.startDatetime.split(":")[0])
+    const startMinute: number = parseInt(eventInfo.startDatetime.split(":")[1])
+    const endHour: number = parseInt(eventInfo.endDatetime.split(":")[0])
+    const endMinute: number = parseInt(eventInfo.endDatetime.split(":")[1])
     await db.collection('events').add({
       ...eventInfo,
+      startDatetime: new Date(date.getFullYear(), date.getMonth(), date.getDate(), startHour, startMinute),
+      endDatetime: new Date(date.getFullYear(), date.getMonth(), date.getDate(), endHour, endMinute),
       users: [userDocRef],
       host: userDocRef,
       createdAt: new Date()
