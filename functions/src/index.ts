@@ -12,7 +12,8 @@ interface Event {
 }
 
 exports.eventTagTrigger = functions.firestore.document('events/{eventId}')
-  .onWrite(async (change: any, _context: any) => {
+  .onWrite(async (change: any, context: any) => {
+    const eventId: string = context.params.eventId
     const eventRef: any = db.collection('events').doc(eventId)
     const beforeEvent: Event = change.before.data()
     const afterEvent: Event = change.after.data()
