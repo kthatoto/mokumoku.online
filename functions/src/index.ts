@@ -20,8 +20,7 @@ exports.eventTagTrigger = functions.firestore.document('events/{eventId}')
 
     const newTags: string[] = afterEvent.tags.filter((tag: string) => !beforeEvent.tags.includes(tag))
     const removedTags: string[] = beforeEvent.tags.filter((tag: string) => !afterEvent.tags.includes(tag))
-    console.log('newTags', newTags)
-    console.log('removedTags', removedTags)
+
     newTags.forEach(async (newTag: string) => {
       const tagRef: any = db.collection('tags').doc(newTag)
       const docSnapshot: any = await tagRef.get()
@@ -44,7 +43,7 @@ exports.eventTagTrigger = functions.firestore.document('events/{eventId}')
       const tagRef: any = db.collection('tags').doc(removedTag)
       const docSnapshot: any = await tagRef.get()
       if (!docSnapshot.exists) return
-      const data: any = docSnapshot.get()
+      const data: any = docSnapshot.data()
       if (!data.eventRefs.find((eRef: any) => eRef.id === eventId)) return
       tagRef.update({
         eventRefs: data.eventRefs.filter((eRef: any) => eRef.id !== eventId)
