@@ -50,12 +50,11 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
     const startMinute: number = parseInt(eventInfo.startDatetime.split(':')[1])
     const endHour: number = parseInt(eventInfo.endDatetime.split(':')[0])
     const endMinute: number = parseInt(eventInfo.endDatetime.split(':')[1])
-    console.log(eventInfo)
 
     await db.collection('events').doc(eventId).update({
       ...eventInfo,
       startDatetime: new Date(date.getFullYear(), date.getMonth(), date.getDate(), startHour, startMinute),
-      endDatetime: new Date(date.getFullYear(), date.getMonth(), date.getDate(), endHour, endMinute),
+      endDatetime: new Date(date.getFullYear(), date.getMonth(), date.getDate(), endHour, endMinute)
     }).catch((_: any) => {
       result = false
     })

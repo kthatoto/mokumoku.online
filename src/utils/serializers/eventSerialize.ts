@@ -19,11 +19,11 @@ export default async (context: any, docRef: any) => {
   const endDatetime: Date = data.endDatetime.toDate()
   let startDatetimeString: string = dayjs(startDatetime).format('HH:mm')
   let endDatetimeString: string = dayjs(endDatetime).format('HH:mm')
-  if (dayjs(date).add(1, 'day').isBefore(dayjs(startDatetime))) {
+  if (dayjs(date).add(1, 'day').isSameOrBefore(dayjs(startDatetime))) {
     const startTimeStrings: string[] = startDatetimeString.split(':')
     startDatetimeString = `${parseInt(startTimeStrings[0]) + 24}:${startTimeStrings[1]}`
   }
-  if (dayjs(date).add(1, 'day').isBefore(dayjs(endDatetime))) {
+  if (dayjs(date).add(1, 'day').isSameOrBefore(dayjs(endDatetime))) {
     const endTimeStrings: string[] = endDatetimeString.split(':')
     endDatetimeString = `${parseInt(endTimeStrings[0]) + 24}:${endTimeStrings[1]}`
   }
