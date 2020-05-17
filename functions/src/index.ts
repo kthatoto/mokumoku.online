@@ -18,8 +18,11 @@ exports.eventTagTrigger = functions.firestore.document('events/{eventId}')
     const beforeEvent: Event = change.before.data()
     const afterEvent: Event = change.after.data()
 
-    const newTags: string[] = afterEvent.tags.filter((tag: string) => !beforeEvent.tags.includes(tag))
-    const removedTags: string[] = beforeEvent.tags.filter((tag: string) => !afterEvent.tags.includes(tag))
+    const beforeTags: string [] = beforeEvent ? beforeEvent.tags : []
+    const afterTags: string [] = afterEvent ? afterEvent.tags : []
+
+    const newTags: string[] = afterTags.filter((tag: string) => !beforeTags.includes(tag))
+    const removedTags: string[] = beforeTags.filter((tag: string) => !afterTags.includes(tag))
 
     newTags.forEach(async (newTag: string) => {
       const tagRef: any = db.collection('tags').doc(newTag)
