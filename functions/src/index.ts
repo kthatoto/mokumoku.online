@@ -26,7 +26,7 @@ exports.eventTagTrigger = functions.firestore.document('events/{eventId}')
       const docSnapshot: any = await tagRef.get()
       if (docSnapshot.exists) {
         const data: any = docSnapshot.data()
-        if (data.eventRefs.find((eventRef: any) => eventRef.id === eventId)) return
+        if (data.eventRefs.find((eRef: any) => eRef.id === eventId)) return
         tagRef.update({ eventRefs: [...data.eventRefs, eventRef] })
       } else {
         tagRef.set({
@@ -44,9 +44,9 @@ exports.eventTagTrigger = functions.firestore.document('events/{eventId}')
       const docSnapshot: any = await tagRef.get()
       if (!docSnapshot.exists) return
       const data: any = docSnapshot.get()
-      if (!data.eventRefs.find((eventRef: any) => eventRef.id === eventId)) return
+      if (!data.eventRefs.find((eRef: any) => eRef.id === eventId)) return
       tagRef.update({
-        eventRefs: data.eventRefs.filter((eventRef: any) => eventRef.id !== eventId)
+        eventRefs: data.eventRefs.filter((eRef: any) => eRef.id !== eventId)
       })
     })
     return 0
