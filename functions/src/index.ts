@@ -23,4 +23,5 @@ exports.tagTrigger = functions.firestore.document('events/{_eventId}')
     const afterEvent: Event = change.after.data()
     console.log(beforeEvent.tags)
     console.log(afterEvent.tags)
+    return 0
   })
