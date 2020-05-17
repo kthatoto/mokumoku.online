@@ -4,7 +4,7 @@
     h3
       icon.icon.-r(name="terminal")
       span もくもく会を編集する
-    el-form(:model="form" ref="form" label-width="80px")
+    el-form(:model="form" ref="form" label-width="85px")
       el-form-item(label="タイトル" required :error="errors.title")
         el-input(v-model="form.title" placeholder="オンラインもくもく会")
       el-form-item(label="説明")
@@ -21,6 +21,17 @@
             :clearable="false" :editable="false" style="width: 100%")
       el-form-item(label="URL")
         el-input(type="url" v-model="form.url" placeholder="https://us04web.zoom.us/j/0123456789a")
+      el-form-item(label="参加人数")
+        el-radio-group.radio-group(@change="toggleLimitUserCount" v-model="form.limitUserCount")
+          el-radio-button(:label="false") 制限しない
+          el-radio-button(:label="true") 制限する
+        el-input-number(v-if="form.limitUserCount" v-model="form.maxUserCount" :min="1" :max="100")
+      el-form-item(label="参加許可制")
+        el-radio-group.radio-group(v-model="form.joinPermission")
+          el-radio-button(:label="false") 誰でも
+          el-radio-button(:label="true") 制限する
+      el-form-item(label="タグ")
+        tag-console(:tags="form.tags" @input="tags => form.tags = tags")
       .buttons
         el-button.submit(type="primary" @click="submit")
           icon.icon.-r(name="plus")
@@ -34,6 +45,7 @@ import { defineComponent, reactive, computed, ref } from '@vue/composition-api'
 import injectBy from '@/utils/injectBy'
 import { Event, EventInfo, indexStoreInjectionKey } from '@/stores/indexStore'
 import { eventStoreInjectionKey } from '@/stores/eventStore'
+import TagConsole from '@/components/molecules/TagConsole.vue'
 
 interface Errors {
   title: string | null
@@ -51,11 +63,17 @@ export default defineComponent({
     showing: { type: Boolean, required: true },
     event: { type: Object, required: true }
   },
+  components: { TagConsole },
   setup (props: Props, context: any) {
     const store = injectBy(indexStoreInjectionKey)
     const eventStore = injectBy(eventStoreInjectionKey)
 
     const form = reactive<Event>(JSON.parse(JSON.stringify(props.event)))
+    const toggleLimitUserCount = (flag: boolean) => {
+      if (flag) form.maxUserCount = eventStore.event.value.maxUserCount
+      if (!flag) form.maxUserCount = null
+    }
+
     const close = () => { context.emit('closeModal') }
     const submitting = ref<boolean>(false)
 
@@ -134,6 +152,7 @@ export default defineComponent({
 
     return {
       form,
+      toggleLimitUserCount,
       close,
       errors,
       submit,
