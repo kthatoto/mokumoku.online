@@ -76,6 +76,7 @@ export const buildIndexStore = (context: any) => {
     const startMinute: number = parseInt(eventInfo.startDatetime.split(':')[1])
     const endHour: number = parseInt(eventInfo.endDatetime.split(':')[0])
     const endMinute: number = parseInt(eventInfo.endDatetime.split(':')[1])
+
     await db.collection('events').add({
       ...eventInfo,
       startDatetime: new Date(date.getFullYear(), date.getMonth(), date.getDate(), startHour, startMinute),

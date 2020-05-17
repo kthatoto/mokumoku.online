@@ -70,7 +70,7 @@ export default defineComponent({
 
     const form = reactive<Event>(JSON.parse(JSON.stringify(props.event)))
     const toggleLimitUserCount = (flag: boolean) => {
-      if (flag) form.maxUserCount = eventStore.event.value.maxUserCount
+      if (flag) form.maxUserCount = eventStore.event.value.maxUserCount || 10
       if (!flag) form.maxUserCount = null
     }
 
@@ -105,7 +105,11 @@ export default defineComponent({
         date,
         startDatetime: form.startDatetime,
         endDatetime: form.endDatetime,
-        url: form.url
+        url: form.url,
+        limitUserCount: form.limitUserCount,
+        maxUserCount: form.maxUserCount,
+        joinPermission: form.joinPermission,
+        tags: form.tags
       }
       const result: boolean = await eventStore.updateEvent(eventInfo)
       if (result) {
@@ -190,6 +194,9 @@ export default defineComponent({
   .-note
     color: color3
     font-size: 12px
+  .radio-group
+    margin-bottom: 10px
+
   >>> .el-dialog
     max-width: 500px
   >>> .el-date-editor--time-select
