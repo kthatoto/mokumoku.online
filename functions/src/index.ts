@@ -1,27 +1,53 @@
 import * as functions from 'firebase-functions'
-// import express from 'express'
-// import cors from 'cors'
-//
-// const api = express()
-//
-// api.use(cors({ origin: true }))
-//
-// api.get('/messages', (_req, res) => {
-//   res.send(['foo', 'bar'])
-// })
-//
-// exports.api = functions.https.onRequest(api)
+import * as admin from 'firebase-admin'
+
+admin.initializeApp({
+  credential: admin.credential.applicationDefault()
+})
+const db = admin.firestore()
 
 interface Event {
   id: string
   tags: string[]
 }
 
-exports.tagTrigger = functions.firestore.document('events/{_eventId}')
-  .onWrite((change: any, _context: any) => {
+exports.eventTagTrigger = functions.firestore.document('events/{eventId}')
+  .onWrite(async (change: any, _context: any) => {
+    const eventRef: any = db.collection('events').doc(eventId)
     const beforeEvent: Event = change.before.data()
     const afterEvent: Event = change.after.data()
-    console.log(beforeEvent.tags)
-    console.log(afterEvent.tags)
+
+    const newTags: string[] = afterEvent.tags.filter((tag: string) => !beforeEvent.tags.includes(tag))
+    const removedTags: string[] = beforeEvent.tags.filter((tag: string) => !afterEvent.tags.includes(tag))
+    console.log('newTags', newTags)
+    console.log('removedTags', removedTags)
+    newTags.forEach(async (newTag: string) => {
+      const tagRef: any = db.collection('tags').doc(newTag)
+      const docSnapshot: any = await tagRef.get()
+      if (docSnapshot.exists) {
+        const data: any = docSnapshot.data()
+        if (data.eventRefs.find((eventRef: any) => eventRef.id === eventId)) return
+        tagRef.update({ eventRefs: [...data.eventRefs, eventRef] })
+      } else {
+        tagRef.set({
+          name: newTag,
+          userRefs: [],
+          eventRefs: [eventRef],
+          groupRefs: [],
+          achievementRefs: []
+        })
+      }
+    })
+
+    removedTags.forEach(async (removedTag: string) => {
+      const tagRef: any = db.collection('tags').doc(removedTag)
+      const docSnapshot: any = await tagRef.get()
+      if (!docSnapshot.exists) return
+      const data: any = docSnapshot.get()
+      if (!data.eventRefs.find((eventRef: any) => eventRef.id === eventId)) return
+      tagRef.update({
+        eventRefs: data.eventRefs.filter((eventRef: any) => eventRef.id !== eventId)
+      })
+    })
     return 0
   })
