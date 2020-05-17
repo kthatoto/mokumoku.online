@@ -12,12 +12,8 @@ import * as functions from 'firebase-functions'
 //
 // exports.api = functions.https.onRequest(api)
 
-interface Event {
-  id: string
-  tags: string
-}
-
 exports.tagTrigger = functions.firestore.document('events/{_eventId}')
-  .onWrite((change: any, context: any) => {
-    console.log(change)
+  .onWrite((change: any, _context: any) => {
+    console.log('before.tags', change.before.tags)
+    console.log('after.tags', change.after.tags)
   })
