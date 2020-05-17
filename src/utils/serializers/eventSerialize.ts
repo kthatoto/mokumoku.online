@@ -15,16 +15,26 @@ export default async (context: any, docRef: any) => {
   })
 
   const dayjs: any = context.root.$dayjs
-  const startDatetime: string = dayjs(data.startDatetime.toDate()).format('HH:mm')
-  const endDatetime: string = dayjs(data.endDatetime.toDate()).format('HH:mm')
+  const startDatetime: Date = data.startDatetime.toDate()
+  const endDatetime: Date = data.endDatetime.toDate()
+  let startDatetimeString: string = dayjs(startDatetime).format('HH:mm')
+  let endDatetimeString: string = dayjs(endDatetime).format('HH:mm')
+  if (dayjs(date).add(1, 'day').isBefore(dayjs(startDatetime))) {
+    const startTimeStrings: string[] = startDatetimeString.split(':')
+    startDatetimeString = `${parseInt(startTimeStrings[0]) + 24}:${startTimeStrings[1]}`
+  }
+  if (dayjs(date).add(1, 'day').isBefore(dayjs(endDatetime))) {
+    const endTimeStrings: string[] = endDatetimeString.split(':')
+    endDatetimeString = `${parseInt(endTimeStrings[0]) + 24}:${endTimeStrings[1]}`
+  }
 
   return {
     ...data,
     id,
     date,
     dateString: context.root.$dayjs(date).format('YYYY-MM-DD'),
-    startDatetime,
-    endDatetime,
+    startDatetime: startDatetimeString,
+    endDatetime: endDatetimeString,
     users,
     host,
     createdAt
