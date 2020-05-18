@@ -42,6 +42,7 @@ export interface SearchForm {
 
 export const buildIndexStore = (context: any) => {
   const db = context.root.$firebase.firestore()
+  const dayjs = context.root.$dayjs
 
   const currentUser = ref<User | null>(null)
   const getCurrentUser = () => {
@@ -58,22 +59,10 @@ export const buildIndexStore = (context: any) => {
 
   const events = ref<Event[]>([])
   const getEvents = async () => {
-    let result: boolean = true
-    const snapshot: any = await db.collection('events')
-      .orderBy('createdAt', 'desc').get()
-      .catch((_: any) => { result = false })
-    if (!result) {
-      return context.root.$message({
-        message: '情報の読み込みに失敗しました。ネットワークの良い環境でご利用ください',
-        type: 'error',
-        duration: 5000
-      })
-    }
-    const newEvents: Event[] = []
-    snapshot.docs.forEach(async (docSnapshot: any) => {
-      newEvents.push(await eventSerialize(context, docSnapshot.ref))
+    await searchEvents({
+      tags: [],
+      dateRange: { start: new Date(), end: dayjs().add(6, 'days').toDate() }
     })
-    events.value = newEvents
   }
 
   const createEvent = async (eventInfo: EventInfo) => {
@@ -100,8 +89,8 @@ export const buildIndexStore = (context: any) => {
 
   const searchEvents = async (form: SearchForm) => {
     let result: boolean = true
-    const startDate: Date = context.root.$dayjs(form.dateRange.start).add(-1, 'second').toDate()
-    const endDate: Date = context.root.$dayjs(form.dateRange.end).endOf('day').toDate()
+    const startDate: Date = dayjs(form.dateRange.start).startOf('day').subtract(1, 'second').toDate()
+    const endDate: Date = dayjs(form.dateRange.end).endOf('day').toDate()
     const snapshot: any = await db.collection('events')
       .where('date', '>=', startDate)
       .where('date', '<=', endDate)

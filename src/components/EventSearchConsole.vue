@@ -44,12 +44,14 @@ export default defineComponent({
   components: { TagConsole },
   setup (_, context: any) {
     const store = injectBy(indexStoreInjectionKey)
+    const dayjs = context.root.$dayjs
 
     const initDate: Date = new Date()
     initDate.setHours(0, 0, 0)
+    const endOfMonthDate: Date = dayjs().add(6, 'days').toDate()
     const form = reactive<SearchForm>({
       tags: [],
-      dateRange: { start: initDate, end: initDate }
+      dateRange: { start: initDate, end: endOfMonthDate }
     })
     const showingStatuses = reactive({ tags: true, calendar: true })
     const toggleStatus = (key: string) => {
@@ -69,10 +71,10 @@ export default defineComponent({
       }
     }
     const displayStartDate = computed<string>(() => {
-      return context.root.$dayjs(form.dateRange.start).format('YYYY年MM月DD日(dd)')
+      return dayjs(form.dateRange.start).format('YYYY年MM月DD日(dd)')
     })
     const displayEndDate = computed<string>(() => {
-      return context.root.$dayjs(form.dateRange.end).format('YYYY年MM月DD日(dd)')
+      return dayjs(form.dateRange.end).format('YYYY年MM月DD日(dd)')
     })
 
     const search = () => {

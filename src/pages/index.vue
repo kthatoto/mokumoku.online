@@ -11,20 +11,7 @@
           span ホストする
     event-search-console.event-search-console
     .events
-      el-card.card(v-for="event in events" :key="event.id")
-        nuxt-link.title(:to="'/mokumoku/' + event.id")
-          h3 {{ event.title }}
-        h4 詳細
-        p.description {{ event.description }}
-        h4 時間
-        p.datetime
-          span.date {{ event.dateString }}
-          span {{ event.startDatetime }}
-          span 〜
-          span {{ event.endDatetime }}
-        h4 参加ユーザー
-        .users
-          Avatar.user(v-for="u in event.users" :key="u.uid" :user="u")
+      event-card.event-card(v-for="event in events" :key="event.id" :event="event")
     new-event-modal(:showing="showingForm" @closeModal="closeForm")
   .achievement-list
     h2
@@ -39,9 +26,10 @@ import injectBy from '@/utils/injectBy'
 import { indexStoreInjectionKey } from '@/stores/indexStore'
 import EventSearchConsole from '@/components/EventSearchConsole.vue'
 import NewEventModal from '@/components/NewEventModal.vue'
+import EventCard from '@/components/molecules/EventCard.vue'
 
 export default defineComponent({
-  components: { EventSearchConsole, NewEventModal },
+  components: { EventSearchConsole, NewEventModal, EventCard },
   setup (_, _context: any) {
     const store = injectBy(indexStoreInjectionKey)
 
@@ -80,10 +68,6 @@ export default defineComponent({
     .console
       text-align: right
       margin-bottom: 20px
-    .card
-      event-card()
-      .description
-        text-truncate()
   .achievement-list
     width: 300px
 </style>
