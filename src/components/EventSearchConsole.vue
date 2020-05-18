@@ -30,30 +30,24 @@
     el-button(@click="toggleAllStatuses")
       span(v-if="anyShowing") 閉じる
       span(v-else) 開く
-    el-button(type="primary") 検索
+    el-button(type="primary" @click="search") 検索
 </template>
 
 <script lang="ts">
 import { defineComponent, reactive, computed } from '@vue/composition-api'
 
+import injectBy from '@/utils/injectBy'
+import { indexStoreInjectionKey, SearchForm } from '@/stores/indexStore'
 import TagConsole from '@/components/molecules/TagConsole.vue'
-
-interface DateRange {
-  start: Date
-  end: Date
-}
-
-interface Form {
-  tags: string[]
-  dateRange: DateRange
-}
 
 export default defineComponent({
   components: { TagConsole },
   setup (_, context: any) {
+    const store = injectBy(indexStoreInjectionKey)
+
     const initDate: Date = new Date()
     initDate.setHours(0, 0, 0)
-    const form = reactive<Form>({
+    const form = reactive<SearchForm>({
       tags: [],
       dateRange: { start: initDate, end: initDate }
     })
@@ -81,6 +75,16 @@ export default defineComponent({
       return context.root.$dayjs(form.dateRange.end).format('YYYY年MM月DD日(dd)')
     })
 
+    const search = () => {
+      store.searchEvents({
+        tags: form.tags,
+        dateRange: {
+          start: form.dateRange.start as Date,
+          end: form.dateRange.end as Date
+        }
+      })
+    }
+
     return {
       form,
       showingStatuses,
@@ -88,7 +92,8 @@ export default defineComponent({
       toggleAllStatuses,
       anyShowing,
       displayStartDate,
-      displayEndDate
+      displayEndDate,
+      search
     }
   }
 })

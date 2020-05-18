@@ -30,6 +30,16 @@ export interface User {
   providerId: string
 }
 
+interface DateRange {
+  start: Date
+  end: Date
+}
+
+export interface SearchForm {
+  tags: string[]
+  dateRange: DateRange
+}
+
 export const buildIndexStore = (context: any) => {
   const db = context.root.$firebase.firestore()
 
@@ -48,7 +58,6 @@ export const buildIndexStore = (context: any) => {
 
   const events = ref<Event[]>([])
   const getEvents = async () => {
-    const newEvents: Event[] = []
     let result: boolean = true
     const snapshot: any = await db.collection('events')
       .orderBy('createdAt', 'desc').get()
@@ -60,6 +69,7 @@ export const buildIndexStore = (context: any) => {
         duration: 5000
       })
     }
+    const newEvents: Event[] = []
     snapshot.docs.forEach(async (docSnapshot: any) => {
       newEvents.push(await eventSerialize(context, docSnapshot.ref))
     })
@@ -88,12 +98,40 @@ export const buildIndexStore = (context: any) => {
     return result
   }
 
+  const searchEvents = async (form: SearchForm) => {
+    let result: boolean = true
+    const startDate: Date = context.root.$dayjs(form.dateRange.start).add(-1, 'second').toDate()
+    const endDate: Date = context.root.$dayjs(form.dateRange.end).endOf('day').toDate()
+    const snapshot: any = await db.collection('events')
+      .where('date', '>=', startDate)
+      .where('date', '<=', endDate)
+      .orderBy('date', 'asc')
+      .get()
+      .catch((_: any) => { result = false })
+    if (!result) {
+      return context.root.$message({
+        message: '情報の読み込みに失敗しました。ネットワークの良い環境でご利用ください',
+        type: 'error',
+        duration: 5000
+      })
+    }
+    const newEvents: Event[] = []
+    snapshot.docs.forEach(async (docSnapshot: any) => {
+      const tagMatched: boolean = docSnapshot.data().tags
+        .some((tag: string) => form.tags.includes(tag))
+      if (form.tags.length > 0 && !tagMatched) return
+      newEvents.push(await eventSerialize(context, docSnapshot.ref))
+    })
+    events.value = newEvents
+  }
+
   return {
     currentUser,
     getCurrentUser,
     events,
     getEvents,
-    createEvent
+    createEvent,
+    searchEvents
   }
 }
 
