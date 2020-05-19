@@ -23,10 +23,9 @@ const upsertUser = async (user) => {
   const providerId = user.providerData[0].providerId.split('.')[0]
   const docSnapshot = await db.collection('users').doc(user.uid).get()
   if (docSnapshot.exists) {
-    const data = docSnapshot.data()
     db.collection('users').doc(user.uid).update({
-      displayName: data.displayName,
-      photoURL: data.photoURL
+      displayName: user.displayName,
+      photoURL: user.photoURL
     })
   } else {
     db.collection('users').doc(user.uid).set({
