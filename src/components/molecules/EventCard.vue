@@ -1,6 +1,6 @@
 <template lang="pug">
 el-card.event-card
-  .main
+  .header
     .time-info
       .year {{ year }}
       .month-day
@@ -10,25 +10,24 @@ el-card.event-card
         span ({{ weekChar }})
       .time-range {{ timeRangeText }}
     .main-info
-      .group
       .title
         nuxt-link(:to="'/mokumoku/' + event.id")
           h3 {{ event.title }}
-  .sub
+      .host
+        span(v-if="event.hostType === 'users'")
+          icon.icon.-r.-large(name="user")
+          .host-plate
+            Avatar.avatar(:user="event.host" :size="30")
+            span {{ event.host.displayName }}
+        span(v-else-if="event.hostType === 'groups'")
+          icon.icon.-r(name="users")
+  .footer
     .tags
       Tag(v-for="tag in event.tags" :key="tag" :label="tag")
-    .description
-  .join-number
-    span.joining-number {{ event.users.length }}
-    span(v-if="event.limitUserCount") /{{ event.maxUserCount }}
-    span.unit 人
-  //- nuxt-link.title(:to="'/mokumoku/' + event.id")
-  //-   h3 {{ event.title }}
-  //- h4 詳細
-  //- p.description {{ event.description }}
-  //- h4 参加ユーザー
-  //- .users
-  //-   Avatar.user(v-for="u in event.users" :key="u.uid" :user="u")
+    .join-number
+      span.joining-number {{ event.users.length }}
+      span(v-if="event.limitUserCount") /{{ event.maxUserCount }}
+      span.unit 人
 </template>
 
 <script lang="ts">
@@ -75,9 +74,8 @@ export default defineComponent({
 <style lang="stylus" scoped>
 .event-card
   margin-bottom: 15px
-  .main
-    display: flex
-    justify-content: space-between
+  .header
+    flex()
     margin-bottom: 10px
   time-info-width = 100px
   .time-info
@@ -92,16 +90,32 @@ export default defineComponent({
   .main-info
     margin-left: 20px
     width: 'calc(100% - %s - 20px)' % time-info-width
-    .group
-      height: 30px
     .title
       text-decoration: underline
-  .join-number
-    text-align: right
-    .joining-number
-      font-weight: bold
-      font-size: 14px
-    .unit
-      margin-left: 3px
-      font-size: 11px
+      font-size: 18px
+      margin-bottom: 5px
+    .host
+      .icon
+        vertical-align: middle
+      .avatar
+        vertical-align: middle
+        margin-right: 5px
+      &-plate
+        display: inline-block
+        border: 1px solid #ccc
+        border-radius: 3px
+        padding: 3px 5px
+  .footer
+    flex()
+    align-items: flex-end
+    .tags
+      width: calc(100% - 60px)
+    .join-number
+      text-align: right
+      .joining-number
+        font-weight: bold
+        font-size: 14px
+      .unit
+        margin-left: 3px
+        font-size: 11px
 </style>
