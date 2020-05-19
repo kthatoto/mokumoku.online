@@ -15,7 +15,7 @@
     "@nuxtjs/axios": "^5.3.6",
     "@nuxtjs/dotenv": "^1.4.0",
     "@vue/composition-api": "^0.5.0",
-    "dayjs": "^1.8.25",
+    "dayjs": "^1.8.27",
     "element-ui": "2.13.0",
     "firebase": "^7.14.2",
     "node-sass": "^4.14.1",
