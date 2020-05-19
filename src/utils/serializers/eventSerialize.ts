@@ -7,6 +7,7 @@ export default async (context: any, docRef: any) => {
   const data: any = docSnapshot.data()
   const date: Date = data.date.toDate()
   const createdAt: Date = data.createdAt.toDate()
+  const hostType: string = data.host.path.split("/")[0]
   const host = (await data.host.get()).data()
 
   const users: User[] = []
@@ -25,6 +26,7 @@ export default async (context: any, docRef: any) => {
     startDatetime: startDatetimeString,
     endDatetime: endDatetimeString,
     users,
+    hostType,
     host,
     createdAt
   }

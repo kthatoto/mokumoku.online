@@ -18,6 +18,7 @@ export interface Event extends EventInfo {
   id: string
   dateString?: string
   users: User[]
+  hostType: 'users' | 'groups'
   host: User // | Group
   createdAt: Date
 }
