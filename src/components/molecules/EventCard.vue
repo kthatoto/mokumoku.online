@@ -55,8 +55,9 @@ export default defineComponent({
     const day = computed<number>(() => date.value.getDate())
     const weekChar = computed<number>(() => dayjs(date.value).format('dd'))
     // const timeRangeText = computed<string>(() => {
-    //   const startTime = dayjs(props.event.startDatetime)
+    //   const startTime = dayjs(props.event.startDatetime).format()
     // })
+
     return {
       year,
       month,
