@@ -25,7 +25,8 @@ const upsertUser = async (user) => {
   if (docSnapshot.exists) {
     db.collection('users').doc(user.uid).update({
       displayName: user.displayName,
-      photoURL: user.photoURL
+      photoURL: user.photoURL,
+      updatedAt: new Date()
     })
   } else {
     db.collection('users').doc(user.uid).set({
