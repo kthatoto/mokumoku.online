@@ -18,16 +18,14 @@ el-card.event-card
     .tags
       Tag(v-for="tag in event.tags" :key="tag" :label="tag")
     .description
+  .join-number
+    span.joining-number {{ event.users.length }}
+    span(v-if="event.limitUserCount") /{{ event.maxUserCount }}
+    span.unit 人
   //- nuxt-link.title(:to="'/mokumoku/' + event.id")
   //-   h3 {{ event.title }}
   //- h4 詳細
   //- p.description {{ event.description }}
-  //- h4 時間
-  //- p.datetime
-  //-   span.date {{ event.dateString }}
-  //-   span {{ event.startDatetime }}
-  //-   span 〜
-  //-   span {{ event.endDatetime }}
   //- h4 参加ユーザー
   //- .users
   //-   Avatar.user(v-for="u in event.users" :key="u.uid" :user="u")
@@ -59,9 +57,7 @@ export default defineComponent({
     const weekChar = computed<number>(() => dayjs(date.value).format('dd'))
 
     const timeRangeText = computed<string>(() => {
-      const startTimeText = timeConvertToOver24(props.event.date, props.event.startDatetime)
-      const endTimeText = timeConvertToOver24(props.event.date, props.event.endDatetime)
-      return `${startTimeText} 〜 ${endTimeText}`
+      return `${props.event.startDatetime}〜${props.event.endDatetime}`
     })
 
     return {
@@ -77,6 +73,7 @@ export default defineComponent({
 
 <style lang="stylus" scoped>
 .event-card
+  margin-bottom: 15px
   .main
     display: flex
     justify-content: space-between
@@ -84,8 +81,26 @@ export default defineComponent({
   time-info-width = 100px
   .time-info
     width: time-info-width
+    .year
+      font-size: 14px
+      font-weight: bold
+    .month-day
+      font-size: 18px
+      font-weight: bold
+      color: color4
   .main-info
-    width: 'calc(100% - %s)' % time-info-width
+    margin-left: 20px
+    width: 'calc(100% - %s - 20px)' % time-info-width
     .group
       height: 30px
+    .title
+      text-decoration: underline
+  .join-number
+    text-align: right
+    .joining-number
+      font-weight: bold
+      font-size: 14px
+    .unit
+      margin-left: 3px
+      font-size: 11px
 </style>
