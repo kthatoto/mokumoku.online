@@ -18,15 +18,24 @@ if (!firebase.apps.length) {
   )
 }
 
-const upsertUser = (user) => {
+const upsertUser = async (user) => {
   const db = firebase.firestore()
   const providerId = user.providerData[0].providerId.split('.')[0]
-  db.collection('users').doc(user.uid).set({
-    uid: user.uid,
-    displayName: user.displayName,
-    photoURL: user.photoURL,
-    providerId
-  })
+  const docSnapshot = await db.collection('users').doc(user.uid).get()
+  if (docSnapshot.exists) {
+    const data = docSnapshot.data()
+    db.collection('users').doc(user.uid).update({
+      displayName: data.displayName,
+      photoURL: data.photoURL
+    })
+  } else {
+    db.collection('users').doc(user.uid).set({
+      uid: user.uid,
+      displayName: user.displayName,
+      photoURL: user.photoURL,
+      providerId
+    })
+  }
 }
 
 export default ({ app, route, redirect }, inject) => {
