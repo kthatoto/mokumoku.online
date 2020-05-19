@@ -38,6 +38,7 @@ export default defineComponent({
 
 <style lang="stylus" scoped>
 .avatar
+  display: inline-block
   position: relative
   .icon
     position: absolute
