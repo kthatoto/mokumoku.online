@@ -34,6 +34,7 @@ el-card.event-card
 <script lang="ts">
 import { defineComponent, computed } from '@vue/composition-api'
 
+import { Event } from '@/stores/indexStore'
 import timeConvertToOver24 from '@/utils/timeConvertToOver24'
 
 interface Props {
