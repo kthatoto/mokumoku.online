@@ -8,10 +8,11 @@ el-card.event-card
         span /
         span {{ day }}
         span ({{ weekChar }})
+      .time-range {{ timeRangeText }}
     .main-info
       .group
       .title
-        nuxt-link(:to="'/mokumoku' + event.id")
+        nuxt-link(:to="'/mokumoku/' + event.id")
           h3 {{ event.title }}
   .sub
     .tags
@@ -35,6 +36,8 @@ el-card.event-card
 <script lang="ts">
 import { defineComponent, computed } from '@vue/composition-api'
 
+import timeConvertToOver24 from '@/utils/timeConvertToOver24'
+
 interface Props {
   event: Event
 }
@@ -54,15 +57,19 @@ export default defineComponent({
     const month = computed<number>(() => date.value.getMonth() + 1)
     const day = computed<number>(() => date.value.getDate())
     const weekChar = computed<number>(() => dayjs(date.value).format('dd'))
-    // const timeRangeText = computed<string>(() => {
-    //   const startTime = dayjs(props.event.startDatetime).format()
-    // })
+
+    const timeRangeText = computed<string>(() => {
+      const startTimeText = timeConvertToOver24(props.event.date, props.event.startDatetime)
+      const endTimeText = timeConvertToOver24(props.event.date, props.event.endDatetime)
+      return `${startTimeText} 〜 ${endTimeText}`
+    })
 
     return {
       year,
       month,
       day,
-      weekChar
+      weekChar,
+      timeRangeText
     }
   }
 })

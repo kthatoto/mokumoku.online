@@ -14,20 +14,8 @@ export default async (context: any, docRef: any) => {
     const user: User = (await userDocRef.get()).data()
     users.push({ ...user, hosting: user.uid === host.uid })
   })
-
-  const dayjs: any = context.root.$dayjs
-  const startDatetime: Date = data.startDatetime.toDate()
-  const endDatetime: Date = data.endDatetime.toDate()
-  let startDatetimeString: string = dayjs(startDatetime).format('HH:mm')
-  let endDatetimeString: string = dayjs(endDatetime).format('HH:mm')
-  if (dayjs(date).add(1, 'day').isSameOrBefore(dayjs(startDatetime))) {
-    const startTimeStrings: string[] = startDatetimeString.split(':')
-    startDatetimeString = `${parseInt(startTimeStrings[0]) + 24}:${startTimeStrings[1]}`
-  }
-  if (dayjs(date).add(1, 'day').isSameOrBefore(dayjs(endDatetime))) {
-    const endTimeStrings: string[] = endDatetimeString.split(':')
-    endDatetimeString = `${parseInt(endTimeStrings[0]) + 24}:${endTimeStrings[1]}`
-  }
+  const startDatetimeString: string = timeConvertToOver24(date, data.startDatetime.toDate())
+  const endDatetimeString: string = timeConvertToOver24(date, data.endDatetime.toDate())
 
   return {
     ...data,
