@@ -1,7 +1,7 @@
 <template lang="pug">
 .avatar(:style="sizeStyle")
   icon.icon(v-if="user.hosting" name="user-circle")
-  img(:src="user.photoURL" :style="sizeStyle")
+  img(:src="user.imageURL" :style="sizeStyle")
 </template>
 
 <script lang="ts">
