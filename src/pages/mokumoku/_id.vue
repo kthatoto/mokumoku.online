@@ -32,12 +32,15 @@
       template(v-else)
         el-button 参加中
   .event__comments
-    h4.comments__header コメント
+    h4 コメント
     comment-field.comment-field(v-if="joining" @getComments="getComments")
     .comment-list
       comment-item(v-for="comment in comments" v-if="comment" :key="comment.id"
         :comment="comment")
   .event__achieves
+    h4 もくもく一覧
+    el-card
+    el-card
 </template>
 
 <script lang="ts">
@@ -118,7 +121,7 @@ export default defineComponent({
   display: flex
   justify-content: space-between
   &__detail
-    width: 300px
+    width: 250px
     .title
       font-size: 24px
       margin-bottom: 20px
@@ -138,16 +141,16 @@ export default defineComponent({
       .icon
         color: color3
         margin-right: 15px
-  &__comments
-    width: 300px
+  &__comments, &__achieves
     h4
-      height: 30px
-      line-height: 30px
+      font-size: 16px
+      height: 20px
+      line-height: 20px
+      margin: 20px 0 10px
+  &__comments
+    width: 400px
     .comment-field
       margin-bottom: 15px
-    .comments
-      &__header
-        margin-bottom: 20px
   &__achieves
     width: 300px
 </style>
