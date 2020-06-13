@@ -1,6 +1,6 @@
 <template lang="pug">
-.event
-  .event__wrapper(v-if="event && event.id")
+.event(v-if="event && event.id")
+  .event__detail
     h1.title
       span {{ event.title }}
       el-button(v-if="hosting" type="primary" icon="el-icon-edit" circle @click="openForm")
@@ -31,12 +31,13 @@
         el-button(type="primary" @click="joinEvent") 参加する
       template(v-else)
         el-button 参加中
-    .comments(v-if="joining")
-      comment-field.comment-field(@getComments="getComments")
-      h4.comments__header コメント
-      .comment-list
-        comment-item(v-for="comment in comments" v-if="comment" :key="comment.id"
-          :comment="comment")
+  .event__comments
+    h4.comments__header コメント
+    comment-field.comment-field(v-if="joining" @getComments="getComments")
+    .comment-list
+      comment-item(v-for="comment in comments" v-if="comment" :key="comment.id"
+        :comment="comment")
+  .event__achieves
 </template>
 
 <script lang="ts">
@@ -112,32 +113,43 @@ export default defineComponent({
 
 <style lang="stylus" scoped>
 .event
-  width: 400px
-  margin: 50px auto 0
-  padding-bottom: 100px
-  .title
-    font-size: 24px
-    margin-bottom: 20px
-    color: color5
-    display: flex
-    justify-content: space-between
-  .card
-    event-card()
-    .url
-      &:hover
-        text-decoration: underline
-  .console
-    text-align: right
-    margin-bottom: 10px
-    .icon
-      color: color3
-      margin-right: 15px
-  .comment-field
-    margin-bottom: 15px
-  .comments
-    &__header
+  width: 1000px
+  margin: 30px auto 0
+  display: flex
+  justify-content: space-between
+  &__detail
+    width: 300px
+    .title
+      font-size: 24px
+      margin-bottom: 20px
+      height: 30px
+      line-height: 30px
+      color: color5
+      display: flex
+      justify-content: space-between
+    .card
+      event-card()
+      .url
+        &:hover
+          text-decoration: underline
+    .console
+      text-align: right
       margin-bottom: 10px
-
+      .icon
+        color: color3
+        margin-right: 15px
+  &__comments
+    width: 300px
+    h4
+      height: 30px
+      line-height: 30px
+    .comment-field
+      margin-bottom: 15px
+    .comments
+      &__header
+        margin-bottom: 20px
+  &__achieves
+    width: 300px
 </style>
 
 <style lang="stylus">
