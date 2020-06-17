@@ -7,7 +7,7 @@ export default async (context: any, docRef: any) => {
   const data: any = docSnapshot.data()
   const date: Date = data.date.toDate()
   const createdAt: Date = data.createdAt.toDate()
-  const hostType: string = data.hostRef.path.split("/")[0]
+  const hostType: 'users' | 'groups' = data.hostRef.path.split("/")[0]
   const host = (await data.hostRef.get()).data()
 
   const users: User[] = []
@@ -20,13 +20,15 @@ export default async (context: any, docRef: any) => {
 
   return {
     id,
-    title: data.title,
-    description: data.description,
-    url: data.url,
-    limitUserCount: data.limitUserCount,
-    maxUserCount: data.maxUserCount,
-    joinPermission: data.joinPermission,
-    tags: data.tags,
+    title: data.title as string,
+    description: data.description as string,
+    url: data.url as string,
+    limitUserCount: data.limitUserCount as boolean,
+    maxUserCount: data.maxUserCount as number | null,
+    joinPermission: data.joinPermission as boolean,
+    tags: data.tags as string[],
+    achievements: [],        // TODO
+    joinRequestingUsers: [], // TODO
     date,
     dateString: context.root.$dayjs(date).format('YYYY-MM-DD'),
     startDatetime: startDatetimeString,
