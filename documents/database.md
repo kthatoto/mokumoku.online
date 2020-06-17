@@ -34,8 +34,6 @@
     * imageURL?: string
     * reactions: { key: string, userRef: DocumentReference<user> }[]
 ## Achievements
-* userRef: DocumentReference<user>
-* eventRef: DocumentReference<event>
 * content: string
 * tags: string[]
 * reactions: { key: string, userRef: DocumentReference<user> }[]
