@@ -1,6 +1,6 @@
 import { InjectionKey, ref, computed } from '@vue/composition-api'
 
-import { Event, EventInfo, User, IndexStore } from './indexStore'
+import { Event, EventInfo, User, Reaction, IndexStore } from './indexStore'
 import eventSerialize from '@/utils/serializers/eventSerialize'
 import commentSerialize from '@/utils/serializers/events/commentSerialize'
 
@@ -12,11 +12,6 @@ export interface Comment {
   imageUrl: string | null
   createdAt: Date
   reactions: Reaction[]
-}
-
-export interface Reaction {
-  key: string
-  user: User
 }
 
 export const buildEventStore = (context: any, indexStore: IndexStore, eventId: string) => {
@@ -76,7 +71,7 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
     const userDocRefs = event.value.users.map((user: User) => db.collection('users').doc(user.uid))
     userDocRefs.push(db.collection('users').doc(indexStore.currentUser.value.uid))
     let result: boolean = true
-    await db.collection('events').doc(eventId).update({ users: userDocRefs }).catch((_: any) => {
+    await db.collection('events').doc(eventId).update({ userRefs: userDocRefs }).catch((_: any) => {
       result = false
     })
     return result

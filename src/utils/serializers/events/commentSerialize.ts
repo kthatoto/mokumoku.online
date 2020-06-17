@@ -1,5 +1,4 @@
-import { User } from '@/stores/indexStore'
-import { Reaction } from '@/stores/eventStore'
+import { User, Reaction } from '@/stores/indexStore'
 
 export default async (docSnapshot: any, hostUid: string, users: User[]) => {
   const id: string = docSnapshot.id

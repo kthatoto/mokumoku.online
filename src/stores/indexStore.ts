@@ -20,15 +20,30 @@ export interface Event extends EventInfo {
   users: User[]
   hostType: 'users' | 'groups'
   host: User // | Group
+  achievements: Achievement[]
+  joinRequestingUsers: User[]
   createdAt: Date
 }
 
 export interface User {
   uid: string
   displayName: string
-  photoURL: string
+  imageURL: string
   hosting?: boolean
   providerId: string
+}
+
+export interface Achievement {
+  id: string
+  content: string
+  tags: string[]
+  reactions: Reaction[]
+  public: boolean
+}
+
+export interface Reaction {
+  key: string
+  user: User
 }
 
 interface DateRange {
@@ -53,7 +68,7 @@ export const buildIndexStore = (context: any) => {
     currentUser.value = {
       uid: user.uid,
       displayName: user.displayName,
-      photoURL: user.photoURL,
+      imageURL: user.photoURL,
       providerId
     }
   }
@@ -81,8 +96,10 @@ export const buildIndexStore = (context: any) => {
       ...eventInfo,
       startDatetime: new Date(date.getFullYear(), date.getMonth(), date.getDate(), startHour, startMinute),
       endDatetime: new Date(date.getFullYear(), date.getMonth(), date.getDate(), endHour, endMinute),
-      users: [userDocRef],
-      host: userDocRef,
+      userRefs: [userDocRef],
+      hostRef: userDocRef,
+      achievementRefs: [],
+      joinRequestingUserRefs: [],
       createdAt: new Date()
     }).catch((_: any) => { result = false })
     return result
