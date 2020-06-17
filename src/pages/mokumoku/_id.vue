@@ -1,26 +1,26 @@
 <template lang="pug">
 .event(v-if="event && event.id")
   .event__detail
-    h1.title
-      span {{ event.title }}
-      el-button(v-if="hosting" type="primary" icon="el-icon-edit" circle @click="openForm")
+    h1.title {{ event.title }}
     .edit-form(v-if="showingForm")
       edit-event-modal(:showing="showingForm" @closeModal="closeForm" :event="event")
     el-card.card
-      h4 詳細
-      p.description {{ event.description }}
+      el-button.edit(v-if="hosting" type="primary" icon="el-icon-edit" circle @click="openForm")
       h4 時間
       p.datetime
         span.date {{ event.dateString }}
         span {{ event.startDatetime }}
         span 〜
         span {{ event.endDatetime }}
-      h4 参加ユーザー
-      .users
-        Avatar.user(v-for="u in event.users" :key="u.uid" :user="u")
       template(v-if="joining")
         h4 参加リンク
         a.url(v-if="event.url" :href="event.url" target="_blank") {{ event.url }}
+        span(v-else) ---
+      h4 参加ユーザー
+      .users
+        Avatar.user(v-for="u in event.users" :key="u.uid" :user="u")
+      h4 詳細
+      p.description {{ event.description }}
     .console
       template(v-if="!joining")
         el-tooltip(effect="dark" placement="bottom-end")
@@ -132,9 +132,11 @@ export default defineComponent({
       justify-content: space-between
     .card
       event-card()
-      .url
-        &:hover
-          text-decoration: underline
+      position: relative
+      .edit
+        position: absolute
+        top: 10px
+        right: 10px
     .console
       text-align: right
       margin-bottom: 10px
