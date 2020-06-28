@@ -8,14 +8,12 @@
 * uid: string
 * description: string
 * eventRefs: DocumentReference<event>[]
-* groupRefs: DocumentReference<group>[]
 * achievementRefs: DocumentReference<achievement>[]
 * tags: string[]
 * createdAt: Date
 ## Events
 * title: string
 * description: string
-* hostRef: DocumentReference<user | group>
 * startDatetime: Date
 * endDatetime: Date
 * url: string
@@ -38,15 +36,8 @@
 * tags: string[]
 * reactions: { key: string, userRef: DocumentReference<user> }[]
 * public: boolean
-## Groups
-* name: string
-* description: string
-* imageURL: string
-* tags: string[]
-* adminRefs: DocumentReference<user>[]
 ## Tags
 * name: string
 * userRefs: DocumentReference<user>[]
 * eventRefs: DocumentReference<event>[]
-* groupRefs: DocumentReference<group>[]
 * achievementRefs: DocumentReference<achievement>[]
