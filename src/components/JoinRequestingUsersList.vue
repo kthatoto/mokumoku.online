@@ -6,7 +6,7 @@
   p(v-else)
     icon.icon.-r(name="exclamation-circle")
     span 参加申請中のユーザーはいません
-  el-dialog(:visible.async="showingDialog")
+  el-dialog(:visible.sync="showingDialog")
     h3(slot="title")
       icon.icon.-r.-x-large(name="user-friends")
       span 参加申請中のユーザー

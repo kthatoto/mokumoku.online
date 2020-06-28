@@ -66,7 +66,10 @@
   .event__achievements
     h4
       span もくもく一覧
-      el-card
+      el-button(type="primary" size="mini")
+        icon.icon.-r(name="plus")
+        span 記録する
+    el-card
       // achievement-field
 </template>
 
@@ -279,6 +282,13 @@ export default defineComponent({
       margin-bottom: 15px
   &__achievements
     width: 300px
+    h4
+      position: relative
+      .el-button
+        position: absolute
+        right: 0
+        bottom: 0
+
 </style>
 
 <style lang="stylus">
