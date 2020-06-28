@@ -65,6 +65,18 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
     return result
   }
 
+  const applyJoiningEvent = async () => {
+    if (indexStore.currentUser.value === null) return false
+    if (joining.value) return false
+    if (applying.value) return false
+    const joinRequestingUserRefs = event.value.joinRequestingUsers.map((user: User) => db.collection('users').doc(user.uid))
+    joinRequestingUserRefs.push(db.collection('users').doc(indexStore.currentUser.value.uid))
+    let result: boolean = true
+    await db.collection('events').doc(eventId).update({ joinRequestingUserRefs }).catch((_: any) => {
+      result = false
+    })
+    return result
+  }
   const joinEvent = async () => {
     if (indexStore.currentUser.value === null) return false
     if (joining.value) return false
@@ -76,12 +88,26 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
     })
     return result
   }
+  const cancelEventApplying = async () => {
+    if (indexStore.currentUser.value === null) return false
+    const currentUserUid: string = indexStore.currentUser.value.uid
+    if (!applying.value) return false
+    const joinRequestingUserRefs = event.value.joinRequestingUsers
+      .filter((user: User) => user.uid !== currentUserUid)
+      .map((user: User) => db.collection('users').doc(user.uid))
+
+    let result: boolean = true
+    await db.collection('events').doc(eventId).update({ joinRequestingUserRefs }).catch((_: any) => {
+      result = false
+    })
+    return result
+  }
   const cancelEventJoining = async () => {
     if (indexStore.currentUser.value === null) return false
-    const currentUser: User = indexStore.currentUser.value
+    const currentUserUid: string = indexStore.currentUser.value.uid
     if (!joining.value) return false
     const userDocRefs = event.value.users
-      .filter((user: User) => user.uid !== currentUser.uid)
+      .filter((user: User) => user.uid !== currentUserUid.uid)
       .map((user: User) => db.collection('users').doc(user.uid))
 
     let result: boolean = true
@@ -208,13 +234,24 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
     })
   })
 
+  const applying = computed<boolean>(() => {
+    if (indexStore.currentUser.value === null) return false
+    if (!event.value.joinRequestingUsers) return false
+    const currentUserUid: string = indexStore.currentUser.value.uid
+    return event.value.joinRequestingUsers.some((user: User) => {
+      return user.uid === currentUserUid
+    })
+  })
+
   return {
     event,
     comments,
     getEvent,
     updateEvent,
     deleteEvent,
+    applyJoiningEvent,
     joinEvent,
+    cancelEventApplying,
     cancelEventJoining,
     addTextComment,
     addImageComment,
@@ -223,7 +260,8 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
     updateCommentContent,
     toggleReaction,
     hosting,
-    joining
+    joining,
+    applying
   }
 }
 

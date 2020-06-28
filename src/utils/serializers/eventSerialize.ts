@@ -14,6 +14,12 @@ export default async (context: any, docRef: any) => {
     const user: User = (await userDocRef.get()).data()
     users.push({ ...user, hosting: user.uid === host.uid })
   })
+  const joinRequestingUsers: User[] = []
+  await data.joinRequestingUserRefs.forEach(async (userDocRef: any) => {
+    const user: User = (await userDocRef.get()).data()
+    joinRequestingUsers.push(user)
+  })
+
   const startDatetimeString: string = timeConvertToOver24(date, data.startDatetime.toDate())
   const endDatetimeString: string = timeConvertToOver24(date, data.endDatetime.toDate())
 
@@ -26,8 +32,8 @@ export default async (context: any, docRef: any) => {
     maxUserCount: data.maxUserCount as number | null,
     joinPermission: data.joinPermission as boolean,
     tags: data.tags as string[],
-    achievements: [],        // TODO
-    joinRequestingUsers: [], // TODO
+    achievements: [], // TODO
+    joinRequestingUsers,
     date,
     dateString: context.root.$dayjs(date).format('YYYY-MM-DD'),
     startDatetime: startDatetimeString,

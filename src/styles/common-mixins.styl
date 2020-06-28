@@ -74,6 +74,13 @@ event-card()
       color: gray
     .date
       margin-right: 10px
+  .joining-link
+    .link
+      color: linkColor
+      &:hover
+        text-decoration: underline
+    .-not-joining
+      color: gray
   .users
     &__list
       display: flex
@@ -81,7 +88,3 @@ event-card()
   .user
     margin-right: 5px
     margin-bottom: 5px
-  .url
-    color: linkColor
-    &:hover
-      text-decoration: underline
