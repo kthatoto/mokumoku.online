@@ -38,7 +38,7 @@
           icon.icon.-x-large(name="question-circle")
         el-button(type="primary" @click="joinEvent") 参加する
       template(v-else)
-        el-button 参加中
+        el-button(@click="cancelEventJoining") 参加中
   .event__comments
     h4 コメント
     comment-field.comment-field(v-if="joining" @getComments="getComments")
@@ -107,6 +107,34 @@ export default defineComponent({
       })
     }
 
+    const cancelEventJoining = () => {
+      const confirmMessage: string = 'イベントへの参加をキャンセルしますか？'
+      context.root.$confirm(confirmMessage, {
+        title: eventStore.event.value.title,
+        confirmButtonText: 'キャンセル',
+        cancelButtonText: '戻る',
+        customClass: 'joining-confirm',
+        callback: async (res: string) => {
+          if (res !== 'confirm') return
+          const result: boolean = await eventStore.cancelEventJoining()
+          if (result) {
+            eventStore.getEvent()
+            context.root.$message({
+              message: `${eventStore.event.value.title}への参加をキャンセルしました`,
+              type: 'success',
+              duration: 5000
+            })
+          } else {
+            context.root.$message({
+              message: 'キャンセルできませんでした',
+              type: 'error',
+              duration: 5000
+            })
+          }
+        }
+      })
+    }
+
     return {
       event: eventStore.event,
       comments: eventStore.comments,
@@ -114,6 +142,7 @@ export default defineComponent({
       openForm,
       closeForm,
       joinEvent,
+      cancelEventJoining,
       getComments: eventStore.getComments,
       hosting: eventStore.hosting,
       joining: eventStore.joining

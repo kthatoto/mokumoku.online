@@ -76,6 +76,20 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
     })
     return result
   }
+  const cancelEventJoining = async () => {
+    if (indexStore.currentUser.value === null) return false
+    const currentUser: User = indexStore.currentUser.value
+    if (!joining.value) return false
+    const userDocRefs = event.value.users
+      .filter((user: User) => user.uid !== currentUser.uid)
+      .map((user: User) => db.collection('users').doc(user.uid))
+
+    let result: boolean = true
+    await db.collection('events').doc(eventId).update({ userRefs: userDocRefs }).catch((_: any) => {
+      result = false
+    })
+    return result
+  }
 
   const addTextComment = async (content: string) => {
     if (indexStore.currentUser.value === null) return false
@@ -201,6 +215,7 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
     updateEvent,
     deleteEvent,
     joinEvent,
+    cancelEventJoining,
     addTextComment,
     addImageComment,
     getComments,
