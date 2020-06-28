@@ -19,7 +19,8 @@
         span(v-else) ---
       .users
         h4 参加ユーザー
-        Avatar.user(v-for="u in event.users" :key="u.uid" :user="u")
+        .users__list
+          Avatar.user(v-for="u in event.users" :key="u.uid" :user="u")
       .tags
         h4 タグ
         template(v-if="event.tags.length > 0")
@@ -33,7 +34,7 @@
         el-tooltip(effect="dark" placement="bottom-end")
           span(slot="content")
             p もくもく会に参加できるリンクを取得できます
-            p コメントの閲覧と投稿が可能になります
+            p コメントの投稿も可能になります
           icon.icon.-x-large(name="question-circle")
         el-button(type="primary" @click="joinEvent") 参加する
       template(v-else)
@@ -79,7 +80,7 @@ export default defineComponent({
       const confirmMessage: string = `参加しますか？
 
 もくもく会に参加できるリンクを取得できます
-コメントの閲覧と投稿が可能になります`
+コメントの投稿も可能になります`
       context.root.$confirm(confirmMessage, {
         title: eventStore.event.value.title,
         confirmButtonText: '参加',
