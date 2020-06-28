@@ -28,7 +28,7 @@
         span(v-else) ---
       .description
         h4 詳細
-        p {{ event.description }}
+        vue-markdown.markdown(:anchorAttributes="{target: '_blank'}" :source="event.description")
     .console
       template(v-if="!joining")
         el-tooltip(effect="dark" placement="bottom-end")
