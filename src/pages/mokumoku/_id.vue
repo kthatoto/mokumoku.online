@@ -6,21 +6,28 @@
       edit-event-modal(:showing="showingForm" @closeModal="closeForm" :event="event")
     el-card.card
       el-button.edit(v-if="hosting" type="primary" icon="el-icon-edit" circle @click="openForm")
-      h4 時間
-      p.datetime
-        span.date {{ event.dateString }}
-        span {{ event.startDatetime }}
-        span 〜
-        span {{ event.endDatetime }}
+      .datetime
+        h4 時間
+        p
+          span.date {{ event.dateString }}
+          span {{ event.startDatetime }}
+          span 〜
+          span {{ event.endDatetime }}
       template(v-if="joining")
         h4 参加リンク
         a.url(v-if="event.url" :href="event.url" target="_blank") {{ event.url }}
         span(v-else) ---
-      h4 参加ユーザー
       .users
+        h4 参加ユーザー
         Avatar.user(v-for="u in event.users" :key="u.uid" :user="u")
-      h4 詳細
-      p.description {{ event.description }}
+      .tags
+        h4 タグ
+        template(v-if="event.tags.length > 0")
+          Tag(v-for="tag in event.tags" :key="tag" :label="tag")
+        span(v-else) ---
+      .description
+        h4 詳細
+        p {{ event.description }}
     .console
       template(v-if="!joining")
         el-tooltip(effect="dark" placement="bottom-end")
