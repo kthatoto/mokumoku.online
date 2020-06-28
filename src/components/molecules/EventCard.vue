@@ -14,13 +14,10 @@ el-card.event-card
         nuxt-link(:to="'/mokumoku/' + event.id")
           h3 {{ event.title }}
       .host
-        span(v-if="event.hostType === 'users'")
-          icon.icon.-r.-large(name="user")
-          .host-plate
-            Avatar.avatar(:user="event.host" :size="30")
-            span {{ event.host.displayName }}
-        span(v-else-if="event.hostType === 'groups'")
-          icon.icon.-r(name="users")
+        icon.icon.-r.-large(name="user")
+        .host-plate
+          Avatar.avatar(:user="event.host" :size="30")
+          span {{ event.host.displayName }}
   .footer
     .tags
       Tag(v-for="tag in event.tags" :key="tag" :label="tag")

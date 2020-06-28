@@ -30,7 +30,6 @@ const createUser = async (user) => {
     uid: user.uid,
     description: '',
     eventRefs: [],
-    groupRefs: [],
     achievementRefs: [],
     tags: [],
     createdAt: new Date()
