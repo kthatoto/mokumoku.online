@@ -66,11 +66,8 @@
   .event__achievements
     h4
       span もくもく一覧
-      el-button(type="primary" size="mini")
-        icon.icon.-r(name="plus")
-        span 記録する
+      achievement-field.button(v-if="joining")
     el-card
-      // achievement-field
 </template>
 
 <script lang="ts">
@@ -83,9 +80,10 @@ import EditEventModal from '@/components/EditEventModal.vue'
 import CommentField from '@/components/CommentField.vue'
 import CommentItem from '@/components/CommentItem.vue'
 import JoinRequestingUsersList from '@/components/JoinRequestingUsersList.vue'
+import AchievementField from '@/components/AchievementField.vue'
 
 export default defineComponent({
-  components: { EditEventModal, CommentField, CommentItem, JoinRequestingUsersList },
+  components: { EditEventModal, CommentField, CommentItem, JoinRequestingUsersList, AchievementField },
   setup (_, context: any) {
     const store = injectBy(indexStoreInjectionKey)
     const eventId: string = context.root.$route.params.id
@@ -284,11 +282,10 @@ export default defineComponent({
     width: 300px
     h4
       position: relative
-      .el-button
+      .button
         position: absolute
         right: 0
         bottom: 0
-
 </style>
 
 <style lang="stylus">
