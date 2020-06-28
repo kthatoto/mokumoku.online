@@ -56,23 +56,18 @@
       template(v-else)
         el-button(@click="cancelEventJoining") 参加中
     .requesting(v-if="hosting")
-      p.-underline(v-if="event.joinRequestingUsers.length > 0" @click="showingJoinRequestingUsersList = true")
-        icon.icon.-r(name="exclamation-circle")
-        span 参加申請中のユーザーが{{ event.joinRequestingUsers.length }}人います
-      p(v-else)
-        icon.icon.-r(name="exclamation-circle")
-        span 参加申請中のユーザーはいません
-      join-requesting-users-list(:showing="showingJoinRequestingUsersList" @hide="showingJoinRequestingUsersList = false")
+      join-requesting-users-list
   .event__comments
     h4 コメント
     comment-field.comment-field(v-if="joining" @getComments="getComments")
     .comment-list
       comment-item(v-for="comment in comments" v-if="comment" :key="comment.id"
         :comment="comment")
-  .event__achieves
-    h4 もくもく一覧
-    el-card
-    el-card
+  .event__achievements
+    h4
+      span もくもく一覧
+      el-card
+      // achievement-field
 </template>
 
 <script lang="ts">
@@ -272,13 +267,7 @@ export default defineComponent({
           margin-right: 15px
         &.-gray
           color: color3
-    .requesting
-      .-underline
-        text-decoration: underline
-        cursor: pointer
-        font-weight: bold
-        hover()
-  &__comments, &__achieves
+  &__comments, &__achievements
     h4
       font-size: 16px
       height: 20px
@@ -288,7 +277,7 @@ export default defineComponent({
     width: 400px
     .comment-field
       margin-bottom: 15px
-  &__achieves
+  &__achievements
     width: 300px
 </style>
 
