@@ -55,6 +55,13 @@
           el-button(type="primary" @click="joinEvent") 参加する
       template(v-else)
         el-button(@click="cancelEventJoining") 参加中
+    .requesting(v-if="hosting")
+      p.-underline(v-if="event.joinRequestingUsers.length > 0")
+        icon.icon.-r(name="exclamation-circle")
+        span 参加申請中のユーザーが{{ event.joinRequestingUsers.length }}人います
+      p(v-else)
+        icon.icon.-r(name="exclamation-circle")
+        span 参加申請中のユーザーはいません
   .event__comments
     h4 コメント
     comment-field.comment-field(v-if="joining" @getComments="getComments")
@@ -260,6 +267,12 @@ export default defineComponent({
           margin-right: 15px
         &.-gray
           color: color3
+    .requesting
+      .-underline
+        text-decoration: underline
+        cursor: pointer
+        font-weight: bold
+        hover()
   &__comments, &__achieves
     h4
       font-size: 16px
