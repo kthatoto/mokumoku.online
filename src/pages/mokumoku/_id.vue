@@ -56,12 +56,13 @@
       template(v-else)
         el-button(@click="cancelEventJoining") 参加中
     .requesting(v-if="hosting")
-      p.-underline(v-if="event.joinRequestingUsers.length > 0")
+      p.-underline(v-if="event.joinRequestingUsers.length > 0" @click="showingJoinRequestingUsersList = true")
         icon.icon.-r(name="exclamation-circle")
         span 参加申請中のユーザーが{{ event.joinRequestingUsers.length }}人います
       p(v-else)
         icon.icon.-r(name="exclamation-circle")
         span 参加申請中のユーザーはいません
+      join-requesting-users-list(:showing="showingJoinRequestingUsersList" @hide="showingJoinRequestingUsersList = false")
   .event__comments
     h4 コメント
     comment-field.comment-field(v-if="joining" @getComments="getComments")
@@ -83,9 +84,10 @@ import { buildEventStore, eventStoreInjectionKey } from '@/stores/eventStore'
 import EditEventModal from '@/components/EditEventModal.vue'
 import CommentField from '@/components/CommentField.vue'
 import CommentItem from '@/components/CommentItem.vue'
+import JoinRequestingUsersList from '@/components/JoinRequestingUsersList.vue'
 
 export default defineComponent({
-  components: { EditEventModal, CommentField, CommentItem },
+  components: { EditEventModal, CommentField, CommentItem, JoinRequestingUsersList },
   setup (_, context: any) {
     const store = injectBy(indexStoreInjectionKey)
     const eventId: string = context.root.$route.params.id
@@ -217,10 +219,13 @@ export default defineComponent({
       })
     }
 
+    const showingJoinRequestingUsersList = ref<boolean>(false)
+
     return {
       event: eventStore.event,
       comments: eventStore.comments,
       showingForm,
+      showingJoinRequestingUsersList,
       openForm,
       closeForm,
       applyJoiningEvent,
