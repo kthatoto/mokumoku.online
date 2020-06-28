@@ -107,7 +107,7 @@ export const buildEventStore = (context: any, indexStore: IndexStore, eventId: s
     const currentUserUid: string = indexStore.currentUser.value.uid
     if (!joining.value) return false
     const userDocRefs = event.value.users
-      .filter((user: User) => user.uid !== currentUserUid.uid)
+      .filter((user: User) => user.uid !== currentUserUid)
       .map((user: User) => db.collection('users').doc(user.uid))
 
     let result: boolean = true
