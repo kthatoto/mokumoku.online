@@ -33,6 +33,7 @@
     * reactions: { key: string, userRef: DocumentReference<user> }[]
 ## Achievements
 * content: string
+* result: string
 * tags: string[]
 * reactions: { key: string, userRef: DocumentReference<user> }[]
 * public: boolean

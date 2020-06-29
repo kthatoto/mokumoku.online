@@ -35,6 +35,7 @@ export interface User {
 export interface Achievement {
   id: string
   content: string
+  result: string
   tags: string[]
   reactions: Reaction[]
   public: boolean
